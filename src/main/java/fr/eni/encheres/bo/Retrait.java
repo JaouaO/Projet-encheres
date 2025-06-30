@@ -8,6 +8,12 @@ public class Retrait {
 	
 	Article article;
 
+	
+	
+	
+	public Retrait() {
+	}
+
 	public Retrait(String rue, String codePostal, String ville, Article article) {
 		this.rue = rue;
 		this.codePostal = codePostal;
@@ -45,6 +51,21 @@ public class Retrait {
 
 	public void setArticle(Article article) {
 		this.article = article;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Retrait [rue=");
+		builder.append(rue);
+		builder.append(", codePostal=");
+		builder.append(codePostal);
+		builder.append(", ville=");
+		builder.append(ville);
+		builder.append(", article=");
+		builder.append(article);
+		builder.append("]");
+		return builder.toString();
 	}
 	
 	

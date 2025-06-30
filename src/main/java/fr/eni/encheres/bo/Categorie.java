@@ -1,5 +1,6 @@
 package fr.eni.encheres.bo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Categorie {
@@ -8,13 +9,25 @@ public class Categorie {
 	private String libelle;
 	
 	List<Article> articles;
+	
+	
+	
 
-	public Categorie(long id, String libelle, List<Article> articles) {
-		this.id = id;
-		this.libelle = libelle;
-		this.articles = articles;
+	public Categorie() {
+		this.articles = new ArrayList<Article>();
 	}
 
+	public Categorie(long id, String libelle) {
+		this.id = id;
+		this.libelle = libelle;
+		this.articles = new ArrayList<Article>();
+	}
+
+	
+	public void addArticle(Article article) {
+		this.articles.add(article);
+	}
+	
 	public long getId() {
 		return id;
 	}
@@ -37,6 +50,19 @@ public class Categorie {
 
 	public void setArticles(List<Article> articles) {
 		this.articles = articles;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Categorie [id=");
+		builder.append(id);
+		builder.append(", libelle=");
+		builder.append(libelle);
+		builder.append(", articles=");
+		builder.append(articles);
+		builder.append("]");
+		return builder.toString();
 	}
 
 	

@@ -10,6 +10,19 @@ public class Enchere {
 	Utilisateur utilisateur;
 	Article article;
 	
+	
+	
+	
+	public Enchere() {
+	}
+
+	public Enchere(LocalDateTime dateEnchere, int montantEnchere, Utilisateur utilisateur, Article article) {
+		this.dateEnchere = dateEnchere;
+		this.montantEnchere = montantEnchere;
+		this.utilisateur = utilisateur;
+		this.article = article;
+	}
+	
 	public LocalDateTime getDateEnchere() {
 		return dateEnchere;
 	}
@@ -42,12 +55,22 @@ public class Enchere {
 		this.article = article;
 	}
 
-	public Enchere(LocalDateTime dateEnchere, int montantEnchere, Utilisateur utilisateur, Article article) {
-		this.dateEnchere = dateEnchere;
-		this.montantEnchere = montantEnchere;
-		this.utilisateur = utilisateur;
-		this.article = article;
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Enchere [dateEnchere=");
+		builder.append(dateEnchere);
+		builder.append(", montantEnchere=");
+		builder.append(montantEnchere);
+		builder.append(", utilisateur=");
+		builder.append(utilisateur);
+		builder.append(", article=");
+		builder.append(article);
+		builder.append("]");
+		return builder.toString();
 	}
+
+
 	
 	
 	

@@ -1,5 +1,6 @@
 package fr.eni.encheres.bo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Utilisateur {
@@ -20,9 +21,16 @@ public class Utilisateur {
 	
 	
 	
+
+	public Utilisateur() {
+		
+		this.articles = new ArrayList<Article>();
+		this.encheres = new ArrayList<Enchere>();
+	}
+	
+	
 	public Utilisateur(long id, String prenom, String email, String motDePasse, String telephone, String rue,
-			String codePostal, String ville, int credit, boolean admin, List<Article> articles,
-			List<Enchere> encheres) {
+			String codePostal, String ville, int credit, boolean admin) {
 		this.id = id;
 		this.prenom = prenom;
 		this.email = email;
@@ -33,9 +41,19 @@ public class Utilisateur {
 		this.ville = ville;
 		this.credit = credit;
 		this.admin = admin;
-		this.articles = articles;
-		this.encheres = encheres;
+		this.articles = new ArrayList<Article>();
+		this.encheres = new ArrayList<Enchere>();
 	}
+	
+	public void addArticle(Article article) {
+		this.articles.add(article);
+	}
+	
+	public void addEnchere(Enchere enchere) {
+		this.encheres.add(enchere);
+	}
+	
+	
 	public long getId() {
 		return id;
 	}
@@ -107,6 +125,36 @@ public class Utilisateur {
 	}
 	public void setEncheres(List<Enchere> encheres) {
 		this.encheres = encheres;
+	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Utilisateur [id=");
+		builder.append(id);
+		builder.append(", prenom=");
+		builder.append(prenom);
+		builder.append(", email=");
+		builder.append(email);
+		builder.append(", motDePasse=");
+		builder.append(motDePasse);
+		builder.append(", telephone=");
+		builder.append(telephone);
+		builder.append(", rue=");
+		builder.append(rue);
+		builder.append(", codePostal=");
+		builder.append(codePostal);
+		builder.append(", ville=");
+		builder.append(ville);
+		builder.append(", credit=");
+		builder.append(credit);
+		builder.append(", admin=");
+		builder.append(admin);
+		builder.append(", articles=");
+		builder.append(articles);
+		builder.append(", encheres=");
+		builder.append(encheres);
+		builder.append("]");
+		return builder.toString();
 	}
 
 	

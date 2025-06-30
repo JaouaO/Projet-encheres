@@ -1,6 +1,7 @@
 package fr.eni.encheres.bo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Article {
@@ -18,10 +19,18 @@ public class Article {
 	private Utilisateur utilisateur;
 	private Categorie categorie;
 	private List<Enchere> encheres;
+	
+	
+	
+	
+
+	public Article() {
+		this.encheres = new ArrayList<Enchere>();
+	}
 
 	public Article(long id, String nom, String description, LocalDateTime dateDebutEnchere,
 			LocalDateTime dateFinEnchere, int miseAPrix, int prixVente, int etatVente, Retrait lieuRetrait,
-			Utilisateur utilisateur, Categorie categorie, List<Enchere> encheres) {
+			Utilisateur utilisateur, Categorie categorie) {
 		this.id = id;
 		this.nom = nom;
 		this.description = description;
@@ -33,7 +42,6 @@ public class Article {
 		this.lieuRetrait = lieuRetrait;
 		this.utilisateur = utilisateur;
 		this.categorie = categorie;
-		this.encheres = encheres;
 	}
 
 	public long getId() {
@@ -131,5 +139,38 @@ public class Article {
 	public void setEncheres(List<Enchere> encheres) {
 		this.encheres = encheres;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Article [id=");
+		builder.append(id);
+		builder.append(", nom=");
+		builder.append(nom);
+		builder.append(", description=");
+		builder.append(description);
+		builder.append(", dateDebutEnchere=");
+		builder.append(dateDebutEnchere);
+		builder.append(", dateFinEnchere=");
+		builder.append(dateFinEnchere);
+		builder.append(", miseAPrix=");
+		builder.append(miseAPrix);
+		builder.append(", prixVente=");
+		builder.append(prixVente);
+		builder.append(", etatVente=");
+		builder.append(etatVente);
+		builder.append(", lieuRetrait=");
+		builder.append(lieuRetrait);
+		builder.append(", utilisateur=");
+		builder.append(utilisateur);
+		builder.append(", categorie=");
+		builder.append(categorie);
+		builder.append(", encheres=");
+		builder.append(encheres);
+		builder.append("]");
+		return builder.toString();
+	}
+	
+	
 
 }
