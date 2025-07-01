@@ -1,4 +1,5 @@
 package fr.eni.encheres.dal;
 
-public interface ArticleDao {
+public interface ArticleDAO {
+
 }
