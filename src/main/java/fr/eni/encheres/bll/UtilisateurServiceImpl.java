@@ -16,44 +16,51 @@ public class UtilisateurServiceImpl {
 
     @Override
     public void creerUtilsateur(Utilisateur utilisateur) {
-       utilisateurDAO.insert(utilisateur);
+        utilisateurDA.creerUtilisateur(utilisateur);
     }
+    
 
     @Override
     public void modifierUtilisateur(Utilisateur utilisateur, long idUtilisateur) {
-      Utilisateur existant = utilisateurDAO.selectById(idUtilisateur);
+      Utilisateur existant = utilisateurdao.selectById(idUtilisateur);
             utilisateur.setId(idUtilisateur); 
             utilisateurDAO.update(utilisateur);
         
     }
 
+    
     @Override
     public void supprimerUtilisateur(long idUtilisateur) {
-       utilisateurDAO.delete(idUtilisateur);
+        utilisateurDAO.supprimerUtilisateur(idUtilisateur);
     }
 
     @Override
     public List<Utilisateur> getUtilisateurs() {
-        return utilisateurDAO.selectAll();
+        return utilisateurDAO.listerUtilisateurs();
     }
 
     @Override
-    public Utilisateur consulterParEnchere(long idEnchere) {
-        return utilisateurDAO.selectByEnchereId(idEnchere);
+     public Utilisateur consulterParEnchere(long idEnchere) {
+        return utilisateurDAO.consulterParEnchere(idEnchere);
     }
 
     @Override
     public Utilisateur consulterParId(long idUtilisateur) {
-        return utilisateurDAO.selectById(idUtilisateur);
+        return utilisateurDAO.consulterParId(idUtilisateur);
     }
 
 
     @Override
-    public void acheterCredits(int nbAchat) {
-        Utilisateur utilisateur = utilisateurdao.selectById(idUtilisateur);
-        int nouveauCredit = utilisateur.getCredit() + nbAchat;
-        utilisateur.setCredit(nouveauCredit);
-        utilisateurDAO.update(utilisateur);
+    public void acheterCredits(long idUtilisateur, int nbAchat) {
+        if (nbAchat <= 0) {
+            throw new IllegalArgumentException("Le nombre de crédits achetés doit être positif.");
+        }
+        Utilisateur utilisateur = utilisateurDAO.consulterParId(idUtilisateur);
+        if (utilisateur != null) {
+            utilisateurDAO.ajouterCredits(nbAchat, idUtilisateur);
+        } else {
+            throw new IllegalArgumentException("Utilisateur non trouvé avec l’ID : " + idUtilisateur);
+        }
     }
 
 }

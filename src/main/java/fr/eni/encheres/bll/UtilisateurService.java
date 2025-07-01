@@ -5,12 +5,12 @@ import fr.eni.encheres.bo.Utilisateur;
 
 public interface UtilisateurService {
 
-
-    void creerUtilsateur(Utilisateur utilisateur);
-    void modifierUtilisateur(Utilisateur utilisateur, long idUtilisateur);
-    void supprimerUtilisateur(long idUtilisateur);
-    List<Utilisateur> getUtilisateurs();
-    Utilisateur consulterParEnchere(long idEnchere);
-    Utilisateur consulterParId(long idUtilisateur);
+    void insert(Utilisateur utilisateur);
+    void update(Utilisateur utilisateur);
+    void delete(long idUtilisateur);
+    Utilisateur selectById(long id);
+    Utilisateur selectByEnchereId(long idEnchere);
+    List<Utilisateur> selectAll();
     void acheterCredits(long idUtilisateur, int nbAchat);
+    
 }
