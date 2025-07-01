@@ -19,15 +19,16 @@ public class EnchereController {
 //	
 	
 //pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
-@GetMapping("/ventes-details")
+@GetMapping("/ventes/details")
 public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model) {
 	//check l'utilisateur pour voir si c'est achat ou vente
     return "ventes-details";
 }
 
 //pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
-@GetMapping("/achats-details")
-public String afficherDetailsAchats(@RequestParam(name = "id") long idArticle, Model model) {
+@GetMapping("/achats/details")
+//@RequestParam(name = "id") long idArticle,
+public String afficherDetailsAchats( Model model) {
 	//check l'utilisateur pour voir si c'est achat ou vente
   return "achats-details";
 }
@@ -48,7 +49,7 @@ public String getMethodName( Model model) {
 //@RequestParam(name=nbPoints)
 public String encherir( int nbPoints, Model model) {
 	//TODO
-	return "achats/details";// + idArticle;
+	return "achats-details";// + idArticle;
 }
 
 //doit request aussi l'ID de l'article
