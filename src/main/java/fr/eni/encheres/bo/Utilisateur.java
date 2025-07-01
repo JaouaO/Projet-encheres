@@ -6,14 +6,16 @@ import java.util.List;
 public class Utilisateur {
 
 	private long id;
+	private String pseudo;
 	private String prenom;
+	private String nom;
 	private String email;
 	private String motDePasse;
 	private String telephone;
 	private String rue;
 	private String codePostal;
 	private String ville;
-	private int credit;
+	private int credit = 100;
 	private boolean admin;
 
 	private List<Article> articles;
@@ -29,10 +31,12 @@ public class Utilisateur {
 	}
 	
 	
-	public Utilisateur(long id, String prenom, String email, String motDePasse, String telephone, String rue,
+	public Utilisateur(long id, String pseudo,String prenom, String nom, String email, String motDePasse, String telephone, String rue,
 			String codePostal, String ville, int credit, boolean admin) {
 		this.id = id;
+		this.pseudo = pseudo;
 		this.prenom = prenom;
+		this.nom = nom;
 		this.email = email;
 		this.motDePasse = motDePasse;
 		this.telephone = telephone;
@@ -52,8 +56,23 @@ public class Utilisateur {
 	public void addEnchere(Enchere enchere) {
 		this.encheres.add(enchere);
 	}
-	
-	
+
+	public String getPseudo() {
+		return pseudo;
+	}
+
+	public void setPseudo(String pseudo) {
+		this.pseudo = pseudo;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -131,8 +150,12 @@ public class Utilisateur {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Utilisateur [id=");
 		builder.append(id);
+		builder.append(", pseudo=");
+		builder.append(pseudo);
 		builder.append(", prenom=");
 		builder.append(prenom);
+		builder.append(", nom=");
+		builder.append(nom);
 		builder.append(", email=");
 		builder.append(email);
 		builder.append(", motDePasse=");
