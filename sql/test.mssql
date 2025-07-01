@@ -10,7 +10,7 @@ INSERT INTO Utilisateur (pseudo, nom, prenom, email, telephone, rue, code_postal
 INSERT INTO Categorie (libelle) VALUES
 ('Électronique'),
 ('Livres'),
-('Vêtements');
+('Vêtements');g
 
 -- articles
 INSERT INTO Article (nom, description, date_debut, date_fin, mise_a_prix, prix_vente, etat_vente, id_vendeur, id_categorie) VALUES
