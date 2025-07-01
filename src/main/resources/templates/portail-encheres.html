@@ -6,13 +6,8 @@
     <title>Portail enchères</title>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/src/main/resources/templates/portail-encheres.html">
-                <h1>Eni-Echères</h1>
-            </a>
-        </nav>
-    </header>
+    	<header th:replace="~{fragments/fragment-entete :: entete}">
+	</header>
 
     <a href="/src/main/resources/templates/creer-nouvelle-vente.html">Vendre un article</a><br>
     <a href="/src/main/resources/templates/profil-user.html">Mon profil</a><br>

@@ -8,11 +8,8 @@
 </head>
 
 <body>
-    <header class="entete">
-        <h1>Eni enchères</h1>
-        <a href="/src/main/resources/templates/connexion.html">S'inscrire - se connecter</a>
-
-    </header>
+   	<header th:replace="~{fragments/fragment-entete :: entete}">
+	</header>
     <h3 style="text-align: center;">Liste des enchères</h3>
 <br><br>
     <p>Filtres : </p>

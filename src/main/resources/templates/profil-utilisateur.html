@@ -8,13 +8,8 @@
 </head>
 
 <body>
-    <header>
-        <nav>
-            <a href="/src/main/resources/templates/portail-encheres.html">
-                <h1>Eni-Echères</h1>
-            </a>
-        </nav>
-    </header>
+  	<header th:replace="~{fragments/fragment-entete :: entete}">
+	</header>
     <h2 style="text-align: center;">(Nom du profil)</h2>
     
 <div class="formulaire">
@@ -36,7 +31,5 @@
 
 
 </body>
-<br><br>
-<a href="/src/main/resources/templates/index.html">Retour à l'accueil</a>
 
 </html>

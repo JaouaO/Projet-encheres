@@ -14,7 +14,11 @@ public class UtilisateurController {
 	@GetMapping({ "/", "/accueil" })
 	public String afficherAccueil(Model model) {
 		return "index";
+		//if(utilisateurEnSession != null){
+	//return "portail-encheres";
+	//}
 	}
+	
 
 	@GetMapping("/connexion")
 	public String afficherConnexion(Model model) {
@@ -34,7 +38,7 @@ public class UtilisateurController {
 	public String connexion(Model model) {
 		// TODO: process POST request
 
-		return "creer-profil";
+		return "modifier-profil";
 	}
 	
 	@GetMapping("/inscription")
@@ -44,18 +48,26 @@ public class UtilisateurController {
 		return "creer-compte";
 	}
 	
-	
-	//pas sur, peut-être qu'il faut que ce soir /connexion/modifier pour correspondre aux routes ?
 	@PostMapping("/inscription")
-	public String creerCompte( Model model ) {
-		//TODO: process POST request
+	public String creerCompte(Model model) {
+		//TODO: process PUT request
 		
-		return "creer-profil";
+		return "modifier-profil";
 	}
 	
-	@PostMapping("/creer-profil")
+	
+	
+	//pas sur, peut-être qu'il faut que ce soir /connexion/modifier pour correspondre aux routes ?
+	@PostMapping("/connexion/modifier")
+	public String modifierProfil( Model model ) {
+		//TODO: process POST request
+		
+		return "modifier-profil";
+	}
+	
+	@GetMapping("/connexion/modifier")
 	public String creerProfil( Model model) {
-		return "portail-encheres";
+		return "modifier-profil";
 	}
 	
 
