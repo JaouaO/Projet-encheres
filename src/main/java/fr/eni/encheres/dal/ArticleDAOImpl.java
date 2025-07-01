@@ -10,17 +10,14 @@ import java.util.List;
 public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public void creerArticle(Article article) {
-
     }
 
     @Override
     public void mettreEnVente(long idArticle) {
-
     }
 
     @Override
     public void annulerVente(long idArticle) {
-
     }
 
     @Override

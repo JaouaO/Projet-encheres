@@ -8,21 +8,23 @@ import java.util.List;
 
 public interface ArticleDAO {
 
-    public void creerArticle(Article article);
 
-    public void mettreEnVente(long idArticle);
+    public void creerArticle(Article article) ;
 
-    public void annulerVente(long idArticle);
 
-    public void vendreArticle(long idArticle, Enchere enchere);
+    public void mettreEnVente(long idArticle) ;
 
-    public Article consulterparId(long idArticle);
+    public void annulerVente(long idArticle) ;
 
-    public List<Article> consulterTout();
+    public void vendreArticle(long idArticle, Enchere enchere) ;
 
-    public List<Article> consulterParRecherche(String motRecherche);
+    public Article consulterparId(long idArticle) ;
 
-    public List<Article> consulterParCategorie (Categorie categorie);
+    public List<Article> consulterTout() ;
 
-    public List<Article> consulterParEtat (String etatVente);
+    public List<Article> consulterParRecherche(String motRecherche) ;
+
+    public List<Article> consulterParCategorie(Categorie categorie) ;
+
+    public List<Article> consulterParEtat(String etatVente) ;
 }
