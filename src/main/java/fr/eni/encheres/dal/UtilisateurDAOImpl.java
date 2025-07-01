@@ -30,7 +30,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        sqlParameterSource.addValue("pseudo", utilisateur.getPseudo();
+        sqlParameterSource.addValue("pseudo", utilisateur.getPseudo());
         sqlParameterSource.addValue("nom", utilisateur.getNom());
         sqlParameterSource.addValue("prenom", utilisateur.getPrenom());
         sqlParameterSource.addValue("email", utilisateur.getEmail());
@@ -126,12 +126,14 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
         sqlParameterSource.addValue("id", idUtilisateur);
 
+        namedParameterJdbcTemplate.update(ADD_CREDITS, sqlParameterSource);
+
     }
 
     @Override
     public void retirerCredits(int nbRetire, long idUtilisateur) {
 
-        String ADD_CREDITS = """
+        String REMOVE_CREDITS = """
                 UPDATE Utilisateur 
                 SET credit = credit-nbRetire
                 WHERE id = :idUtilisateur
@@ -140,6 +142,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
         sqlParameterSource.addValue("id", idUtilisateur);
 
+        namedParameterJdbcTemplate.update(REMOVE_CREDITS, sqlParameterSource);
     }
 
 
@@ -148,7 +151,9 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         public Utilisateur mapRow(ResultSet rs, int rowNum) throws SQLException {
             Utilisateur u = new Utilisateur();
             u.setId(rs.getLong("id"));
+            u.setPseudo(rs.getString("pseudo"));
             u.setPrenom(rs.getString("prenom"));
+            u.setNom(rs.getString("nom"));
             u.setEmail(rs.getString("email"));
             u.setMotDePasse(rs.getString("motDePasse"));
             u.setTelephone(rs.getString("telephone"));
