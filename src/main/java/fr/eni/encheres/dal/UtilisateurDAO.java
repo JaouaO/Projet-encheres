@@ -13,9 +13,8 @@ public interface UtilisateurDAO {
 
     public Utilisateur consulterParId (long idUtilisateur);
 
-    public void ajouterCredits(int nbAjout);
+    public void ajouterCredits(int nbAjout, long idUtilisateur);
 
-    public void retirerCredits(int nbRetire);
+    public void retirerCredits(int nbRetire, long idUtilisateur);
 
-    public void ajouterArticle(long idArticle);
-}
+ }

@@ -22,7 +22,6 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     @Override
     public void vendreArticle(long idArticle, Enchere enchere) {
-
     }
 
     @Override

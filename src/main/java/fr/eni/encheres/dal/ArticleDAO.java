@@ -8,9 +8,7 @@ import java.util.List;
 
 public interface ArticleDAO {
 
-
     public void creerArticle(Article article) ;
-
 
     public void mettreEnVente(long idArticle) ;
 
