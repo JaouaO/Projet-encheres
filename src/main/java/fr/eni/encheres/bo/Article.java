@@ -13,7 +13,7 @@ public class Article {
 	private LocalDateTime dateFinEnchere;
 	private int miseAPrix;
 	private int prixVente;
-	private int etatVente;
+	private String etatVente;
 
 	private Retrait lieuRetrait;
 	private Utilisateur utilisateur;
@@ -29,7 +29,7 @@ public class Article {
 	}
 
 	public Article(long id, String nom, String description, LocalDateTime dateDebutEnchere,
-			LocalDateTime dateFinEnchere, int miseAPrix, int prixVente, int etatVente, Retrait lieuRetrait,
+			LocalDateTime dateFinEnchere, int miseAPrix, int prixVente, String etatVente, Retrait lieuRetrait,
 			Utilisateur utilisateur, Categorie categorie) {
 		this.id = id;
 		this.nom = nom;
@@ -100,11 +100,11 @@ public class Article {
 		this.prixVente = prixVente;
 	}
 
-	public int getEtatVente() {
+	public String getEtatVente() {
 		return etatVente;
 	}
 
-	public void setEtatVente(int etatVente) {
+	public void setEtatVente(String etatVente) {
 		this.etatVente = etatVente;
 	}
 
