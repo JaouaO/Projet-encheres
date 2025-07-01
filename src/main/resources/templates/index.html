@@ -4,25 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index Projet</title>
+    <title>Index</title>
 </head>
 
 <body>
    	<header th:replace="~{fragments/fragment-entete :: entete}">
 	</header>
+	
+	<a th:href="@{/inscription}">S'inscrire</a>
+	<a th:href="@{/connexion}">Se connecter</a>
+	
+	
     <h3 style="text-align: center;">Liste des enchères</h3>
-<br><br>
+
+<!-- <form action="/accueil" method="post"> -->
+    <form action="">
     <p>Filtres : </p>
     <p>Catégorie : <select name="" id=""></select></p>
-    <form>
+
         <input type="text" name="text" class="search" placeholder="Le nom de l'article contient">
+        <button>Rechercher</button>
     </form>
-<br>
-    <button>Rechercher</button>
-<br><br>
 
     <div>
-       <a href="/src/main/resources/templates/detail-vente.html"> <p>PC Gamer pour travailler</p></a>
+       <a th:href="@{/achats/details}"> <p>PC Gamer pour travailler</p></a>
         <p>Prix : 210 points Classement : 2</p>
         <p>Fin de l'enchère : 10/08/2018</p>
         <p>Retrait : 10 allée des Alouettes 44800 Saint-Herblain</p>

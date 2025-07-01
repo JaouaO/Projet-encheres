@@ -9,26 +9,21 @@
 </head>
 
 <body>
-	<header>
-		<nav>
-			<a th:href="@{/accueil}">
-				<h1>Eni-Echères</h1>
-			</a>
-		</nav>
-	</header>
+	<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
+	<!-- <form th:object="${Utilisateur} action="/connexion" method="post"> -->
+	<form action="">
 
+		<p>
+			Identifiant : <input type="text">
+		</p>
+		<p>
+			Mot de passe : <input type="text">
+		</p>
 
-	<p>
-		Identifiant : <input type="text">
-	</p>
-	<p>
-		Mot de passe : <input type="text">
-	</p>
-
-	<button type="submit">Connexion</button>
-	<input type="checkbox">Se souvenir de moi
-	<a href="">Mot de passe oublié</a>
-
+		<button type="submit">Connexion</button>
+		<input type="checkbox">Se souvenir de moi <a href="">Mot
+			de passe oublié</a>
+	</form>
 
 
 
@@ -36,7 +31,6 @@
 
 	<a th:href="@{/inscription}">Créer un compte</a>
 
-	<a th:href="@{/accueil}">Retour à l'accueil</a>
 </body>
 
 
