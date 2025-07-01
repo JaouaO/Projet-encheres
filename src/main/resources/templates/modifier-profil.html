@@ -2,33 +2,35 @@
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer Profil</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Créer Profil</title>
 </head>
 
 <body>
-    <header th:replace="~{fragments/fragment-entete :: entete}">
-	</header>
-    <h2 style="text-align: center;">Mon profil</h2>
+	<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
+	<h2>Mon profil</h2>
 
-<!-- <form th:object="${Utilisateur} action="/inscription" method="post"> -->
+	<!-- <form th:object="${Utilisateur} action="/inscription" method="post"> -->
 	<form action="">
-    <label for="">Pseudo :</label> <input type="text"><br>
-    <label for="">Nom :</label> <input type="text"><br>
-    <label for="">Prénom :</label> <input type="text"><br>
-    <label for="">Email :</label> <input type="email"><br>
-    <label for="">Téléphone :</label> <input type="number"><br>
-    <label for="">Rue :</label> <input type="text"><br>
-    <label for="">Code Postal :</label> <input type="number"><br>
-    <label for="">Ville :</label> <input type="text"><br>
-    <label for="">Mot de passe :</label> <input type="password"><br>
-    <label for="">Confirmation :</label> <input type="password">
-</form>
-
-
-
-    <a href="/src/main/resources/templates/portail-encheres.html">Enregistrer</a>  <a href="/src/main/resources/templates/index.html">Supprimer mon compte</a> <a href="/src/main/resources/templates/index.html">Retour</a>
+		<label for="">Pseudo :</label> <input type="text"><br> <label
+			for="">Nom :</label> <input type="text"><br> <label
+			for="">Prénom :</label> <input type="text"><br> <label
+			for="">Email :</label> <input type="email"><br> <label
+			for="">Téléphone :</label> <input type="number"><br> <label
+			for="">Rue :</label> <input type="text"><br> <label
+			for="">Code Postal :</label> <input type="number"><br> <label
+			for="">Ville :</label> <input type="text"><br> <label
+			for="">Mot de passe :</label> <input type="password"><br>
+		<label for="">Confirmation :</label> <input type="password">
+		<li>
+			<button type="submit">Créer</button>
+		</li>
+	</form>
+	<!--ajouter une pop up pour verifier la suppression du compte-->
+	<a th:href="@{/accueil}">Supprimer mon
+		compte</a>
+	<a th:href="@{/profil}">Retour</a>
 
 
 </body>
