@@ -8,7 +8,9 @@
 <body>
        	<header th:replace="~{fragments/fragment-entete :: entete}">
 	</header>
-            <h2 style="text-align: center;">Détail Vente</h2>
+	       <!-- Afficherle bon titre en fonction des cas -->
+            <h2>Jojo a remporté l'enchère !</h2>
+            <h2>Détail Vente</h2>
     <h3>PC Gamer pour travailler</h3>
 
 
@@ -20,9 +22,15 @@
     <p>Fin de l'enchère : 09/10/2018</p>
     <p>Retrait : 10 Allée des Alouettes 44800 Saint-Herblain</p>
 
-    <p>Vendeur : <a href="/src/main/resources/templates/profil-user.html">jojo44</a></p>
-    <p>Ma proposition : <select type="number"></select> <button type="submit">Enchérir</button>
+    <p>Vendeur : <a h th:href="@{/profil}">jojo44</a></p>
+    
+    
+    	       <!-- Afficherle les boutons en fonction des cas -->
+    <a  th:href="@{/accueil}"><button>Annuler la vente</button></a>
 
-    <a href="/src/main/resources/templates/portail-encheres.html"><button type="submit">Retour</button></a>
+   <a  th:href="@{/accueil}"><button>Retour</button></a>
+    <a  th:href="@{/retire}"><button>Retrait effectué</button></a>
+    	       <!-- mettre Profil.prenom en thymeleaf-->
+       <a  th:href="@{/profil}"><button>Contacter "Profil.prenom"</button></a>
 </body>
 </html>

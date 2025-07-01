@@ -3,6 +3,7 @@ package fr.eni.encheres.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -18,18 +19,44 @@ public class EnchereController {
 //	
 	
 //pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
-@GetMapping("/detail")
-public String getMethodName(@RequestParam(name = "id") long idArticle, Model model) {
+@GetMapping("/ventes-details")
+public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model) {
 	//check l'utilisateur pour voir si c'est achat ou vente
-    return "detail-vente";
+    return "ventes-details";
+}
+
+//pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
+@GetMapping("/achats-details")
+public String afficherDetailsAchats(@RequestParam(name = "id") long idArticle, Model model) {
+	//check l'utilisateur pour voir si c'est achat ou vente
+  return "achats-details";
 }
 
 @GetMapping("/vente")
+public String afficherVente( Model model) {
+    return "creer-nouvelle-vente";
+}
+
+@PostMapping("/creer-nouvelle-vente")
 public String getMethodName( Model model) {
     return "creer-nouvelle-vente";
 }
 
 
+//doit request aussi l'ID de l'article
+@PostMapping("/encherir")
+//@RequestParam(name=nbPoints)
+public String encherir( int nbPoints, Model model) {
+	//TODO
+	return "achats/details";// + idArticle;
+}
+
+//doit request aussi l'ID de l'article
+@PostMapping("/retire")
+public String retire(Model model) {
+	//TODO checker que le vendeur ET l'acheteur l'ont marqué comme retiré
+	return "redirect:/achats/details";// + idArticle;
+}
 	
 	
 }
