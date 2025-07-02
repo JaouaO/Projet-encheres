@@ -44,13 +44,7 @@ public class EnchereServiceImpl implements EnchereService {
 	public void finaliserVente(long idArticle) {
 
 		if (this.enchereDAO.consulterParArticle(idArticle).size > 0) {
-			Enchere enchereGagnante = new Enchere();
-			for (Enchere enchere : this.enchereDAO.consulterParArticle(idArticle)) {
-				if (enchere.getMontantEnchere() > enchereGagnante.getMontantEnchere())
-					enchereGagnante = enchere;
-			}
-
-			this.vendreArticle(idArticle, enchereGagnante);
+			this.vendreArticle(idArticle);
 		} else {
 			this.annulerVente(idArticle);
 		}
