@@ -15,11 +15,26 @@ public class CategorieDAOImpl implements CategorieDAO {
     @Override
     public void Categorie(Categorie categorie) {
 
+        String creerCategorie = "INSERT INTO Categorie (id, libelle) VALUES (:id, :libelle)";
+
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("libelle", categorie.getLibelle());
+        parameterSource.addValue("id", categorie.getId());
+
+        namedParameterJdbcTemplate.update(creerCategorie, parameterSource);
+
     }
 
     @Override
     // suppression d'une catégorie
     public void supprimerCategorie(long idCategorie) {
+
+        String supprCategorie = "UPDATE Categorie SET libelle = :libelle WHERE id = :id";
+
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("id", idCategorie);
+
+        this.namedParameterJdbcTemplate.update(supprCategorie, parameterSource);
 
     }
 
@@ -27,12 +42,12 @@ public class CategorieDAOImpl implements CategorieDAO {
     // modification d'une catégorie
     public void modifierCategorie(long idCategorie) {
 
-        String UPDATE = "UPDATE Categorie SET libelle = :libelle WHERE id = :id";
+        String modifCategorie = "UPDATE Categorie SET libelle = :libelle WHERE id = :id";
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("id", idCategorie);
 
-        this.namedParameterJdbcTemplate.update(UPDATE, parameterSource);
+        this.namedParameterJdbcTemplate.update(modifCategorie, parameterSource);
 
     }
 
@@ -40,12 +55,12 @@ public class CategorieDAOImpl implements CategorieDAO {
     // consulter une catégorie par son id
     public Categorie consulterParId(long idCategorie) {
 
-        String FIND_BY_ID = "SELECT id, libelle FROM Categorie WHERE id = :id";
+        String trouverParId = "SELECT id, libelle FROM Categorie WHERE id = :id";
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("id", idCategorie);
 
-        return this.namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, parameterSource, new BeanPropertyRowMapper<>(Categorie.class));
+        return this.namedParameterJdbcTemplate.queryForObject(trouverParId, parameterSource, new BeanPropertyRowMapper<>(Categorie.class));
     }
 
     @Override
@@ -55,8 +70,8 @@ public class CategorieDAOImpl implements CategorieDAO {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("id", article.getId());
 
-        String ADD_ARTICLE = "INSERT INTO Categorie (id) VALUES (:id)";
+        String integrerArticle = "INSERT INTO Categorie (id) VALUES (:id)";
 
-        return this.namedParameterJdbcTemplate.queryForObject(ADD_ARTICLE, parameterSource, new BeanPropertyRowMapper<>(Categorie.class));
+        return this.namedParameterJdbcTemplate.queryForObject(integrerArticle, parameterSource, new BeanPropertyRowMapper<>(Categorie.class));
     }
 }
