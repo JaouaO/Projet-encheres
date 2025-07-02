@@ -13,15 +13,15 @@ public class CategorieDAOImpl implements CategorieDAO {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public void Categorie(Categorie categorie) {
+    public void creerCategorie(Categorie categorie) {
 
-        String creerCategorie = "INSERT INTO Categorie (id, libelle) VALUES (:id, :libelle)";
+        String creationCategorie = "INSERT INTO Categorie (id, libelle) VALUES (:id, :libelle)";
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("libelle", categorie.getLibelle());
         parameterSource.addValue("id", categorie.getId());
 
-        namedParameterJdbcTemplate.update(creerCategorie, parameterSource);
+        namedParameterJdbcTemplate.update(creationCategorie, parameterSource);
 
     }
 
