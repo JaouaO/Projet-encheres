@@ -13,7 +13,7 @@ public class CategorieDAOImpl implements CategorieDAO {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public void Categorie(Categorie categorie) {
+    public void creerCategorie(Categorie categorie) {
 
         String creerCategorie = "INSERT INTO Categorie (id, libelle) VALUES (:id, :libelle)";
 
