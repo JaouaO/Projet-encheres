@@ -31,7 +31,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void creerCategorie(Categorie categorie) {
-        categorieDAO.Categorie(categorie); 
+        categorieDAO.creerCategorie(categorie); 
     }
 
     @Override

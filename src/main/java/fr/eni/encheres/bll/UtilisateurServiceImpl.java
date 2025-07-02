@@ -25,11 +25,11 @@ public class UtilisateurServiceImpl implements UtilisateurService{
     }
 
 	 @Override
-	    public void modifierUtilisateur(Utilisateur utilisateur, long idUtilisateur) {
+	    public void modifierUtilisateur(long idUtilisateur) {
 	        if (idUtilisateur <= 0) {
 	            throw new IllegalArgumentException("ID utilisateur invalide");
 	        }
-	         utilisateurDAO.modifierUtilisateur(utilisateur, idUtilisateur);
+	         utilisateurDAO.modifierUtilisateur(idUtilisateur);
 	        
 	    }
 
@@ -45,7 +45,9 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 
 	    @Override
 	    public void desactiverUtilisateur(long idUtilisateur) {
-	        //inactif/inactif en sql?
+			 if (idUtilisateur <= 0) {
+	            throw new IllegalArgumentException("ID utilisateur invalide");
+	        }
 	        utilisateurDAO.desactiverUtilisateur(idUtilisateur);
 	    }
 	    
@@ -80,14 +82,16 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	        utilisateurDAO.retirerCredits(nbRetire, idUtilisateur);
 	    }
 
+
+		@Override
 		public void annulerVenteParUtilisateur(long idArticle, long idUtilisateur) {
 	    		      
 	    	
-	    	List<Enchere> encheres = enchereDAO.consulterParArticle(idArticle);
+	    	/*List<Enchere> encheres = enchereDAO.consulterParArticle(idArticle);
 	        for (Enchere enchere : encheres) {
 	            Utilisateur encherisseur = enchere.getUtilisateur();
 	            utilisateurDAO.ajouterCredits(enchere.getMontantEnchere(), encherisseur.getId());
-	        }
+	        }*/
 	        this.articleDAO.annulerVente(idArticle);
 	    }
 	}
