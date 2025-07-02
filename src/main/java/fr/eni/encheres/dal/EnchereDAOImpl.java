@@ -17,9 +17,9 @@ public class EnchereDAOImpl implements EnchereDAO {
 	// ajout d'une enchère
 	public List<Enchere> ajouterEnchere(Enchere enchere) {
 
-		String creerEchere = "INSERT INTO Enchere (id, date_enchere, montant_enchere, id_utilisateur, id_article) VALUES (:id, :dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)";
+		String creerEnchere = "INSERT INTO Enchere (id, date_enchere, montant_enchere, id_utilisateur, id_article) VALUES (:id, :dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)";
 
-		return this.namedParameterJdbcTemplate.query(creerEchere, new BeanPropertyRowMapper<>(Enchere.class));
+		return this.namedParameterJdbcTemplate.query(creerEnchere, new BeanPropertyRowMapper<>(Enchere.class));
 	}
 
 	@Override
