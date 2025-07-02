@@ -14,7 +14,7 @@ public interface ArticleDAO {
 
     public void annulerVente(long idArticle) ;
 
-    public void vendreArticle(long idArticle, Enchere enchere) ;
+    public void vendreArticle(long idArticle) ;
 
     public Article consulterparId(long idArticle) ;
 
@@ -22,7 +22,7 @@ public interface ArticleDAO {
 
     public List<Article> consulterParRecherche(String motRecherche) ;
 
-    public List<Article> consulterParCategorie(Categorie categorie) ;
+    public List<Article> consulterParCategorie(long idCategorie) ;
 
     public List<Article> consulterParEtat(String etatVente) ;
 }

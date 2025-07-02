@@ -125,7 +125,7 @@ public class Article {
 	}
 
 	public Categorie getCategorie() {
-		return categorie;
+		return this.categorie;
 	}
 
 	public void setCategorie(Categorie categorie) {
@@ -170,7 +170,6 @@ public class Article {
 		builder.append("]");
 		return builder.toString();
 	}
-	
-	
+
 
 }

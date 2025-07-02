@@ -23,14 +23,14 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
     @Override
     public void creerUtilisateur(Utilisateur utilisateur) {
-        String ADD_USER = """
+        String ajouterUtilisateur = """
                 INSERT INTO Utilisateur (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur)
                 VALUES (:pseudo, :nom, :prenom, :email, :telephone, :rue, :codePostal, :ville, :motDePpasse, :credit, :administrateur)
                 """;
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        sqlParameterSource.addValue("pseudo", utilisateur.getPseudo();
+        sqlParameterSource.addValue("pseudo", utilisateur.getPseudo());
         sqlParameterSource.addValue("nom", utilisateur.getNom());
         sqlParameterSource.addValue("prenom", utilisateur.getPrenom());
         sqlParameterSource.addValue("email", utilisateur.getEmail());
@@ -42,7 +42,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         sqlParameterSource.addValue("credit", utilisateur.getCredit());
         sqlParameterSource.addValue("administrateur", utilisateur.isAdmin());
 
-        namedParameterJdbcTemplate.update(ADD_USER, sqlParameterSource, keyHolder);
+        namedParameterJdbcTemplate.update(ajouterUtilisateur, sqlParameterSource, keyHolder);
 
         if (keyHolder != null && keyHolder.getKey() != null) {
             utilisateur.setId(keyHolder.getKey().longValue());
@@ -55,7 +55,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         if (idUtilisateur != 0) {
             utilisateur.setId(idUtilisateur);
 
-        String MODIFY_USER = """
+        String modifUtilisateur = """
                 UPDATE Utilisateur
                 SET pseudo = 'pseudo', 
                     nom = 'nom', 
@@ -71,10 +71,10 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
                 
         """;
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        sqlParameterSource.addValue("id", idUtilisateur);
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("id", idUtilisateur);
 
-        namedParameterJdbcTemplate.update(MODIFY_USER, sqlParameterSource, keyHolder);
+        namedParameterJdbcTemplate.update(modifUtilisateur, parameterSource, keyHolder);
         if (keyHolder != null && keyHolder.getKey() != null) {
             utilisateur.setId(keyHolder.getKey().longValue());
         }}
@@ -85,14 +85,14 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
     public void supprimerUtilisateur(long idUtilisateur) {
         if (idUtilisateur != 0) {
 
-            String DELETE_USER = """
+            String supprUtilisateur = """
                     DELETE FROM Utilisateur
                     WHERE id = :idUtilisateur
             """;
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-            sqlParameterSource.addValue("id", idUtilisateur);
-            namedParameterJdbcTemplate.update(DELETE_USER, sqlParameterSource, keyHolder);
+            MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+            parameterSource.addValue("id", idUtilisateur);
+            namedParameterJdbcTemplate.update(supprUtilisateur, parameterSource, keyHolder);
         }
 
     }
@@ -104,42 +104,45 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
     @Override
     public Utilisateur consulterParId(long idUtilisateur) {
-        String FIND_BY_ID = """
+        String trouverParId = """
                 SELECT id, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, credit, administrateur
                 FROM Utilisateur
                 WHERE id = :idUtilisateur"""
                 ;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("id", idUtilisateur);
-        return namedParameterJdbcTemplate.getJdbcTemplate().queryForObject(FIND_BY_ID, new UtilisateurRowMapper(), parameterSource);
+        return namedParameterJdbcTemplate.getJdbcTemplate().queryForObject(trouverParId, new UtilisateurRowMapper(), parameterSource);
     }
 
     @Override
     public void ajouterCredits(int nbAjout, long idUtilisateur) {
 
-        String ADD_CREDITS = """
+        String creditPlus = """
                 UPDATE Utilisateur 
                 SET credit = credit+nbAjout
                 WHERE id = :idUtilisateur
         """;
 
-        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        sqlParameterSource.addValue("id", idUtilisateur);
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("id", idUtilisateur);
+
+        namedParameterJdbcTemplate.update(creditPlus, parameterSource);
 
     }
 
     @Override
     public void retirerCredits(int nbRetire, long idUtilisateur) {
 
-        String ADD_CREDITS = """
+        String CreditsMoins = """
                 UPDATE Utilisateur 
                 SET credit = credit-nbRetire
                 WHERE id = :idUtilisateur
         """;
 
-        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        sqlParameterSource.addValue("id", idUtilisateur);
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("id", idUtilisateur);
 
+        namedParameterJdbcTemplate.update(CreditsMoins, parameterSource);
     }
 
 
@@ -148,7 +151,9 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         public Utilisateur mapRow(ResultSet rs, int rowNum) throws SQLException {
             Utilisateur u = new Utilisateur();
             u.setId(rs.getLong("id"));
+            u.setPseudo(rs.getString("pseudo"));
             u.setPrenom(rs.getString("prenom"));
+            u.setNom(rs.getString("nom"));
             u.setEmail(rs.getString("email"));
             u.setMotDePasse(rs.getString("motDePasse"));
             u.setTelephone(rs.getString("telephone"));
