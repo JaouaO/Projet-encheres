@@ -14,5 +14,5 @@ public interface EnchereDAO {
 
     List<Enchere> consulterTout();
 
-    int annulerEnchere(Enchere enchere);
+    void annulerEnchere(Enchere enchere);
 }

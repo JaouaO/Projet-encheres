@@ -3,8 +3,9 @@ package fr.eni.encheres.dal;
 import fr.eni.encheres.bo.Enchere;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class EnchereDAOImpl implements EnchereDAO {
@@ -43,18 +44,23 @@ public class EnchereDAOImpl implements EnchereDAO {
     // consulter la liste des enchères
     public List<Enchere> consulterTout() {
 
-        String consulTout = "SELECT dateEnchere, montantEnchere, utilisateur, article FROM Enchere";
+        String consulTout = "SELECT id, date_enchere, montant_enchere, id_utilisateur, id_article FROM Enchere";
 
         return this.namedParameterJdbcTemplate.query(consulTout, new BeanPropertyRowMapper<>(Enchere.class));
     }
     @Override
     // annulation d'une enchère
-    public int annulerEnchere(Enchere enchere) {
+    public void annulerEnchere(Enchere enchere) {
+        LocalDateTime dateEnchere = enchere.getDateEnchere();
+        Long idUtilisateur = enchere.getUtilisateur().getId();
 
-        String supprEnchere = "DELETE FROM Enchere WHERE id_enchere = 1";
+        String supprEnchere = "DELETE FROM Enchere WHERE date_enchere = :dateEnchere AND id_utilisateur = :idUtilisateur";
 
-        return this.namedParameterJdbcTemplate.update(supprEnchere, new BeanPropertySqlParameterSource(enchere));
+        MapSqlParameterSource paramSource = new MapSqlParameterSource();
+        paramSource.addValue("date_enchere", dateEnchere);
+        paramSource.addValue("id_utilisateur", idUtilisateur);
 
+        namedParameterJdbcTemplate.update(supprEnchere, paramSource);
     }
 
 }
