@@ -29,7 +29,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     public void creerArticle(Article article) {
         String creerUnNouvelArticle = """
                 INSERT INTO Article (id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie)
-                VALUES (:id, :nom, :description, :dateDebutEnchere, :dateFinEnchere, :miseAPrix, :prixVente, :etatVente, :utilisateur, :categorie)
+                VALUES (:id, :nom, :description, :dateDebutEnchere, :dateFinEnchere, :miseAPrix, :prixVente, :etatVente, :idUtilisateur, :idCategorie)
                 """;
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -42,8 +42,8 @@ public class ArticleDAOImpl implements ArticleDAO {
         parameterSource.addValue("miseAPrix", article.getMiseAPrix());
         parameterSource.addValue("prix_vente", article.getPrixVente());
         parameterSource.addValue("etatVente", article.getEtatVente());
-        parameterSource.addValue("utilisateur", article.getUtilisateur());
-        parameterSource.addValue("categorie",article.getCategorie());
+        parameterSource.addValue("idUtilisateur", article.getUtilisateur().getId());
+        parameterSource.addValue("idCcategorie",article.getCategorie().getId());
 
         namedParameterJdbcTemplate.update(creerUnNouvelArticle, parameterSource, keyHolder);
 
@@ -58,9 +58,9 @@ public class ArticleDAOImpl implements ArticleDAO {
                 UPDATE Article SET etat_vente = 'en_cours'
                 WHERE id = :idArticle
                 """;
-        MapSqlParameterSource ParameterSource = new MapSqlParameterSource();
-        ParameterSource.addValue("id", idArticle);
-        namedParameterJdbcTemplate.update(mettreEtatEnVente, ParameterSource);
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("id", idArticle);
+        namedParameterJdbcTemplate.update(mettreEtatEnVente, parameterSource);
     }
 
     @Override
@@ -82,9 +82,9 @@ public class ArticleDAOImpl implements ArticleDAO {
                 UPDATE Article SET etat_vente = 'terminee'
                 WHERE id = :idArticle
                 """;
-        MapSqlParameterSource ParameterSource = new MapSqlParameterSource();
-        ParameterSource.addValue("id", idArticle);
-        namedParameterJdbcTemplate.update(mettreEtatVendu, ParameterSource);
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("id", idArticle);
+        namedParameterJdbcTemplate.update(mettreEtatVendu, parameterSource);
     }
 
     @Override
