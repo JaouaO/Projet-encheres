@@ -1,10 +1,15 @@
 package fr.eni.encheres.bo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Categorie {
+public class Categorie implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long id;
 	private String libelle;
 	
