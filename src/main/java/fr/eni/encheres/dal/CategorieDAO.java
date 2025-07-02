@@ -1,15 +1,15 @@
 package fr.eni.encheres.dal;
 
+import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
-import fr.eni.encheres.bo.Enchere;
 
 public interface CategorieDAO {
 
-    public void Categorie(Categorie categorie);
-    public void supprimerCategorie(long idCategorie);
-    public int modifierCategorie(long idCategorie);
-    Categorie consulterParId(long Categorie);
-    public Enchere ajouterArticle(long idArticle);
+     void Categorie(Categorie categorie);
+     void supprimerCategorie(long idCategorie);
+     void modifierCategorie(long idCategorie);
+     Categorie consulterParId(long Categorie);
+     Categorie ajouterArticle(Article article);
 
 
 }

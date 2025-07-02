@@ -1,14 +1,16 @@
 package fr.eni.encheres.dal;
 
+import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
-import fr.eni.encheres.bo.Enchere;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class CategorieDAOImpl implements CategorieDAO {
 
-    private JdbcTemplate namedParameterJdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
     public void Categorie(Categorie categorie) {
@@ -23,29 +25,38 @@ public class CategorieDAOImpl implements CategorieDAO {
 
     @Override
     // modification d'une catégorie
-    public int modifierCategorie(long idCategorie) {
+    public void modifierCategorie(long idCategorie) {
 
-       String UPDATE = "UPDATE Categorie SET libelle = :libelle WHERE id = :id";
+        String UPDATE = "UPDATE Categorie SET libelle = :libelle WHERE id = :id";
 
-        return this.namedParameterJdbcTemplate.update(UPDATE, new BeanPropertySqlParameterSource(Categorie.class));
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("id", idCategorie);
+
+        this.namedParameterJdbcTemplate.update(UPDATE, parameterSource);
 
     }
 
     @Override
     // consulter une catégorie par son id
-    public Categorie consulterParId(long Categorie) {
+    public Categorie consulterParId(long idCategorie) {
 
-        String FIND_BY_ID = "SELECT id FROM Categorie WHERE id = :id";
+        String FIND_BY_ID = "SELECT id, libelle FROM Categorie WHERE id = :id";
 
-        return this.namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, new BeanPropertyRowMapper<>(Categorie.class));
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("id", idCategorie);
+
+        return this.namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, parameterSource, new BeanPropertyRowMapper<>(Categorie.class));
     }
 
     @Override
     // ajout d'une nouvelle catégorie
-    public Enchere ajouterArticle(long idArticle) {
+    public Categorie ajouterArticle(Article article) {
 
-        String ADD_ARTICLE = "INSERT INTO id, libelle, articles FROM Categorie WHERE id = :id";
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("id", article.getId());
 
-        return this.namedParameterJdbcTemplate.queryForObject(ADD_ARTICLE, new BeanPropertyRowMapper<>(Enchere.class));
+        String ADD_ARTICLE = "INSERT INTO Categorie (id) VALUES (:id)";
+
+        return this.namedParameterJdbcTemplate.queryForObject(ADD_ARTICLE, parameterSource, new BeanPropertyRowMapper<>(Categorie.class));
     }
 }
