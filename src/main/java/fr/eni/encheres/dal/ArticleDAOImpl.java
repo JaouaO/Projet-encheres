@@ -27,7 +27,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     @Override
     public void creerArticle(Article article) {
-        String ADD_ARTICLE = """
+        String creerUnNouvelArticle = """
                 INSERT INTO Article (id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie)
                 VALUES (:id, :nom, :description, :dateDebutEnchere, :dateFinEnchere, :miseAPrix, :prixVente, :etatVente, :utilisateur, :categorie)
                 """;
@@ -45,7 +45,7 @@ public class ArticleDAOImpl implements ArticleDAO {
         parameterSource.addValue("utilisateur", article.getUtilisateur());
         parameterSource.addValue("categorie",article.getCategorie());
 
-        namedParameterJdbcTemplate.update(ADD_ARTICLE, parameterSource, keyHolder);
+        namedParameterJdbcTemplate.update(creerUnNouvelArticle, parameterSource, keyHolder);
 
         if (keyHolder.getKey() != null) {
             article.setId(keyHolder.getKey().longValue());
@@ -54,100 +54,98 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     @Override
     public void mettreEnVente(long idArticle) {
-        String nvEtatVente = "en_cours";
-        String UPDATE_ETAT = """
-                UPDATE Article SET etat_vente = nvEtatVente
+        String mettreEtatEnVente = """
+                UPDATE Article SET etat_vente = 'en_cours'
                 WHERE id = :idArticle
                 """;
-        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        sqlParameterSource.addValue("id", idArticle);
-        namedParameterJdbcTemplate.update(nvEtatVente, sqlParameterSource);
+        MapSqlParameterSource ParameterSource = new MapSqlParameterSource();
+        ParameterSource.addValue("id", idArticle);
+        namedParameterJdbcTemplate.update(mettreEtatEnVente, ParameterSource);
     }
 
     @Override
     public void annulerVente(long idArticle) {
         if (idArticle == 0) {
-            String REMOVE_ARTICLE = """
+            String supprArticle = """
                 DELETE Article
                 WHERE id = :idArticle
                 """;
-            MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-            sqlParameterSource.addValue("id", idArticle);
-            namedParameterJdbcTemplate.update(REMOVE_ARTICLE, sqlParameterSource);
+            MapSqlParameterSource ParameterSource = new MapSqlParameterSource();
+            ParameterSource.addValue("id", idArticle);
+            namedParameterJdbcTemplate.update(supprArticle, ParameterSource);
         }
     }
 
     @Override
     public void vendreArticle(long idArticle) {
-        String nvEtatVente = "terminee";
-        String UPDATE_ETAT = """
-                UPDATE Article SET etat_vente = nvEtatVente
+        String mettreEtatVendu = """
+                UPDATE Article SET etat_vente = 'terminee'
                 WHERE id = :idArticle
                 """;
-        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        sqlParameterSource.addValue("id", idArticle);
-        namedParameterJdbcTemplate.update(nvEtatVente, sqlParameterSource);
+        MapSqlParameterSource ParameterSource = new MapSqlParameterSource();
+        ParameterSource.addValue("id", idArticle);
+        namedParameterJdbcTemplate.update(mettreEtatVendu, ParameterSource);
     }
 
     @Override
     public Article consulterparId(long idArticle) {
-        String FIND_BY_ID = """
+        String trouverParId = """
                 SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, libelle
                 FROM Article
                 WHERE idArticle = :idArticle
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("id", idArticle);
-        return namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, parameterSource, new ArticleRowMapper());
+        return namedParameterJdbcTemplate.queryForObject(trouverParId, parameterSource, new ArticleRowMapper());
     }
 
     @Override
     public List<Article> consulterTout() {
-        String GET_ALL = """
+        String trouverTousLesArticles = """
                 SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, libelle
                 FROM article
                 """;
-        return namedParameterJdbcTemplate.query(GET_ALL, new ArticleRowMapper());
+        return namedParameterJdbcTemplate.query(trouverTousLesArticles, new ArticleRowMapper());
     }
 
     @Override
     public List<Article> consulterParRecherche(String motRecherche) {
-        String FIND_BY_SEARCH = """
+        String trouverParRecherche = """
                 SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, libelle
                 FROM article AS a
                 INNER JOIN categorie AS c ON (a.id_categorie=c.id)
-                WHERE nom LIKE "%" + motRecherche + "%"
-                OR libelle LIKE "%" + motRecherche + "%"
+                WHERE nom LIKE '%"+ motRecherche + "%' 
+                   OR libelle LIKE '%" + motRecherche + "%'
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("nom", motRecherche);
         parameterSource.addValue("libelle", motRecherche);
-        return namedParameterJdbcTemplate.query(FIND_BY_SEARCH, parameterSource, new ArticleRowMapper());
+        return namedParameterJdbcTemplate.query(trouverParRecherche, parameterSource, new ArticleRowMapper());
     }
 
     @Override
-    public List<Article> consulterParCategorie(Categorie categorie) {
+    public List<Article> consulterParCategorie(long idCategorie) {
 
-        String FIND_BY_CATEGORIE = """
+        String trouverParCategorie = """
                 SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
                 FROM Article
-                WHERE categorie = :categorie
+                WHERE id_categorie = :idCategorie
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("categorie", categorie);
-        return namedParameterJdbcTemplate.query(FIND_BY_CATEGORIE, parameterSource, new ArticleRowMapper());
+        parameterSource.addValue("id_categorie", idCategorie);
+        return namedParameterJdbcTemplate.query(trouverParCategorie, parameterSource, new ArticleRowMapper());
     }
 
     @Override
     public List<Article> consulterParEtat(String etatVente) {
-        String FIND_BY_ETAT = """
+        String trierParEtat = """
                 SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
                 FROM Article
                 WHERE etat_vente = :etatVente
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("etatVente", etatVente);
-        return namedParameterJdbcTemplate.query(FIND_BY_ETAT, parameterSource, new ArticleRowMapper());
+        return namedParameterJdbcTemplate.query(trierParEtat, parameterSource, new ArticleRowMapper());
     }
 
     class ArticleRowMapper implements RowMapper<Article> {
@@ -164,8 +162,12 @@ public class ArticleDAOImpl implements ArticleDAO {
             a.setMiseAPrix(rs.getInt("miseAPrix"));
             a.setPrixVente(rs.getInt("prixVente"));
             a.setEtatVente(rs.getString("etatVente"));
-            a.setUtilisateur((Utilisateur) rs.getObject("utlisateur"));
-            a.setCategorie((Categorie) rs.getObject("categorie"));
+            Utilisateur utilisateur = new Utilisateur();
+            utilisateur.setId(rs.getLong("id_vendeur"));
+            a.setUtilisateur(utilisateur);
+            Categorie categorie = new Categorie();
+            categorie.setId(rs.getLong("id_categorie"));
+            a.setCategorie(categorie);
 
             return a;
         }

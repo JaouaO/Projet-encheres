@@ -23,7 +23,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
     @Override
     public void creerUtilisateur(Utilisateur utilisateur) {
-        String ADD_USER = """
+        String ajouterUtilisateur = """
                 INSERT INTO Utilisateur (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur)
                 VALUES (:pseudo, :nom, :prenom, :email, :telephone, :rue, :codePostal, :ville, :motDePpasse, :credit, :administrateur)
                 """;
@@ -42,7 +42,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         sqlParameterSource.addValue("credit", utilisateur.getCredit());
         sqlParameterSource.addValue("administrateur", utilisateur.isAdmin());
 
-        namedParameterJdbcTemplate.update(ADD_USER, sqlParameterSource, keyHolder);
+        namedParameterJdbcTemplate.update(ajouterUtilisateur, sqlParameterSource, keyHolder);
 
         if (keyHolder != null && keyHolder.getKey() != null) {
             utilisateur.setId(keyHolder.getKey().longValue());
@@ -55,7 +55,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         if (idUtilisateur != 0) {
             utilisateur.setId(idUtilisateur);
 
-        String MODIFY_USER = """
+        String modifUtilisateur = """
                 UPDATE Utilisateur
                 SET pseudo = 'pseudo', 
                     nom = 'nom', 
@@ -71,10 +71,10 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
                 
         """;
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        sqlParameterSource.addValue("id", idUtilisateur);
+        MapSqlParameterSource ParameterSource = new MapSqlParameterSource();
+        ParameterSource.addValue("id", idUtilisateur);
 
-        namedParameterJdbcTemplate.update(MODIFY_USER, sqlParameterSource, keyHolder);
+        namedParameterJdbcTemplate.update(modifUtilisateur, ParameterSource, keyHolder);
         if (keyHolder != null && keyHolder.getKey() != null) {
             utilisateur.setId(keyHolder.getKey().longValue());
         }}
@@ -85,14 +85,14 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
     public void supprimerUtilisateur(long idUtilisateur) {
         if (idUtilisateur != 0) {
 
-            String DELETE_USER = """
+            String supprUtilisateur = """
                     DELETE FROM Utilisateur
                     WHERE id = :idUtilisateur
             """;
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-            sqlParameterSource.addValue("id", idUtilisateur);
-            namedParameterJdbcTemplate.update(DELETE_USER, sqlParameterSource, keyHolder);
+            MapSqlParameterSource ParameterSource = new MapSqlParameterSource();
+            ParameterSource.addValue("id", idUtilisateur);
+            namedParameterJdbcTemplate.update(supprUtilisateur, ParameterSource, keyHolder);
         }
 
     }
@@ -104,45 +104,45 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
     @Override
     public Utilisateur consulterParId(long idUtilisateur) {
-        String FIND_BY_ID = """
+        String trouverParId = """
                 SELECT id, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, credit, administrateur
                 FROM Utilisateur
                 WHERE id = :idUtilisateur"""
                 ;
-        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idUtilisateur);
-        return namedParameterJdbcTemplate.getJdbcTemplate().queryForObject(FIND_BY_ID, new UtilisateurRowMapper(), parameterSource);
+        MapSqlParameterSource ParameterSource = new MapSqlParameterSource();
+        ParameterSource.addValue("id", idUtilisateur);
+        return namedParameterJdbcTemplate.getJdbcTemplate().queryForObject(trouverParId, new UtilisateurRowMapper(), ParameterSource);
     }
 
     @Override
     public void ajouterCredits(int nbAjout, long idUtilisateur) {
 
-        String ADD_CREDITS = """
+        String creditPlus = """
                 UPDATE Utilisateur 
                 SET credit = credit+nbAjout
                 WHERE id = :idUtilisateur
         """;
 
-        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        sqlParameterSource.addValue("id", idUtilisateur);
+        MapSqlParameterSource ParameterSource = new MapSqlParameterSource();
+        ParameterSource.addValue("id", idUtilisateur);
 
-        namedParameterJdbcTemplate.update(ADD_CREDITS, sqlParameterSource);
+        namedParameterJdbcTemplate.update(creditPlus, ParameterSource);
 
     }
 
     @Override
     public void retirerCredits(int nbRetire, long idUtilisateur) {
 
-        String REMOVE_CREDITS = """
+        String CreditsMoins = """
                 UPDATE Utilisateur 
                 SET credit = credit-nbRetire
                 WHERE id = :idUtilisateur
         """;
 
-        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
-        sqlParameterSource.addValue("id", idUtilisateur);
+        MapSqlParameterSource ParameterSource = new MapSqlParameterSource();
+        ParameterSource.addValue("id", idUtilisateur);
 
-        namedParameterJdbcTemplate.update(REMOVE_CREDITS, sqlParameterSource);
+        namedParameterJdbcTemplate.update(CreditsMoins, ParameterSource);
     }
 
 
