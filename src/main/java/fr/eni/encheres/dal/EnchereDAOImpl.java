@@ -4,10 +4,12 @@ import fr.eni.encheres.bo.Enchere;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Repository
 public class EnchereDAOImpl implements EnchereDAO {
 
 	private JdbcTemplate namedParameterJdbcTemplate;

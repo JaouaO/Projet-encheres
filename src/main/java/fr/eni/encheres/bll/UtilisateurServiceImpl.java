@@ -92,6 +92,6 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	            Utilisateur encherisseur = enchere.getUtilisateur();
 	            utilisateurDAO.ajouterCredits(enchere.getMontantEnchere(), encherisseur.getId());
 	        }*/
-	        this.articleDAO.annulerVente(idArticle);
+	       // this.articleDAO.annulerVente(idArticle);
 	    }
 	}
