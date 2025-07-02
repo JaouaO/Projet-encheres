@@ -26,15 +26,13 @@ public class UtilisateurController {
 		return "connexion";
 	}
 	
-
-	//pas sur si il faut remttre post /connexion comme c'est la même page ou pas
-	@PostMapping("/profil")
-	public String connexion(Model model) {
-		// TODO: process POST request
-
-		return "index";
+	@GetMapping("/profil")
+	public String afficherProfil(Model model) {
+		return "profil";
 	}
 	
+
+
 	@GetMapping("/inscription")
 	public String afficherCreerCompte(Model model) {
 		//TODO: process PUT request
@@ -46,13 +44,13 @@ public class UtilisateurController {
 	public String creerCompte(Model model) {
 		//TODO: process PUT request
 		
-		return "modifier-profil";
+		return "index";
 	}
 	
 	
 	
 	//pas sur, peut-être qu'il faut que ce soir /connexion/modifier pour correspondre aux routes ?
-	@GetMapping("/connexion/modifier")
+	@GetMapping("/profil/modifier")
 	public String afficherModifierProfil( Model model ) {
 		//TODO: process POST request
 		
