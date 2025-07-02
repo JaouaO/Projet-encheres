@@ -1,5 +1,8 @@
 package fr.eni.encheres.bll;
 
+import java.util.List;
+
+import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.UtilisateurDAO;
 
@@ -69,7 +72,22 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	        if (nbRetire <= 0) {
 	            throw new IllegalArgumentException("Nombre de crédits à retirer doit être positif");
 	        }
+			Utilisateur utilisateur = utilisateurDAO.consulterParId(idUtilisateur);
+			if (utilisateur.getCredit() < nbRetire) {
+        		throw new IllegalStateException("Crédits insuffisants : solde actuel = " 
+                                        + utilisateur.getCredit() + ", demandé = " + nbRetire);
+    }
 	        utilisateurDAO.retirerCredits(nbRetire, idUtilisateur);
 	    }
 
+		public void annulerVenteParUtilisateur(long idArticle, long idUtilisateur) {
+	    		      
+	    	
+	    	List<Enchere> encheres = enchereDAO.consulterParArticle(idArticle);
+	        for (Enchere enchere : encheres) {
+	            Utilisateur encherisseur = enchere.getUtilisateur();
+	            utilisateurDAO.ajouterCredits(enchere.getMontantEnchere(), encherisseur.getId());
+	        }
+	        this.articleDAO.annulerVente(idArticle);
+	    }
 	}

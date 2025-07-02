@@ -11,5 +11,6 @@ public interface UtilisateurService {
 	    Utilisateur consulterParId(long idUtilisateur);
 	    void ajouterCredits(int nbAjout, long idUtilisateur);
 	    void retirerCredits(int nbRetire, long idUtilisateur);
+		void annulerVenteParUtilisateur(long idArticle, long idUtilisateur);
 	
 }
