@@ -1,8 +1,5 @@
 package fr.eni.encheres.bll;
 
-import java.util.List;
-
-import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.dal.UtilisateurDAO;
 
@@ -91,7 +88,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	        for (Enchere enchere : encheres) {
 	            Utilisateur encherisseur = enchere.getUtilisateur();
 	            utilisateurDAO.ajouterCredits(enchere.getMontantEnchere(), encherisseur.getId());
-	        }*/
-	       // this.articleDAO.annulerVente(idArticle);
+//	        }*/
+//	        this.articleDAO.annulerVente(idArticle);
 	    }
 	}
