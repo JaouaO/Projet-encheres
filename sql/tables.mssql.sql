@@ -73,4 +73,4 @@ CREATE TABLE Enchere (
     FOREIGN KEY (id_article) REFERENCES Article(id)
 );
 -- Contrainte sur les choix des états des vente
-ALTER TABLE Article ADD CONSTRAINT chekEtatVente CHECK (etat_vente IN ('en_cours', 'terminee', 'non-debutee', 'livree'));
+ALTER TABLE Article ADD CONSTRAINT chekEtatVente CHECK (etat_vente IN ('en_cours', 'terminee', 'non_debutee', 'livree'));
