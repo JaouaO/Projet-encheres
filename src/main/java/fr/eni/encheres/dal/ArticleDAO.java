@@ -1,8 +1,7 @@
 package fr.eni.encheres.dal;
 
 import fr.eni.encheres.bo.Article;
-import fr.eni.encheres.bo.Categorie;
-import fr.eni.encheres.bo.Enchere;
+
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ public interface ArticleDAO {
 
     public void vendreArticle(long idArticle) ;
 
-    public Article consulterparId(long idArticle) ;
+    public Article consulterParId(long idArticle) ;
 
     public List<Article> consulterTout() ;
 

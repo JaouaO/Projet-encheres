@@ -5,22 +5,21 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import fr.eni.encheres.bo.Article;
-import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
+import fr.eni.encheres.dal.ArticleDAO;
+import fr.eni.encheres.dal.EnchereDAO;
 
 @Service
 public class EnchereServiceImpl implements EnchereService {
 
 	private ArticleDAO articleDAO;
 	private EnchereDAO enchereDAO;
-	private CategorieDAO categorieDAO;
 
 
 
-	public EnchereServiceImpl(ArticleDAO articleDAO, EnchereDAO enchereDAO, CategorieDAO categorieDAO) {
+	public EnchereServiceImpl(ArticleDAO articleDAO, EnchereDAO enchereDAO) {
 		this.articleDAO = articleDAO;
 		this.enchereDAO = enchereDAO;
-		this.categorieDAO = categorieDAO;
 	}
 
 	@Override
@@ -43,7 +42,7 @@ public class EnchereServiceImpl implements EnchereService {
 	@Override
 	public void finaliserVente(long idArticle) {
 
-		if (this.enchereDAO.consulterParArticle(idArticle).size > 0) {
+		if (this.enchereDAO.consulterParArticle(idArticle).size() > 0) {
 			this.vendreArticle(idArticle);
 		} else {
 			this.annulerVente(idArticle);
@@ -52,8 +51,8 @@ public class EnchereServiceImpl implements EnchereService {
 	}
 
 	@Override
-	public void vendreArticle(long idArticle, Enchere enchere) {
-		this.articleDAO.vendreArticle();
+	public void vendreArticle(long idArticle) {
+		this.articleDAO.vendreArticle(idArticle);
 
 	}
 
@@ -75,8 +74,8 @@ public class EnchereServiceImpl implements EnchereService {
 	}
 
 	@Override
-	public List<Article> consulterParCategorie(Categorie categorie) {
-		return this.articleDAO.consulterParCategorie(categorie);
+	public List<Article> consulterParCategorie(long idCategorie) {
+		return this.articleDAO.consulterParCategorie(idCategorie);
 	}
 
 	@Override
