@@ -15,7 +15,9 @@ public class EnchereServiceImpl implements EnchereService {
 	private EnchereDAO enchereDAO;
 	private CategorieDAO categorieDAO;
 
-	public EnchereServiceImpl() {
+
+
+	public EnchereServiceImpl(ArticleDAO articleDAO, EnchereDAO enchereDAO, CategorieDAO categorieDAO) {
 		this.articleDAO = articleDAO;
 		this.enchereDAO = enchereDAO;
 		this.categorieDAO = categorieDAO;
