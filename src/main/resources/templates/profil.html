@@ -4,19 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer Profil</title>
+    <title>Profil</title>
 </head>
 
 <body>
-    <header>
-        <nav>
-            <a href="/src/main/resources/templates/portail-encheres.html">
-                <h1>Eni-Echères</h1>
-            </a>
-        </nav>
-    </header>
-    <h2 style="text-align: center;">Mon profil</h2>
-
+  	<header th:replace="~{fragments/fragment-entete :: entete}">
+	</header>
+	<!-- <span data-th-text="'[' + ${utilisateurEnSession.prenom} + ']'"></span></h2> -->
+    <h2>(Nom du profil)</h2>
+    
 <div class="formulaire">
     <label for="">Pseudo :</label> <input type="text"><br>
     <label for="">Nom :</label> <input type="text"><br>
@@ -27,16 +23,14 @@
     <label for="">Code Postal :</label> <input type="number"><br>
     <label for="">Ville :</label> <input type="text"><br>
     <label for="">Mot de passe :</label> <input type="password"><br>
-    <label for="">Confirmation :</label> <input type="password">
+    <label for="">Confirmation :</label> <input type="password"><br>
+    <label for="">Crédit :</label> <input type="number" >
 </div>
 
-<br><br><br>
-
-    <a href="/src/main/resources/templates/portail-encheres.html">Enregistrer</a>  <a href="/src/main/resources/templates/index.html">Supprimer mon compte</a> <a href="/src/main/resources/templates/index.html">Retour</a>
+<!-- Changer le bouton si pas le bon profil -->
+    <a th:href="@{/profil/modifier}">Modifier</a>
 
 
 </body>
-<br><br>
-<a href="/src/main/resources/templates/index.html">Retour à l'accueil</a>
 
 </html>

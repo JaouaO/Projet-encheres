@@ -8,16 +8,13 @@
 </head>
 
 <body>
-    <header>
-        <nav>
-            <a href="/src/main/resources/templates/portail-encheres.html">
-                <h1>Eni-Echères</h1>
-            </a>
-        </nav>
-    </header>
-    <h2 style="text-align: center;">Créer un compte</h2>
+	<header th:replace="~{fragments/fragment-entete :: entete}">
+	</header>
+    <h2>Créer un compte</h2>
 
-    <div class="formulaire">
+
+<!-- <form th:object="${Utilisateur} action="/inscription" method="post"> -->
+    <form action = "">
         <label for="">Pseudo :</label> <input type="text"><br>
         <label for="">Nom :</label> <input type="text"><br>
         <label for="">Prénom :</label> <input type="text"><br>
@@ -28,14 +25,16 @@
         <label for="">Ville :</label> <input type="text"><br>
         <label for="">Mot de passe :</label> <input type="password"><br>
         <label for="">Confirmation :</label> <input type="password">
-    </div>
-    <br><br><br>
+        <li>
+				<button type="submit">Créer</button>
+			</li>
+			 <li>
+				<a  th:href="@{/accueil}"><button>Annuler</button></a>
+		</li>
+    </form>
 
-    <a href="/src/main/resources/templates/creer-profil.html">Créer</a> <a href="/src/main/resources/templates/index.html">Annuler</a>
 
 
 </body>
-<br><br>
-<a href="/src/main/resources/templates/index.html">Retour à l'accueil</a>
 
 </html>

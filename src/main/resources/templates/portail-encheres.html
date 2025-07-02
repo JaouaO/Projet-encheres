@@ -6,45 +6,49 @@
     <title>Portail enchères</title>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="/src/main/resources/templates/portail-encheres.html">
-                <h1>Eni-Echères</h1>
-            </a>
-        </nav>
-    </header>
+    	<header th:replace="~{fragments/fragment-entete :: entete}">
+	</header>
 
-    <a href="/src/main/resources/templates/creer-nouvelle-vente.html">Vendre un article</a><br>
-    <a href="/src/main/resources/templates/profil-user.html">Mon profil</a><br>
-    <a href="/src/main/resources/templates/index.html">Déconnexion</a><br><br>
+    <a th:href="@{/ventes/nouvelle-vente}">Vendre un article</a>
+    <a th:href="@{/profil}">Mon profil</a>
+    <!-- gérer la déco -->
+    <a th:href="@{/session-cloture">Déconnexion</a>
     
+    
+    <form action="">
+
     Filtres :
-<br><br>
-    <input type="radio">Achats   <br><br>
-        <input type="checkbox" name="" id="">enchères ouvertes<br>
-        <input type="checkbox" name="" id="">mes enchères en cours<br>
-        <input type="checkbox" name="" id="">mes enchères remportées<br><br>
+    <input type="radio">Achats 
+        <input type="checkbox" name="" id="">enchères ouvertes
+        <input type="checkbox" name="" id="">mes enchères en cours
+        <input type="checkbox" name="" id="">mes enchères remportées
     
-    <input type="radio" name="" id="">Mes ventes    <br><br>  
-        <input type="checkbox" name="" id="">mes ventes en cours<br>
-        <input type="checkbox" name="" id="">ventes non débutées<br>
-        <input type="checkbox" name="" id="">ventes terminées<br><br>
+    <input type="radio" name="" id="">Mes ventes      
+        <input type="checkbox" name="" id="">mes ventes en cours
+        <input type="checkbox" name="" id="">ventes non débutées
+        <input type="checkbox" name="" id="">ventes terminées
 
-    Catégories : <select name="" id=""></select><br><br>
+    Catégories : <select name="" id=""></select>
 
     <input type="text" name="text" class="search" placeholder="Le nom de l'article contient">
-<br><br>
-    <button href="">Rechercher</button>
+
+    <li>
+		<button type="submit">Rechercher</button>
+	</li>
+    
+        </form>
 
     <div>
-        <a href="/src/main/resources/templates/detail-vente.html">
+        <a th:href="@{/achats-details}">
             <p>PC Gamer pour travailler</p>
         </a>
         <p>Prix : 210 points Classement : 2</p>
         <p>Fin de l'enchère : 10/08/2018</p>
         <p>Retrait : 10 allée des Alouettes 44800 Saint-Herblain</p>
-        <p>Vendeur : <a href="/src/main/resources/templates/profil-user.html">jojo44</a></p>
+            <!-- il faut envoyer la recherche de  profil avec un get, et gérer ça soit dans la même méthode du controller soit dans une autre -->
+        <p>Vendeur : <a th:href="@{/profil}">jojo44</a></p>
     
+        <!-- ne pas laisser width = 20% -->
         <img src="/src/main/resources/static/images/pc gamer 1.webp" alt="" width="20%">
     </div>
 
