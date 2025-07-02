@@ -3,7 +3,6 @@ package fr.eni.encheres.bll;
 import java.util.List;
 
 import fr.eni.encheres.bo.Article;
-import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
 
 public interface EnchereService {
@@ -16,7 +15,7 @@ public interface EnchereService {
 
 	void finaliserVente(long idArticle);
 
-	void vendreArticle(long idArticle, Enchere enchere);
+	void vendreArticle(long idArticle);
 
 	Article consulterParId(long idArticle);
 
@@ -24,7 +23,7 @@ public interface EnchereService {
 
 	List<Article> consulterParRecherche(String recherche);
 
-	List<Article> consulterParCategorie(Categorie categorie);
+	List<Article> consulterParCategorie(long idCategorie);
 
 	List<Article> consulterParEtat(String etat);
 

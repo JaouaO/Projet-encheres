@@ -88,7 +88,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     }
 
     @Override
-    public Article consulterparId(long idArticle) {
+    public Article consulterParId(long idArticle) {
         String trouverParId = """
                 SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, libelle
                 FROM Article

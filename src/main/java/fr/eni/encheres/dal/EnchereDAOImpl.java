@@ -10,57 +10,61 @@ import java.util.List;
 
 public class EnchereDAOImpl implements EnchereDAO {
 
-    private JdbcTemplate namedParameterJdbcTemplate;
+	private JdbcTemplate namedParameterJdbcTemplate;
 
-    @Override
+	@Override
 
-    // ajout d'une enchère
-    public List<Enchere> ajouterEnchere(Enchere enchere) {
+	// ajout d'une enchère
+	public List<Enchere> ajouterEnchere(Enchere enchere) {
 
-        String creerEchere = "INSERT INTO Enchere (id, date_enchere, montant_enchere, id_utilisateur, id_article) VALUES (:id, :dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)";
+		String creerEnchere = "INSERT INTO Enchere (id, date_enchere, montant_enchere, id_utilisateur, id_article) VALUES (:id, :dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)";
 
-        return this.namedParameterJdbcTemplate.query(creerEchere, new BeanPropertyRowMapper<>(Enchere.class));
-    }
-    @Override
+		return this.namedParameterJdbcTemplate.query(creerEnchere, new BeanPropertyRowMapper<>(Enchere.class));
+	}
 
-    // consultation de l'utilisateur par son id
-    public List<Enchere> consulterParUtilisateur(long idUtilisateur) {
+	@Override
 
-        String trouverUtilisateur = "SELECT id_utilisateur FROM Enchere WHERE id_utilisateur = :idUtilisateur";
+	// consultation de l'utilisateur par son id
+	public List<Enchere> consulterParUtilisateur(long idUtilisateur) {
 
-        return this.namedParameterJdbcTemplate.query(trouverUtilisateur, new BeanPropertyRowMapper<>(Enchere.class));
+		String trouverUtilisateur = "SELECT id_utilisateur FROM Enchere WHERE id_utilisateur = :idUtilisateur";
 
-    }
-    @Override
-    // consultation par article
-    public List<Enchere> consulterParArticle(long idArticle) {
+		return this.namedParameterJdbcTemplate.query(trouverUtilisateur, new BeanPropertyRowMapper<>(Enchere.class));
 
-        String trouverParArticle = "SELECT id_article FROM Enchere WHERE id_article = :idArticle";
+	}
 
-        return this.namedParameterJdbcTemplate.query(trouverParArticle, new BeanPropertyRowMapper<>(Enchere.class));
+	@Override
+	// consultation par article
+	public List<Enchere> consulterParArticle(long idArticle) {
 
-    }
-    @Override
-    // consulter la liste des enchères
-    public List<Enchere> consulterTout() {
+		String trouverParArticle = "SELECT id_article FROM Enchere WHERE id_article = :idArticle";
 
-        String consulTout = "SELECT id, date_enchere, montant_enchere, id_utilisateur, id_article FROM Enchere";
+		return this.namedParameterJdbcTemplate.query(trouverParArticle, new BeanPropertyRowMapper<>(Enchere.class));
 
-        return this.namedParameterJdbcTemplate.query(consulTout, new BeanPropertyRowMapper<>(Enchere.class));
-    }
-    @Override
-    // annulation d'une enchère
-    public void annulerEnchere(Enchere enchere) {
-        LocalDateTime dateEnchere = enchere.getDateEnchere();
-        Long idUtilisateur = enchere.getUtilisateur().getId();
+	}
 
-        String supprEnchere = "DELETE FROM Enchere WHERE date_enchere = :dateEnchere AND id_utilisateur = :idUtilisateur";
+	@Override
+	// consulter la liste des enchères
+	public List<Enchere> consulterTout() {
 
-        MapSqlParameterSource paramSource = new MapSqlParameterSource();
-        paramSource.addValue("date_enchere", dateEnchere);
-        paramSource.addValue("id_utilisateur", idUtilisateur);
+		String consulTout = "SELECT id, date_enchere, montant_enchere, id_utilisateur, id_article FROM Enchere";
 
-        namedParameterJdbcTemplate.update(supprEnchere, paramSource);
-    }
+		return this.namedParameterJdbcTemplate.query(consulTout, new BeanPropertyRowMapper<>(Enchere.class));
+	}
+
+	@Override
+	// annulation d'une enchère
+	public void annulerEnchere(Enchere enchere) {
+		LocalDateTime dateEnchere = enchere.getDateEnchere();
+		Long idUtilisateur = enchere.getUtilisateur().getId();
+
+		String supprEnchere = "DELETE FROM Enchere WHERE date_enchere = :dateEnchere AND id_utilisateur = :idUtilisateur";
+
+		MapSqlParameterSource paramSource = new MapSqlParameterSource();
+		paramSource.addValue("date_enchere", dateEnchere);
+		paramSource.addValue("id_utilisateur", idUtilisateur);
+
+		namedParameterJdbcTemplate.update(supprEnchere, paramSource);
+	}
 
 }
