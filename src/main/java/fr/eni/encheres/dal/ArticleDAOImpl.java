@@ -3,7 +3,6 @@ package fr.eni.encheres.dal;
 
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
-import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Utilisateur;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -11,8 +10,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-
-import java.security.SignedObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -27,8 +24,6 @@ public class ArticleDAOImpl implements ArticleDAO {
     public ArticleDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
-
-    // NB : voir quand est-ce que l'on approvisionne la table SQL Retrait ????
 
     @Override
     public void creerArticle(Article article) {
@@ -59,25 +54,60 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     @Override
     public void mettreEnVente(long idArticle) {
-
+        String nvEtatVente = "en_cours";
+        String UPDATE_ETAT = """
+                UPDATE Article SET etat_vente = nvEtatVente
+                WHERE id = :idArticle
+                """;
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+        sqlParameterSource.addValue("id", idArticle);
+        namedParameterJdbcTemplate.update(nvEtatVente, sqlParameterSource);
     }
 
     @Override
     public void annulerVente(long idArticle) {
+        if (idArticle == 0) {
+            String REMOVE_ARTICLE = """
+                DELETE Article
+                WHERE id = :idArticle
+                """;
+            MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+            sqlParameterSource.addValue("id", idArticle);
+            namedParameterJdbcTemplate.update(REMOVE_ARTICLE, sqlParameterSource);
+        }
     }
 
     @Override
-    public void vendreArticle(long idArticle, Enchere enchere) {
+    public void vendreArticle(long idArticle) {
+        String nvEtatVente = "terminee";
+        String UPDATE_ETAT = """
+                UPDATE Article SET etat_vente = nvEtatVente
+                WHERE id = :idArticle
+                """;
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource();
+        sqlParameterSource.addValue("id", idArticle);
+        namedParameterJdbcTemplate.update(nvEtatVente, sqlParameterSource);
     }
 
     @Override
     public Article consulterparId(long idArticle) {
-        return null;
+        String FIND_BY_ID = """
+                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, libelle
+                FROM Article
+                WHERE idArticle = :idArticle
+                """;
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("id", idArticle);
+        return namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, parameterSource, new ArticleRowMapper());
     }
 
     @Override
     public List<Article> consulterTout() {
-        return List.of();
+        String GET_ALL = """
+                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, libelle
+                FROM article
+                """;
+        return namedParameterJdbcTemplate.query(GET_ALL, new ArticleRowMapper());
     }
 
     @Override
@@ -92,7 +122,6 @@ public class ArticleDAOImpl implements ArticleDAO {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("nom", motRecherche);
         parameterSource.addValue("libelle", motRecherche);
-
         return namedParameterJdbcTemplate.query(FIND_BY_SEARCH, parameterSource, new ArticleRowMapper());
     }
 
@@ -106,8 +135,6 @@ public class ArticleDAOImpl implements ArticleDAO {
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("categorie", categorie);
-
-
         return namedParameterJdbcTemplate.query(FIND_BY_CATEGORIE, parameterSource, new ArticleRowMapper());
     }
 
@@ -120,7 +147,6 @@ public class ArticleDAOImpl implements ArticleDAO {
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("etatVente", etatVente);
-
         return namedParameterJdbcTemplate.query(FIND_BY_ETAT, parameterSource, new ArticleRowMapper());
     }
 

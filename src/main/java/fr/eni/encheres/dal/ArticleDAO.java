@@ -14,7 +14,7 @@ public interface ArticleDAO {
 
     public void annulerVente(long idArticle) ;
 
-    public void vendreArticle(long idArticle, Enchere enchere) ;
+    public void vendreArticle(long idArticle) ;
 
     public Article consulterparId(long idArticle) ;
 
