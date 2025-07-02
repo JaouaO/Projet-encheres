@@ -51,8 +51,9 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
     }
 
     @Override
-    public void modifierUtilisateur(Utilisateur utilisateur, long idUtilisateur) {
+    public void modifierUtilisateur(long idUtilisateur) {
         if (idUtilisateur != 0) {
+            Utilisateur utilisateur = new Utilisateur();
             utilisateur.setId(idUtilisateur);
 
         String modifUtilisateur = """
