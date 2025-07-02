@@ -32,7 +32,7 @@ CREATE TABLE Utilisateur (
     code_postal VARCHAR(10) NOT NULL,
     ville VARCHAR(100) NOT NULL,
     mot_de_passe VARCHAR(200) NOT NULL,
-    credit INT NOT NULL DEFAULT 0,
+    credit INT NOT NULL DEFAULT 0 CHECK (credit >= 0),
     administrateur BIT NOT NULL DEFAULT 0
 );
 
