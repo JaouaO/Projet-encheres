@@ -1,10 +1,15 @@
 package fr.eni.encheres.bo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Utilisateur {
+public class Utilisateur implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long id;
 	private String pseudo;
 	private String prenom;
