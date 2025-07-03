@@ -64,11 +64,6 @@ public class EnchereServiceImpl implements EnchereService {
 		return this.articleDAO.consulterParId(idArticle);
 	}
 	
-	@Override
-	public Categorie consulterCategorieParId(long idCategorie) {
-
-		return this.categorieDAO.consulterParId(idCategorie);
-	}
 
 	@Override
 	public List<Article> consulterToutArticle() {

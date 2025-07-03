@@ -17,8 +17,6 @@ public interface EnchereService {
 	void finaliserVente(long idArticle);
 
 	void vendreArticle(long idArticle);
-	
-	Categorie consulterCategorieParId(long idCategorie);
 
 	Article consulterArticleParId(long idArticle);
 	
