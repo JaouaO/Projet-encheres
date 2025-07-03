@@ -35,12 +35,15 @@ public String afficherDetailsAchats( Model model) {
 
 @GetMapping("/vente")
 public String afficherVente( Model model) {
+	//model.addAttribute("categories", model)
+	
     return "creer-nouvelle-vente";
 }
 
 @PostMapping("/creer-nouvelle-vente")
 public String getMethodName( Model model) {
-    return "creer-nouvelle-vente";
+	
+	return "index";
 }
 
 

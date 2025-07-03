@@ -6,44 +6,47 @@
 <title>Nouvelle vente</title>
 </head>
 <body>
-	<header th:replace="~{fragments/fragment-entete :: entete}">
-	</header>
-	
-<!-- <form th:object="${Article} action="/creer-nouvelle-vente" method="post"> -->
-	<form action="">
+	<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
+
+	<form action="@{/creer-nouvelle-vente}" method="post"
+		th:object="${Article}">
+
 		<h2>Nouvelle vente</h2>
+		<ul class="flex-outer">
+			<li>Article : <input type="text" name="" id="">
+			</li>
+			<li><label for="idCategorie">Catégorie :</label>
+			<select th:field="*{categorie}" id="idCategorie">
+					<option th:each="c : ${categories}" th:text="${c.libelle}"
+						th:value="${c.id}"></option>
+			</select>
+			</li>
 
-		<p>
-			Article : <input type="text" name="" id="">
-		</p>
-		<p>
-			Catégorie : <select></select>
-		</p>
+			<li><label for="taDescription">Description :</label> <textarea
+					id="taDescription" rows="3" th:field="*{description}">
+						
+				</textarea> <!-- à faire -->
+			<li>Photo de l'article</li>
+			<input type="file" name="" id="">
 
 
-		<p>
-			Description :
-			<textarea name="" id=""></textarea>
-		</p>
+			<li><label for="inputMiseAPrix">Prix initial : </label> <input
+					type="number" id="inputMiseAPrix" th:field="*{miseAPrix}" /></li>
+			<li><label for="inputdateDebutEnchere">Début de l'enchère</label>
+			 <input type="date" id="inputdateDebutEnchere"  th:field="*{dateDebutEnchere}">
+			</li>
+			<li><label for="inputdateFinEnchere">Fin de l'enchère</label>
+			 <input type="date" id="inputdateFinEnchere"  th:field="*{dateFinEnchere}">
+			</li>
 
-		<p>Photo de l'article</p>
-		<input type="file" name="" id="">
-		
-		<p>
-			Prix initial : <input type="number" name="" id="">
-		</p>
-		<p>
-			Début de l'enchère <input type="date" name="" id="">
-		</p>
-		<p>
-			Fin de l'enchère <input type="date" name="" id="">
-		</p>
-
-		<p>Retrait : 5 rue des Pinsons 44000 Nantes</p>
-		<li>
-			<button type="submit">Créer</button>
-		</li>
-		<li><a th:href="@{/accueil}"><button>Annuler</button></a></li>
+			<li><label th:text="${utilisateur.afficherRetrait()}"></label></li>
+			<li>
+			
+			
+				<button type="submit">Créer</button>
+			</li>
+			<li><a th:href="@{/accueil}"><button>Annuler</button></a></li>
+		</ul>
 	</form>
 
 </body>
