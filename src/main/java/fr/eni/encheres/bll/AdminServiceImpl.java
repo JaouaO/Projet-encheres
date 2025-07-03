@@ -1,8 +1,7 @@
 package fr.eni.encheres.bll;
 
 import fr.eni.encheres.bo.Categorie;
-import fr.eni.encheres.bo.Utilisateur;
-import fr.eni.encheres.bo.Article;
+
 import fr.eni.encheres.dal.UtilisateurDAO;
 import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.dal.ArticleDAO;

@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import fr.eni.encheres.bo.Article;
+import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.dal.ArticleDAO;
+import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.dal.EnchereDAO;
 
 @Service
@@ -14,12 +16,13 @@ public class EnchereServiceImpl implements EnchereService {
 
 	private ArticleDAO articleDAO;
 	private EnchereDAO enchereDAO;
+	private CategorieDAO categorieDAO;
 
 
-
-	public EnchereServiceImpl(ArticleDAO articleDAO, EnchereDAO enchereDAO) {
+	public EnchereServiceImpl(ArticleDAO articleDAO, EnchereDAO enchereDAO, CategorieDAO categorieDAO) {
 		this.articleDAO = articleDAO;
 		this.enchereDAO = enchereDAO;
+		this.categorieDAO = categorieDAO;
 	}
 
 	@Override
@@ -57,11 +60,16 @@ public class EnchereServiceImpl implements EnchereService {
 	}
 
 	@Override
-	public Article consulterParId(long idArticle) {
+	public Article consulterArticleParId(long idArticle) {
 
 		return this.articleDAO.consulterParId(idArticle);
 	}
 
+	@Override
+	public Categorie consulterCategorieParId(long idCategorie) {
+		return this.categorieDAO.consulterParId(idCategorie);
+	}
+	
 	@Override
 	public List<Article> consulterTout() {
 		return this.articleDAO.consulterTout();
@@ -89,5 +97,7 @@ public class EnchereServiceImpl implements EnchereService {
 		this.enchereDAO.ajouterEnchere(enchere);
 
 	}
+
+
 
 }
