@@ -37,13 +37,13 @@ public class ArticleDAOImpl implements ArticleDAO {
         parameterSource.addValue("id", article.getId());
         parameterSource.addValue("nom", article.getNom());
         parameterSource.addValue("description", article.getDescription());
-        parameterSource.addValue("date_debut", article.getDateDebutEnchere());
-        parameterSource.addValue("date_fin", article.getDateFinEnchere());
-        parameterSource.addValue("mise_a_Prix", article.getMiseAPrix());
-        parameterSource.addValue("prix_vente", article.getPrixVente());
-        parameterSource.addValue("etat_vente", article.getEtatVente());
-        parameterSource.addValue("id_utilisateur", article.getUtilisateur().getId());
-        parameterSource.addValue("id_categorie",article.getCategorie().getId());
+        parameterSource.addValue("dateDebutEnchere", article.getDateDebutEnchere());
+        parameterSource.addValue("dateFinEnchere", article.getDateFinEnchere());
+        parameterSource.addValue("miseAPrix", article.getMiseAPrix());
+        parameterSource.addValue("prixVente", article.getPrixVente());
+        parameterSource.addValue("etatVente", article.getEtatVente());
+        parameterSource.addValue("idUtilisateur", article.getUtilisateur().getId());
+        parameterSource.addValue("idCategorie",article.getCategorie().getId());
 
         namedParameterJdbcTemplate.update(creerUnNouvelArticle, parameterSource, keyHolder);
 
@@ -59,7 +59,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE id = :idArticle
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idArticle);
+        parameterSource.addValue("idArticle", idArticle);
         namedParameterJdbcTemplate.update(mettreEtatEnVente, parameterSource);
     }
 
@@ -71,7 +71,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE id = :idArticle
                 """;
             MapSqlParameterSource ParameterSource = new MapSqlParameterSource();
-            ParameterSource.addValue("id", idArticle);
+            ParameterSource.addValue("idArticle", idArticle);
             namedParameterJdbcTemplate.update(supprArticle, ParameterSource);
         }
     }
@@ -83,7 +83,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE id = :idArticle
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idArticle);
+        parameterSource.addValue("idArticle", idArticle);
         namedParameterJdbcTemplate.update(mettreEtatVendu, parameterSource);
     }
 
@@ -96,7 +96,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE article.id = :idArticle
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("article.id", idArticle);
+        parameterSource.addValue("idArticle", idArticle);
         return namedParameterJdbcTemplate.queryForObject(trouverParId, parameterSource, new ArticleRowMapper());
     }
 
@@ -118,8 +118,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE nom LIKE '%"+ motRecherche + "%' 
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("nom", motRecherche);
-        parameterSource.addValue("libelle", motRecherche);
+        parameterSource.addValue("motRecherche", motRecherche);
         return namedParameterJdbcTemplate.query(trouverParRecherche, parameterSource, new ArticleRowMapper());
     }
 
@@ -144,7 +143,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE etat_vente = :etatVente
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("etat_vente", etatVente);
+        parameterSource.addValue("etatVente", etatVente);
         return namedParameterJdbcTemplate.query(trierParEtat, parameterSource, new ArticleRowMapper());
     }
 

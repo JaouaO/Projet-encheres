@@ -24,10 +24,14 @@ public class Article implements Serializable{
 	private Utilisateur utilisateur;
 	private Categorie categorie;
 	private List<Enchere> encheres;
-	
-	
-	
-	
+
+	public String afficherPseudoDernierEncherisseur(long idArticle) {
+		Article article = new Article();
+		article.setId(idArticle);
+		List<Enchere> encheresParArticle = article.getEncheres();
+		Enchere derniereEnchere = encheresParArticle.get(encheresParArticle.size()-1);
+		return derniereEnchere.getUtilisateur().getPseudo();
+	}
 
 	public Article() {
 		this.encheres = new ArrayList<Enchere>();
@@ -137,7 +141,7 @@ public class Article implements Serializable{
 		this.categorie = categorie;
 	}
 
-	public Iterable<Enchere> getEncheres() {
+	public List<Enchere> getEncheres() {
 		return encheres;
 	}
 

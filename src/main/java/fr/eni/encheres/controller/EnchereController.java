@@ -1,29 +1,25 @@
 package fr.eni.encheres.controller;
 
+import fr.eni.encheres.bll.EnchereService;
+import fr.eni.encheres.bo.Article;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import fr.eni.encheres.bll.EnchereService;
-import fr.eni.encheres.bo.Article;
-
 
 
 //@SessionAttributes("utilisateurEnSession")
 @Controller
 public class EnchereController {
 
-	EnchereService enchereservice;
+    private EnchereService enchereService;
 
-	public EnchereController(EnchereService enchereservice) {
-		this.enchereservice = enchereservice;
-	}
-	
-	
-//pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
+    public EnchereController(EnchereService enchereService) {
+        this.enchereService = enchereService;
+    }
+
+    //pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
 @GetMapping("/ventes/details")
 public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model) {
 	//check l'utilisateur pour voir si c'est achat ou vente
@@ -32,24 +28,34 @@ public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, M
 
 //pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
 @GetMapping("/achats/details")
-//@RequestParam(name = "id") long idArticle,
-public String afficherDetailsAchats( Model model) {
-	//check l'utilisateur pour voir si c'est achat ou vente
-  return "achats-details";
+public String afficherDetailsAchats( @RequestParam(name = "id") long idArticle, Model model) {
+    if (idArticle > 0) {
+        Article article = enchereService.consulterArticleParId(idArticle);
+        if (article != null) {
+            // Ajout de l'instance dans le modèle
+            model.addAttribute("article", article);
+
+            return "achats-details";
+        } else
+            System.out.println("Cet article n'existe pas");
+            return "redirect:index";
+    } else {
+        System.out.println("Cet article n'existe pas");
+        return "redirect:index";
+    }
+
+
 }
 
 @GetMapping("/vente")
 public String afficherVente( Model model) {
-	model.addAttribute("categories", this.enchereservice.consulterToutCategorie());
-	Article article = new Article();
-	model.addAttribute("article", article);
+	//model.addAttribute("categories", model)
 	
     return "creer-nouvelle-vente";
 }
 
 @PostMapping("/creer-nouvelle-vente")
-public String getMethodName(@ModelAttribute Article article, Model model) {
-	System.out.println(article);
+public String getMethodName( Model model) {
 	
 	return "index";
 }
