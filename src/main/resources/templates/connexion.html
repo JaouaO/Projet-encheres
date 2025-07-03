@@ -10,14 +10,14 @@
 
 <body>
 	<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
-	<!-- <form th:object="${Utilisateur} action="/connexion" method="post"> -->
-	<form action="">
-
+	
+	<form th:action="@{/connexion}" method="post">
+ 
 		<p>
-			Identifiant : <input type="text">
+			Identifiant : <input type="text" name="pseudo" required>
 		</p>
 		<p>
-			Mot de passe : <input type="text">
+			Mot de passe : <input type="password" name="motDePasse" required>
 		</p>
 
 		<button type="submit">Connexion</button>

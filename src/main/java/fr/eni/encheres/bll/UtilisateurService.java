@@ -9,6 +9,7 @@ public interface UtilisateurService {
 	    void supprimerUtilisateur(long idUtilisateur);
 	    void desactiverUtilisateur(long idUtilisateur);
 	    Utilisateur consulterParId(long idUtilisateur);
+	    Utilisateur verifierConnexion(String pseudo, String motDePasse);
 	    void ajouterCredits(int nbAjout, long idUtilisateur);
 	    void retirerCredits(int nbRetire, long idUtilisateur);
 		void annulerVenteParUtilisateur(long idArticle, long idUtilisateur);
