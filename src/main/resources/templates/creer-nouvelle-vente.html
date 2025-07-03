@@ -8,8 +8,8 @@
 <body>
 	<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
 
-	<form action="@{/creer-nouvelle-vente}" method="post"
-		th:object="${Article}">
+	<form action="/creer-nouvelle-vente" method="post"
+		th:object="${article}">
 
 		<h2>Nouvelle vente</h2>
 		<ul class="flex-outer">
@@ -38,9 +38,10 @@
 			<li><label for="inputdateFinEnchere">Fin de l'enchère</label>
 			 <input type="date" id="inputdateFinEnchere"  th:field="*{dateFinEnchere}">
 			</li>
-
+<!--
 			<li><label th:text="${utilisateur.afficherRetrait()}"></label></li>
 			<li>
+-->
 			
 			
 				<button type="submit">Créer</button>
