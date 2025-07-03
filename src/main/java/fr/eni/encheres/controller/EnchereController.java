@@ -55,8 +55,12 @@ public String afficherVente( Model model) {
 	public String getMethodName(@ModelAttribute Article article, Model model) {
 		Utilisateur utilisateur = utilisateurService.consulterParId(1);
 		article.setUtilisateur(utilisateur);
+		article.setEtatVente("NON_DEBUTEE");
 		article.setLieuRetrait(utilisateur.getRetrait());
 		System.out.println(article);
+		
+		enchereservice.creerArticle(article);
+		
 
 		return "redirect:/accueil";
 	}

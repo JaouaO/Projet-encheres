@@ -28,22 +28,21 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public void creerArticle(Article article) {
         String creerUnNouvelArticle = """
-                INSERT INTO Article (id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie)
-                VALUES (:id, :nom, :description, :dateDebutEnchere, :dateFinEnchere, :miseAPrix, :prixVente, :etatVente, :idUtilisateur, :idCategorie)
+                INSERT INTO Article ( nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie)
+                VALUES (:nom, :description, :dateDebutEnchere, :dateFinEnchere, :miseAPrix, :prixVente, :etatVente, :idUtilisateur, :idCategorie)
                 """;
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", article.getId());
-        parameterSource.addValue("nom", article.getNom());
+        parameterSource.addValue("nom",article.getNom());
         parameterSource.addValue("description", article.getDescription());
-        parameterSource.addValue("date_debut", article.getDateDebutEnchere());
-        parameterSource.addValue("date_fin", article.getDateFinEnchere());
-        parameterSource.addValue("mise_a_Prix", article.getMiseAPrix());
-        parameterSource.addValue("prix_vente", article.getPrixVente());
-        parameterSource.addValue("etat_vente", article.getEtatVente());
-        parameterSource.addValue("id_utilisateur", article.getUtilisateur().getId());
-        parameterSource.addValue("id_categorie",article.getCategorie().getId());
+        parameterSource.addValue("dateDebutEnchere", article.getDateDebutEnchere());
+        parameterSource.addValue("dateFinEnchere", article.getDateFinEnchere());
+        parameterSource.addValue("miseAPrix", article.getMiseAPrix());
+        parameterSource.addValue("prixVente", article.getPrixVente());
+        parameterSource.addValue("etatVente", article.getEtatVente());
+        parameterSource.addValue("idUtilisateur", article.getUtilisateur().getId());
+        parameterSource.addValue("idCategorie",article.getCategorie().getId());
 
         namedParameterJdbcTemplate.update(creerUnNouvelArticle, parameterSource, keyHolder);
 
