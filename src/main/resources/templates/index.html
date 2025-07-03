@@ -14,7 +14,7 @@
 	
 	<a th:href="@{/inscription}">S'inscrire</a>
 	<a th:href="@{/connexion}">Se connecter</a>
-	<a th:href="@{/vente}">Se connecter</a>
+	<a th:href="@{/vente}">Vendre</a>
 	
 	
     <h3>Liste des enchères</h3>
@@ -22,9 +22,7 @@
 <!-- <form action="/accueil" method="post"> -->
     <form action="">
     <p>Filtres : </p>
-    <p>Catégorie : <select name="" id=""></select></p>
-
-    <li><label>Liste de cours</label> <select name="idCours" id="">
+    <li><label>Catégorie : </label> <select name="idCategorie" id="idCategorie">
 						<option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.libelle}"></option>
 				</select></li>
 
