@@ -90,12 +90,12 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public Article consulterParId(long idArticle) {
         String trouverParId = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, libelle
+                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
                 FROM Article
-                WHERE idArticle = :idArticle
+                WHERE id = :idArticle
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idArticle);
+        parameterSource.addValue("idArticle", idArticle);
         return namedParameterJdbcTemplate.queryForObject(trouverParId, parameterSource, new ArticleRowMapper());
     }
 
@@ -155,13 +155,13 @@ public class ArticleDAOImpl implements ArticleDAO {
             a.setId(rs.getLong("id"));
             a.setNom(rs.getString("nom"));
             a.setDescription(rs.getString("description"));
-            LocalDateTime dateDeb = rs.getObject("dateDebutEnchere", LocalDate.class).atStartOfDay();
+            LocalDateTime dateDeb = rs.getObject("date_debut", LocalDate.class).atStartOfDay();
             a.setDateDebutEnchere(dateDeb);
-            LocalDateTime dateFin = rs.getObject("dateFinEnchere", LocalDate.class).atStartOfDay();
+            LocalDateTime dateFin = rs.getObject("date_fin", LocalDate.class).atStartOfDay();
             a.setDateFinEnchere(dateFin);
-            a.setMiseAPrix(rs.getInt("miseAPrix"));
-            a.setPrixVente(rs.getInt("prixVente"));
-            a.setEtatVente(rs.getString("etatVente"));
+            a.setMiseAPrix(rs.getInt("mise_a_prix"));
+            a.setPrixVente(rs.getInt("prix_vente"));
+            a.setEtatVente(rs.getString("etat_vente"));
             Utilisateur utilisateur = new Utilisateur();
             utilisateur.setId(rs.getLong("id_vendeur"));
             a.setUtilisateur(utilisateur);
