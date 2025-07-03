@@ -1,15 +1,18 @@
 package fr.eni.encheres.controller;
+
+import fr.eni.encheres.bll.EnchereService;
+import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bo.Article;
-import java.util.ArrayList;
-import java.util.List;
+import fr.eni.encheres.bo.Categorie;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
-import fr.eni.encheres.bll.EnchereService;
-import fr.eni.encheres.bll.UtilisateurService;
-import fr.eni.encheres.bo.Categorie;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -28,12 +31,12 @@ public class UtilisateurController {
 	@GetMapping({ "/", "/accueil" })
 	public String afficherAccueil(Model model) {
 
-		List<Article> articles = enchereService.consulterTout();
+		List<Article> articles = enchereService.consulterToutArticle();
 		model.addAttribute("articles", articles);
 
 		List<Categorie> categories = this.enchereService.consulterToutCategorie();
 
-		
+
 		model.addAttribute("categories", categories);
 
 
@@ -91,5 +94,57 @@ public class UtilisateurController {
 
 		return "redirect:/accueil";
 	}
+
+
+	@GetMapping({ "/portail-encheres" })
+	public String afficherPortail (Model model) {
+
+		List<Article> articles = enchereService.consulterParEtat("Enchère ouverte");
+
+		model.addAttribute("articles", articles);
+
+		List<Categorie> categories = this.enchereService.consulterToutCategorie();
+
+		model.addAttribute("categories", categories);
+
+			return "portail-encheres";
+		}
+
+    @PostMapping("/portail-encheres")
+    public String filtrerArticles(
+            @RequestParam("type") String type,
+            @RequestParam(value = "categorie", required = false) String categorie,
+            Model model) {
+
+		List<Article> articles;
+
+		// Récupération des articles selon le type (achat ou vente)
+		if ("vente".equals(type)) {
+			articles = enchereService.consulterParEtat("Mes ventes");
+		} else {
+			articles = enchereService.consulterParEtat("Enchère ouverte");
+		}
+
+		// Si une catégorie est sélectionnée, on filtre avec une boucle
+		if (categorie != null && !categorie.isEmpty()) {
+			List<Article> articlesFiltres = new ArrayList<>();
+
+			for (Article article : articles) {
+				if (article.getCategorie().getLibelle().equalsIgnoreCase(categorie)) {
+					articlesFiltres.add(article);
+				}
+			}
+}
+			articles = articlesFiltres;  // problème à regler
+
+			// On prépare les données pour l'affichage dans la vue
+			model.addAttribute("articles", articles);
+			model.addAttribute("categories", enchereService.consulterToutCategorie());
+			model.addAttribute("type", type);
+
+			return "portail-encheres";
+		}
+
+
 
 }
