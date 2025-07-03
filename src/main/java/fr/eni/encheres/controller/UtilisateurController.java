@@ -28,7 +28,7 @@ public class UtilisateurController {
 	@GetMapping({ "/", "/accueil" })
 	public String afficherAccueil(Model model) {
 
-		List<Article> articles = enchereService.consulterTout();
+		List<Article> articles = enchereService.consulterToutArticle();
 		model.addAttribute("articles", articles);
 
 		List<Categorie> categories = this.enchereService.consulterToutCategorie();
