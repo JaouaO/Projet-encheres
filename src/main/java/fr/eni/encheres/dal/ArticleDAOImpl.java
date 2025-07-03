@@ -92,10 +92,10 @@ public class ArticleDAOImpl implements ArticleDAO {
         String trouverParId = """
                 SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
                 FROM Article
-                WHERE idArticle = :idArticle
+                WHERE id = :idArticle
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idArticle);
+        parameterSource.addValue("idArticle", idArticle);
         return namedParameterJdbcTemplate.queryForObject(trouverParId, parameterSource, new ArticleRowMapper());
     }
 

@@ -22,6 +22,10 @@
     <form action="">
     <p>Filtres : </p>
     <p>Catégorie : <select name="" id=""></select></p>
+    
+    <li><label>Liste de cours</label> <select name="idCours" id="">
+						<option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.libelle}"></option>
+				</select></li>
 
         <input type="text" name="text" class="search" placeholder="Le nom de l'article contient">
         <button>Rechercher</button>
