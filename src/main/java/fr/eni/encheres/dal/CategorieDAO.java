@@ -1,5 +1,7 @@
 package fr.eni.encheres.dal;
 
+import java.util.List;
+
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 
@@ -10,6 +12,7 @@ public interface CategorieDAO {
      void modifierCategorie(long idCategorie);
      Categorie consulterParId(long Categorie);
      Categorie ajouterArticle(Article article);
+	List<Categorie> consulterTout();
 
 
 }

@@ -18,7 +18,6 @@ public class EnchereServiceImpl implements EnchereService {
 	private EnchereDAO enchereDAO;
 	private CategorieDAO categorieDAO;
 
-
 	public EnchereServiceImpl(ArticleDAO articleDAO, EnchereDAO enchereDAO, CategorieDAO categorieDAO) {
 		this.articleDAO = articleDAO;
 		this.enchereDAO = enchereDAO;
@@ -64,15 +63,29 @@ public class EnchereServiceImpl implements EnchereService {
 
 		return this.articleDAO.consulterParId(idArticle);
 	}
+	
+	@Override
+	public Categorie consulterCategorieParId(long idCategorie) {
+
+		return this.categorieDAO.consulterParId(idCategorie);
+	}
 
 	@Override
+	public List<Article> consulterToutArticle() {
+		return this.articleDAO.consulterTout();
+	}
+
+  @Override
 	public Categorie consulterCategorieParId(long idCategorie) {
 		return this.categorieDAO.consulterParId(idCategorie);
 	}
 	
+
+	
+	
 	@Override
-	public List<Article> consulterTout() {
-		return this.articleDAO.consulterTout();
+	public List<Categorie> consulterToutCategorie() {
+		return this.categorieDAO.consulterTout();
 	}
 
 	@Override
@@ -97,7 +110,5 @@ public class EnchereServiceImpl implements EnchereService {
 		this.enchereDAO.ajouterEnchere(enchere);
 
 	}
-
-
 
 }

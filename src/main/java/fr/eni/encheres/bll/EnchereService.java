@@ -21,8 +21,13 @@ public interface EnchereService {
 	Categorie consulterCategorieParId(long idCategorie);
 
 	Article consulterArticleParId(long idArticle);
+	
+	Categorie consulterCategorieParId(long idCategorie);
 
-	List<Article> consulterTout();
+
+	List<Article> consulterToutArticle();
+	
+	List<Categorie> consulterToutCategorie();
 
 	List<Article> consulterParRecherche(String recherche);
 

@@ -2,6 +2,9 @@ package fr.eni.encheres.dal;
 
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
+
+import java.util.List;
+
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -11,8 +14,14 @@ import org.springframework.stereotype.Repository;
 public class CategorieDAOImpl implements CategorieDAO {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    
+    
 
-    @Override
+    public CategorieDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+	}
+
+	@Override
     public void creerCategorie(Categorie categorie) {
 
         String creerCategorie = "INSERT INTO Categorie (id, libelle) VALUES (:id, :libelle)";
@@ -74,4 +83,13 @@ public class CategorieDAOImpl implements CategorieDAO {
 
         return this.namedParameterJdbcTemplate.queryForObject(integrerArticle, parameterSource, new BeanPropertyRowMapper<>(Categorie.class));
     }
+
+	@Override
+	public List<Categorie> consulterTout() {
+		String trouverToutesLesCategories = """
+                SELECT id, libelle
+                FROM categorie
+                """;
+		return namedParameterJdbcTemplate.query(trouverToutesLesCategories,new BeanPropertyRowMapper<>(Categorie.class));
+	}
 }
