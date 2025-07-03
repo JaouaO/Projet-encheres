@@ -90,20 +90,22 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public Article consulterParId(long idArticle) {
         String trouverParId = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
+                SELECT article.id, article.nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, pseudo, rue, code_postal, ville
                 FROM Article
-                WHERE idArticle = :idArticle
+                INNER JOIN Utilisateur ON (Article.id_vendeur = utilisateur.id)
+                WHERE article.id = :idArticle
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idArticle);
+        parameterSource.addValue("article.id", idArticle);
         return namedParameterJdbcTemplate.queryForObject(trouverParId, parameterSource, new ArticleRowMapper());
     }
 
     @Override
     public List<Article> consulterTout() {
         String trouverTousLesArticles = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
-                FROM article
+                SELECT article.id, article.nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, pseudo, rue, code_postal, ville
+                FROM Article
+                INNER JOIN Utilisateur ON (Article.id_vendeur = utilisateur.id)
                 """;
         return namedParameterJdbcTemplate.query(trouverTousLesArticles, new ArticleRowMapper());
     }
@@ -111,11 +113,9 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public List<Article> consulterParRecherche(String motRecherche) {
         String trouverParRecherche = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, libelle
-                FROM article AS a
-                INNER JOIN categorie AS c ON (a.id_categorie=c.id)
+                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
+                FROM article
                 WHERE nom LIKE '%"+ motRecherche + "%' 
-                   OR libelle LIKE '%" + motRecherche + "%'
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("nom", motRecherche);
@@ -162,12 +162,16 @@ public class ArticleDAOImpl implements ArticleDAO {
             a.setMiseAPrix(rs.getInt("mise_a_prix"));
             a.setPrixVente(rs.getInt("prix_vente"));
             a.setEtatVente(rs.getString("etat_vente"));
-            Utilisateur utilisateur = new Utilisateur();
-            utilisateur.setId(rs.getLong("id_vendeur"));
-            a.setUtilisateur(utilisateur);
-            Categorie categorie = new Categorie();
-            categorie.setId(rs.getLong("id_categorie"));
-            a.setCategorie(categorie);
+            Utilisateur u = new Utilisateur();
+            u.setId(rs.getLong("id_vendeur"));
+            a.setUtilisateur(u);
+            u.setPseudo(rs.getString("pseudo"));
+            u.setRue(rs.getString("rue"));
+            u.setVille(rs.getString("ville"));
+            u.setCodePostal(rs.getString("code_postal"));
+            Categorie c = new Categorie();
+            c.setId(rs.getLong("id_categorie"));
+            a.setCategorie(c);
 
             return a;
         }

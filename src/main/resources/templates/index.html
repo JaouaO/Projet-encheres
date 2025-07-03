@@ -22,6 +22,10 @@
     <form action="">
     <p>Filtres : </p>
     <p>Catégorie : <select name="" id=""></select></p>
+    
+<!--    <li><label>Liste de cours</label> <select name="idCours" id="">-->
+<!--						<option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.libelle}"></option>-->
+<!--				</select></li>-->
 
         <input type="text" name="text" class="search" placeholder="Le nom de l'article contient">
         <button>Rechercher</button>
@@ -29,13 +33,10 @@
 
     <div th:each="article : ${articles}">
        <a th:href="@{/achats/details/id=${article.id}}"> <p th:text="${article.nom}"></p></a>
-        <div>
-            <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
-            <p>Classement : A COMPLETER</p>
-        </div>
+        <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
         <p th:text="'Fin de l enchère : ' + ${article.dateFinEnchere}" ></p>
-<!--        <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}" ></p>-->
-<!--        <p th:text="'Vendeur : ' + ${article.utlisateur.pseudo}" ></p>-->
+        <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}" ></p>
+        <p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}" ></p>
 
     </div>
 </body>
