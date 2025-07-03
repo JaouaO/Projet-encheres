@@ -1,5 +1,6 @@
 package fr.eni.encheres.bll;
 
+
 import org.springframework.stereotype.Service;
 
 import fr.eni.encheres.bo.Utilisateur;
@@ -91,7 +92,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	        for (Enchere enchere : encheres) {
 	            Utilisateur encherisseur = enchere.getUtilisateur();
 	            utilisateurDAO.ajouterCredits(enchere.getMontantEnchere(), encherisseur.getId());
-	        }*/
-	       // this.articleDAO.annulerVente(idArticle);
+//	        }*/
+//	        this.articleDAO.annulerVente(idArticle);
 	    }
 	}
