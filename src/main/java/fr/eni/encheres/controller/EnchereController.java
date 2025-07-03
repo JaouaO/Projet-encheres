@@ -3,20 +3,25 @@ package fr.eni.encheres.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import fr.eni.encheres.bll.EnchereService;
+import fr.eni.encheres.bo.Article;
+
 
 
 //@SessionAttributes("utilisateurEnSession")
 @Controller
 public class EnchereController {
 
-//	EnchereService enchereservice;
-//
-//	public EnchereController(EnchereService enchereservice) {
-//		this.enchereservice = enchereservice;
-//	}
-//	
+	EnchereService enchereservice;
+
+	public EnchereController(EnchereService enchereservice) {
+		this.enchereservice = enchereservice;
+	}
+	
 	
 //pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
 @GetMapping("/ventes/details")
@@ -35,13 +40,16 @@ public String afficherDetailsAchats( Model model) {
 
 @GetMapping("/vente")
 public String afficherVente( Model model) {
-	//model.addAttribute("categories", model)
+	model.addAttribute("categories", this.enchereservice.consulterToutCategorie());
+	Article article = new Article();
+	model.addAttribute("article", article);
 	
     return "creer-nouvelle-vente";
 }
 
 @PostMapping("/creer-nouvelle-vente")
-public String getMethodName( Model model) {
+public String getMethodName(@ModelAttribute Article article, Model model) {
+	System.out.println(article);
 	
 	return "index";
 }
