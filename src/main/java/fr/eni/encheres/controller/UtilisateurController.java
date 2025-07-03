@@ -1,5 +1,6 @@
 package fr.eni.encheres.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,7 @@ public class UtilisateurController {
 	public String afficherAccueil(Model model) {
 		List<Categorie> categories = this.enchereService.consulterToutCategorie();
 
+		
 		model.addAttribute("categories", categories);
 
 		return "index";
