@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -30,12 +31,15 @@
         <button>Rechercher</button>
     </form>
 
-    <div>
-       <a th:href="@{/achats/details}"> <p>PC Gamer pour travailler</p></a>
-        <p>Prix : 210 points Classement : 2</p>
-        <p>Fin de l'enchère : 10/08/2018</p>
-        <p>Retrait : 10 allée des Alouettes 44800 Saint-Herblain</p>
-        <p>Vendeur : jojo44</p>
+    <div th:each="article : ${articles}">
+       <a th:href="@{/achats/details/id=${article.id}}"> <p th:text="${article.nom}"></p></a>
+        <div>
+            <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
+            <p>Classement : A COMPLETER</p>
+        </div>
+        <p th:text="'Fin de l enchère : ' + ${article.dateFinEnchere}" ></p>
+<!--        <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}" ></p>-->
+<!--        <p th:text="'Vendeur : ' + ${article.utlisateur.pseudo}" ></p>-->
 
     </div>
 </body>
