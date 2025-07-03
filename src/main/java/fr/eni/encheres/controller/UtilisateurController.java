@@ -1,19 +1,30 @@
 package fr.eni.encheres.controller;
 
+import fr.eni.encheres.bll.EnchereService;
+import fr.eni.encheres.bo.Article;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.support.SessionStatus;
 
-
+import java.util.List;
 
 
 @Controller
 public class UtilisateurController {
 
+	private EnchereService enchereService;
+
+	public UtilisateurController(EnchereService enchereService) {
+		this.enchereService = enchereService;
+	}
+
 	@GetMapping({ "/", "/accueil" })
 	public String afficherAccueil(Model model) {
+		List<Article> articles = enchereService.consulterTout();
+		model.addAttribute("articles", articles);
+
 		return "index";
 		//if(utilisateurEnSession != null){
 	//return "portail-encheres";
