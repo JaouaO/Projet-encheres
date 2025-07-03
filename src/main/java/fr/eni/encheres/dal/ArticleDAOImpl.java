@@ -96,7 +96,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE article.id = :idArticle
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("article.id", idArticle);
+        parameterSource.addValue("idArticle", idArticle);
         return namedParameterJdbcTemplate.queryForObject(trouverParId, parameterSource, new ArticleRowMapper());
     }
 
