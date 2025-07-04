@@ -31,7 +31,7 @@
     </form>
 
     <div th:each="article : ${articles}">
-       <a th:href="@{/achats/details/id=${article.id}}"> <p th:text="${article.nom}"></p></a>
+       <a th:href="@{/achats/details(id=${article.id})}"> <p th:text="${article.nom}"></p></a>
         <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
         <p th:text="'Fin de l enchère : ' + ${article.dateFinEnchere}" ></p>
         <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}" ></p>
