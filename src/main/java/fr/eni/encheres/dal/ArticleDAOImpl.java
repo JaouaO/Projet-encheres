@@ -58,7 +58,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE id = :idArticle
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idArticle);
+        parameterSource.addValue("idArticle", idArticle);
         namedParameterJdbcTemplate.update(mettreEtatEnVente, parameterSource);
     }
 
@@ -70,7 +70,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE id = :idArticle
                 """;
             MapSqlParameterSource ParameterSource = new MapSqlParameterSource();
-            ParameterSource.addValue("id", idArticle);
+            ParameterSource.addValue("idArticle", idArticle);
             namedParameterJdbcTemplate.update(supprArticle, ParameterSource);
         }
     }
@@ -82,7 +82,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE id = :idArticle
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idArticle);
+        parameterSource.addValue("idArticle", idArticle);
         namedParameterJdbcTemplate.update(mettreEtatVendu, parameterSource);
     }
 
@@ -117,8 +117,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE nom LIKE '%"+ motRecherche + "%' 
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("nom", motRecherche);
-        parameterSource.addValue("libelle", motRecherche);
+        parameterSource.addValue("motRecherche", motRecherche);
         return namedParameterJdbcTemplate.query(trouverParRecherche, parameterSource, new ArticleRowMapper());
     }
 
@@ -143,7 +142,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE etat_vente = :etatVente
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("etat_vente", etatVente);
+        parameterSource.addValue("etatVente", etatVente);
         return namedParameterJdbcTemplate.query(trierParEtat, parameterSource, new ArticleRowMapper());
     }
 

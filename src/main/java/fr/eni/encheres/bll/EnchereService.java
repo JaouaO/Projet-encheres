@@ -35,5 +35,6 @@ public interface EnchereService {
 
 	
 	void ajouterEnchere(Enchere enchere);
-	
+
+    Enchere recupererDerniereEnchere(long idArticle);
 }
