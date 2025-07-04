@@ -95,4 +95,12 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 //	        }*/
 //	        this.articleDAO.annulerVente(idArticle);
 	    }
+		@Override
+		public Utilisateur verifierConnexion(String pseudo, String motDePasse) {
+	    	Utilisateur utilisateur = utilisateurDAO.consulterParPseudo(pseudo);
+	    		if (utilisateur != null && utilisateur.getMotDePasse().equals(motDePasse)) {
+	       		 return utilisateur;
+	    }
+	    	return null;
+	}
 	}
