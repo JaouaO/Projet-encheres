@@ -34,8 +34,7 @@ public class ArticleDAOImpl implements ArticleDAO {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", article.getId());
-        parameterSource.addValue("nom", article.getNom());
+        parameterSource.addValue("nom",article.getNom());
         parameterSource.addValue("description", article.getDescription());
         parameterSource.addValue("dateDebutEnchere", article.getDateDebutEnchere());
         parameterSource.addValue("dateFinEnchere", article.getDateFinEnchere());

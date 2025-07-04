@@ -29,6 +29,7 @@ public class Article implements Serializable{
 
 	public Article() {
 		this.encheres = new ArrayList<Enchere>();
+		this.etatVente = "nonDebutee";
 	}
 
 
