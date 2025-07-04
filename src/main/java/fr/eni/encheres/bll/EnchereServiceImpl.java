@@ -89,7 +89,6 @@ public class EnchereServiceImpl implements EnchereService {
 		return encheres.get(encheres.size() - 1);
 	}
 	
-	
 	@Override
 	public List<Categorie> consulterToutCategorie() {
 		return this.categorieDAO.consulterTout();
