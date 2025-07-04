@@ -11,6 +11,7 @@ import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.dal.ArticleDAO;
 import fr.eni.encheres.dal.CategorieDAO;
 import fr.eni.encheres.dal.EnchereDAO;
+import fr.eni.encheres.dal.UtilisateurDAO;
 
 @Service
 public class EnchereServiceImpl implements EnchereService {
@@ -18,11 +19,16 @@ public class EnchereServiceImpl implements EnchereService {
 	private ArticleDAO articleDAO;
 	private EnchereDAO enchereDAO;
 	private CategorieDAO categorieDAO;
+	private UtilisateurDAO utilisateurDAO;
 
-	public EnchereServiceImpl(ArticleDAO articleDAO, EnchereDAO enchereDAO, CategorieDAO categorieDAO) {
+
+
+	public EnchereServiceImpl(ArticleDAO articleDAO, EnchereDAO enchereDAO, CategorieDAO categorieDAO,
+			UtilisateurDAO utilisateurDAO) {
 		this.articleDAO = articleDAO;
 		this.enchereDAO = enchereDAO;
 		this.categorieDAO = categorieDAO;
+		this.utilisateurDAO = utilisateurDAO;
 	}
 
 	@Override
@@ -78,14 +84,15 @@ public class EnchereServiceImpl implements EnchereService {
 
 	@Override
 	public Enchere recupererDerniereEnchere(long idArticle) {
-		Article article = articleDAO.consulterParId(idArticle);
 
-		List<Enchere> encheres = article.getEncheres();
+		List<Enchere> encheres = this.enchereDAO.consulterParArticle(idArticle);
 
 		encheres.sort(Comparator.comparing(Enchere::getDateEnchere));
 		if (encheres.isEmpty()) {
 			return null;
 		}
+		Enchere enchere = encheres.get(encheres.size() - 1);
+		enchere.setUtilisateur(this.utilisateurDAO.consulterParId(enchere.getUtilisateur().getId()));
 		return encheres.get(encheres.size() - 1);
 	}
 	
