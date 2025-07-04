@@ -27,7 +27,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
     public void creerUtilisateur(Utilisateur utilisateur) {
         String ajouterUtilisateur = """
                 INSERT INTO Utilisateur (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur)
-                VALUES (:pseudo, :nom, :prenom, :email, :telephone, :rue, :codePostal, :ville, :motDePpasse, :credit, :administrateur)
+                VALUES (:pseudo, :nom, :prenom, :email, :telephone, :rue, :code_postal, :ville, :mot_de_passe, :credit, :administrateur)
                 """;
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -164,6 +164,16 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         return namedParameterJdbcTemplate.query(
                 SQL,
                 new MapSqlParameterSource("pseudo", pseudo),
+                new UtilisateurRowMapper()
+        ).stream().findFirst().orElse(null);
+    }
+
+    @Override
+    public Utilisateur consulterParEmail(String email) {
+        String SQL = "SELECT * FROM Utilisateur WHERE email = :email";
+        return namedParameterJdbcTemplate.query(
+                SQL,
+                new MapSqlParameterSource("email", email),
                 new UtilisateurRowMapper()
         ).stream().findFirst().orElse(null);
     }

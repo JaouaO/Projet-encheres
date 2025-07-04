@@ -14,17 +14,38 @@
 
 
 <!-- <form th:object="${Utilisateur} action="/inscription" method="post"> -->
-    <form action = "">
-        <label for="">Pseudo :</label> <input type="text"><br>
-        <label for="">Nom :</label> <input type="text"><br>
-        <label for="">Prénom :</label> <input type="text"><br>
-        <label for="">Email :</label> <input type="email"><br>
-        <label for="">Téléphone :</label> <input type="number"><br>
-        <label for="">Rue :</label> <input type="text"><br>
-        <label for="">Code Postal :</label> <input type="number"><br>
-        <label for="">Ville :</label> <input type="text"><br>
-        <label for="">Mot de passe :</label> <input type="password"><br>
-        <label for="">Confirmation :</label> <input type="password">
+    <form th:action="@{/inscription}" th:object="${utilisateur}" method="post">
+
+
+        <label for="">Pseudo :</label>
+        <input type="text" th:field="*{pseudo}" pattern="[a-zA-Z0-9]+" required><br>
+
+        <label for="">Nom :</label>
+        <input type="text" th:field="*{nom}" required><br>
+
+        <label for="">Prénom :</label>
+        <input type="text" th:field="*{prenom}" required><br>
+
+        <label for="">Email :</label>
+        <input  type="email" th:field="*{email}" required><br>
+
+        <label for="">Téléphone :</label>
+        <input type="number" th:field="*{telephone}" required><br>
+
+        <label for="">Rue :</label>
+        <input type="text"th:field="*{rue}" required><br>
+
+        <label for="">Code Postal :</label>
+        <input type="number" th:field="*{codePostal}" required><br>
+
+        <label for="">Ville :</label>
+        <input type="text" th:field="*{ville}" required><br>
+
+        <label for="">Mot de passe :</label>
+        <input type="password" th:field="*{motDePasse}" required><br>
+
+        <label for="">Confirmation :</label>
+        <input type="password" >
         <li>
 				<button type="submit">Créer</button>
 			</li>
@@ -32,7 +53,7 @@
 				<a  th:href="@{/accueil}"><button>Annuler</button></a>
 		</li>
     </form>
-
+    <p th:if="${erreur}" th:text="${erreur}"></p>
 
 
 </body>
