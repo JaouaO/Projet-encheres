@@ -10,8 +10,10 @@
 
 <body>
 	<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
+
 	<!-- <form th:object="${Utilisateur} action="/connexion" method="post"> -->
 	<form th:action="@{/connexion}" method="post">
+
 
 		<p>
 			Identifiant : <input type="text" name="pseudo" required>
