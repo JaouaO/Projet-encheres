@@ -7,6 +7,7 @@ import fr.eni.encheres.bo.Enchere;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -22,13 +23,13 @@ import fr.eni.encheres.bo.Utilisateur;
 public class EnchereController {
   
   
-    private EnchereService enchereservice;
+    private EnchereService enchereService;
     private UtilisateurService utilisateurService;
 
 
 
-public EnchereController(EnchereService enchereservice, UtilisateurService utilisateurService) {
-		this.enchereservice = enchereservice;
+public EnchereController(EnchereService enchereService, UtilisateurService utilisateurService) {
+		this.enchereService = enchereService;
 		this.utilisateurService = utilisateurService;
 	}
 
@@ -64,7 +65,7 @@ public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, M
 
 @GetMapping("/vente")
 public String afficherVente( Model model) {
-	model.addAttribute("categories", this.enchereservice.consulterToutCategorie());
+	model.addAttribute("categories", this.enchereService.consulterToutCategorie());
 	Article article = new Article();
 	model.addAttribute("article", article);
 	
@@ -80,7 +81,7 @@ public String afficherVente( Model model) {
 		article.setLieuRetrait(utilisateur.getRetrait());
 		System.out.println(article);
 		
-		enchereservice.creerArticle(article);
+		enchereService.creerArticle(article);
 
 		return "redirect:/accueil";
 	}
