@@ -17,4 +17,6 @@ public interface UtilisateurDAO {
 
     public void retirerCredits(int nbRetire, long idUtilisateur);
 
+    Utilisateur consulterParEmail(String email);
+
  }
