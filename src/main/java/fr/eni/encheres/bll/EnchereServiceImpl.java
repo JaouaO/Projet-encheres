@@ -1,5 +1,6 @@
 package fr.eni.encheres.bll;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -74,9 +75,19 @@ public class EnchereServiceImpl implements EnchereService {
 	public Categorie consulterCategorieParId(long idCategorie) {
 		return this.categorieDAO.consulterParId(idCategorie);
 	}
-	
 
-	
+	@Override
+	public Enchere recupererDerniereEnchere(long idArticle) {
+		Article article = articleDAO.consulterParId(idArticle);
+
+		List<Enchere> encheres = article.getEncheres();
+
+		encheres.sort(Comparator.comparing(Enchere::getDateEnchere));
+		if (encheres.isEmpty()) {
+			return null;
+		}
+		return encheres.get(encheres.size() - 1);
+	}
 	
 	@Override
 	public List<Categorie> consulterToutCategorie() {

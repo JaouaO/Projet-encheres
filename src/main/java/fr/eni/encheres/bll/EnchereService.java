@@ -19,9 +19,6 @@ public interface EnchereService {
 	void vendreArticle(long idArticle);
 
 	Article consulterArticleParId(long idArticle);
-	
-	Categorie consulterCategorieParId(long idCategorie);
-
 
 	List<Article> consulterToutArticle();
 	
@@ -35,5 +32,6 @@ public interface EnchereService {
 
 	
 	void ajouterEnchere(Enchere enchere);
-	
+
+    Enchere recupererDerniereEnchere(long idArticle);
 }

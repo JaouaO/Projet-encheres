@@ -147,6 +147,26 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
         namedParameterJdbcTemplate.update(CreditsMoins, parameterSource);
     }
+    
+    @Override
+    public Utilisateur consulterParPseudo(String pseudo) {
+        String SQL = "SELECT * FROM Utilisateur WHERE pseudo = :pseudo";
+            return namedParameterJdbcTemplate.query(
+                 SQL,
+                 new MapSqlParameterSource("pseudo", pseudo),
+                 new UtilisateurRowMapper()
+         ).stream().findFirst().orElse(null);
+}
+
+    @Override
+    public Utilisateur consulterParPseudo(String pseudo) {
+        String SQL = "SELECT * FROM Utilisateur WHERE pseudo = :pseudo";
+        return namedParameterJdbcTemplate.query(
+                SQL,
+                new MapSqlParameterSource("pseudo", pseudo),
+                new UtilisateurRowMapper()
+        ).stream().findFirst().orElse(null);
+    }
 
     @Override
     public Utilisateur consulterParEmail(String email) {
@@ -178,5 +198,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
             return u;
         }
     }
+
+
 }
 
