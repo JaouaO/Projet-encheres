@@ -114,5 +114,5 @@ public String retire(Model model) {
     return "redirect:/achats/details";// + idArticle;
 }
 
-
+//
 }
