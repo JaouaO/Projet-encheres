@@ -158,6 +158,16 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
          ).stream().findFirst().orElse(null);
 }
 
+    @Override
+    public Utilisateur consulterParPseudo(String pseudo) {
+        String SQL = "SELECT * FROM Utilisateur WHERE pseudo = :pseudo";
+        return namedParameterJdbcTemplate.query(
+                SQL,
+                new MapSqlParameterSource("pseudo", pseudo),
+                new UtilisateurRowMapper()
+        ).stream().findFirst().orElse(null);
+    }
+
 
     class UtilisateurRowMapper implements RowMapper<Utilisateur> {
         @Override
