@@ -2,6 +2,8 @@ package fr.eni.encheres.dal;
 
 
 import fr.eni.encheres.bo.Utilisateur;
+
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -36,9 +38,9 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         sqlParameterSource.addValue("email", utilisateur.getEmail());
         sqlParameterSource.addValue("telephone", utilisateur.getTelephone());
         sqlParameterSource.addValue("rue", utilisateur.getRue());
-        sqlParameterSource.addValue("codePostal", utilisateur.getCodePostal());
+        sqlParameterSource.addValue("code_postal", utilisateur.getCodePostal());
         sqlParameterSource.addValue("ville", utilisateur.getVille());
-        sqlParameterSource.addValue("motDePasse", utilisateur.getMotDePasse());
+        sqlParameterSource.addValue("mot_de_passe", utilisateur.getMotDePasse());
         sqlParameterSource.addValue("credit", utilisateur.getCredit());
         sqlParameterSource.addValue("administrateur", utilisateur.isAdmin());
 
@@ -108,11 +110,11 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         String trouverParId = """
                 SELECT id, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, credit, administrateur
                 FROM Utilisateur
-                WHERE id = :idUtilisateur"""
-                ;
+                WHERE id = :idUtilisateur
+        """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idUtilisateur);
-        return namedParameterJdbcTemplate.getJdbcTemplate().queryForObject(trouverParId, new UtilisateurRowMapper(), parameterSource);
+        parameterSource.addValue("idUtilisateur", idUtilisateur);
+        return namedParameterJdbcTemplate.queryForObject(trouverParId, parameterSource,  new BeanPropertyRowMapper<>(Utilisateur.class));
     }
 
     @Override
@@ -125,7 +127,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         """;
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idUtilisateur);
+        parameterSource.addValue("idUtilisateur", idUtilisateur);
 
         namedParameterJdbcTemplate.update(creditPlus, parameterSource);
 
@@ -141,7 +143,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         """;
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idUtilisateur);
+        parameterSource.addValue("idUtilisateur", idUtilisateur);
 
         namedParameterJdbcTemplate.update(CreditsMoins, parameterSource);
     }
@@ -156,10 +158,10 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
             u.setPrenom(rs.getString("prenom"));
             u.setNom(rs.getString("nom"));
             u.setEmail(rs.getString("email"));
-            u.setMotDePasse(rs.getString("motDePasse"));
+            u.setMotDePasse(rs.getString("mot_de_passe"));
             u.setTelephone(rs.getString("telephone"));
             u.setRue(rs.getString("rue"));
-            u.setCodePostal(rs.getString("codePostal"));
+            u.setCodePostal(rs.getString("code_postal"));
             u.setVille(rs.getString("ville"));
             u.setCredit(rs.getInt("credit"));
             u.setAdmin(rs.getBoolean("administrateur"));

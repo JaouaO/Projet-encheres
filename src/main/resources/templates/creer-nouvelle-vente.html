@@ -13,7 +13,7 @@
 
 		<h2>Nouvelle vente</h2>
 		<ul class="flex-outer">
-			<li>Article : <input type="text" name="" id="">
+			<li><label for="inputNom">Article : </label><input type="text" id="inputNom" th:field="*{nom}">
 			</li>
 			<li><label for="idCategorie">Catégorie :</label>
 			<select th:field="*{categorie}" id="idCategorie">

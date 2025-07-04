@@ -192,9 +192,12 @@ public class Utilisateur implements Serializable{
 		builder.append(", admin=");
 		builder.append(admin);
 		builder.append(", articles=");
-		builder.append(articles);
-		builder.append(", encheres=");
-		builder.append(encheres);
+		for (Article article : articles) {
+			builder.append(article.getNom());
+			builder.append(", ");
+		}
+		//builder.append(", encheres=");
+		//builder.append(encheres);
 		builder.append("]");
 		return builder.toString();
 	}

@@ -10,23 +10,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import fr.eni.encheres.bll.UtilisateurService;
+import fr.eni.encheres.bo.Utilisateur;
+
 
 //@SessionAttributes("utilisateurEnSession")
 @Controller
 public class EnchereController {
+  
+  
+    private EnchereService enchereservice;
+    private UtilisateurService utilisateurService;
 
-    private EnchereService enchereService;
 
-    public EnchereController(EnchereService enchereService) {
-        this.enchereService = enchereService;
-    }
 
-    //pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
-@GetMapping("/ventes/details")
-public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model) {
-	//check l'utilisateur pour voir si c'est achat ou vente
-    return "ventes-details";
-}
+public EnchereController(EnchereService enchereservice, UtilisateurService utilisateurService) {
+		this.enchereservice = enchereservice;
+		this.utilisateurService = utilisateurService;
+	}
+
+
 
     @GetMapping("/achats/details")
     public String afficherDetailsAchats(@RequestParam(name = "id") long idArticle, Model model) {
@@ -46,35 +49,52 @@ public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, M
         }
         return "redirect:index";
     }
+  
+    //pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
+@GetMapping("/ventes/details")
+public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model) {
+	//check l'utilisateur pour voir si c'est achat ou vente
+    return "ventes-details";
+}
+  
+  
 
 @GetMapping("/vente")
 public String afficherVente( Model model) {
-	//model.addAttribute("categories", model)
+	model.addAttribute("categories", this.enchereservice.consulterToutCategorie());
+	Article article = new Article();
+	model.addAttribute("article", article);
 	
     return "creer-nouvelle-vente";
 }
 
-@PostMapping("/creer-nouvelle-vente")
-public String getMethodName( Model model) {
-	
-	return "index";
-}
+  
+	@PostMapping("/creer-nouvelle-vente")
+	public String getMethodName(@ModelAttribute Article article, Model model) {
+		Utilisateur utilisateur = utilisateurService.consulterParId(1);
+		article.setUtilisateur(utilisateur);
+		article.setEtatVente("NON_DEBUTEE");
+		article.setLieuRetrait(utilisateur.getRetrait());
+		System.out.println(article);
+		
+		enchereservice.creerArticle(article);
 
+		return "redirect:/accueil";
+	}
 
 //doit request aussi l'ID de l'article
-@PostMapping("/encherir")
+	@PostMapping("/encherir")
 //@RequestParam(name=nbPoints)
-public String encherir( int nbPoints, Model model) {
-	//TODO
-	return "achats-details";// + idArticle;
-}
+	public String encherir(int nbPoints, Model model) {
+		// TODO
+		return "achats-details";// + idArticle;
+	}
 
 //doit request aussi l'ID de l'article
-@PostMapping("/retire")
-public String retire(Model model) {
-	//TODO checker que le vendeur ET l'acheteur l'ont marqué comme retiré
-	return "redirect:/achats/details";// + idArticle;
-}
-	
-	
+	@PostMapping("/retire")
+	public String retire(Model model) {
+		// TODO checker que le vendeur ET l'acheteur l'ont marqué comme retiré
+		return "redirect:/achats/details";// + idArticle;
+	}
+
 }
