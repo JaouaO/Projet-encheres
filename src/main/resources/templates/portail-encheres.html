@@ -12,7 +12,7 @@
     <a th:href="@{/ventes/nouvelle-vente}">Vendre un article</a>
     <a th:href="@{/profil}">Mon profil</a>
     <!-- gérer la déco -->
-    <a th:href="@{/session-cloture">Déconnexion</a>
+    <a th:href="@{/session-cloture}">Déconnexion</a>
     
     
     <form action="">
@@ -38,19 +38,31 @@
     
         </form>
 
-    <div>
-        <a th:href="@{/achats-details}">
-            <p>PC Gamer pour travailler</p>
-        </a>
-        <p>Prix : 210 points Classement : 2</p>
-        <p>Fin de l'enchère : 10/08/2018</p>
-        <p>Retrait : 10 allée des Alouettes 44800 Saint-Herblain</p>
-            <!-- il faut envoyer la recherche de  profil avec un get, et gérer ça soit dans la même méthode du controller soit dans une autre -->
+        <div th:each="article : ${articles}">
+            <a th:href="@{/achats/details/id=${article.id}}"> <p th:text="${article.nom}"></p></a>
+            <div>
+                <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
+                <p>Classement : A COMPLETER</p>
+            </div>
+            <p th:text="'Fin de l enchère : ' + ${article.dateFinEnchere}" ></p>
+            <!--        <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}" ></p>-->
+            <!--        <p th:text="'Vendeur : ' + ${article.utlisateur.pseudo}" ></p>-->
+
+        </div>
+
+        <!-- <div>
+               <a th:href="@{/achats-details}">
+                   <p>PC Gamer pour travailler</p>
+               </a>
+               <p>Prix : 210 points Classement : 2</p>
+               <p>Fin de l'enchère : 10/08/2018</p>
+               <p>Retrait : 10 allée des Alouettes 44800 Saint-Herblain</p>
+                    il faut envoyer la recherche de  profil avec un get, et gérer ça soit dans la même méthode du controller soit dans une autre
         <p>Vendeur : <a th:href="@{/profil}">jojo44</a></p>
-    
-        <!-- ne pas laisser width = 20% -->
-        <img src="/src/main/resources/static/images/pc gamer 1.webp" alt="" width="20%">
-    </div>
+
+
+        <img src="/src/main/resources/static/images/pc gamer 1.webp" alt="">
+        </div>  -->
 
     
 </body>

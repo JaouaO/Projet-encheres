@@ -10,9 +10,11 @@
 
 <body>
 	<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
-	
+
+	<!-- <form th:object="${Utilisateur} action="/connexion" method="post"> -->
 	<form th:action="@{/connexion}" method="post">
- 
+
+
 		<p>
 			Identifiant : <input type="text" name="pseudo" required>
 		</p>
@@ -24,6 +26,10 @@
 		<input type="checkbox">Se souvenir de moi <a href="">Mot
 			de passe oublié</a>
 	</form>
+
+	<div th:if="${erreur}" class="erreur">
+		<p th:text="${erreur}"></p>
+	</div>
 
 
 

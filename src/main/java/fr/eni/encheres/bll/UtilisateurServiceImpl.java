@@ -21,9 +21,24 @@ public class UtilisateurServiceImpl implements UtilisateurService{
         if (utilisateur == null) {
             throw new IllegalArgumentException("Utilisateur ne peut pas être null");
         }
-        // ajout d'autres validations (email valide, pseudo unique, etc...)
-        utilisateurDAO.creerUtilisateur(utilisateur);
-    }
+		// Vérification pseudo alphanumérique
+		if (!utilisateur.getPseudo().matches("^[a-zA-Z0-9]+$")) {
+			throw new IllegalArgumentException("Le pseudo doit être alphanumérique.");
+		}
+
+		// pseudo unique
+		if (utilisateurDAO.consulterParPseudo(utilisateur.getPseudo()) != null) {
+			throw new IllegalArgumentException("Ce pseudo est déjà utilisé.");
+		}
+
+		// email unique
+		if (utilisateurDAO.consulterParEmail(utilisateur.getEmail()) != null) {
+			throw new IllegalArgumentException("Cet email est déjà utilisé.");
+		}
+
+		utilisateurDAO.creerUtilisateur(utilisateur);
+	}
+
 
 	 @Override
 	    public void modifierUtilisateur(long idUtilisateur) {
@@ -95,6 +110,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 //	        }*/
 //	        this.articleDAO.annulerVente(idArticle);
 	    }
+
 		@Override
 		public Utilisateur verifierConnexion(String pseudo, String motDePasse) {
 	    	Utilisateur utilisateur = utilisateurDAO.consulterParPseudo(pseudo);
@@ -102,5 +118,6 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	       		 return utilisateur;
 	    }
 	    	return null;
+
 	}
 	}
