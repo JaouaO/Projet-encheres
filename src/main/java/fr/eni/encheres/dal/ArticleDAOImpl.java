@@ -28,8 +28,8 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public void creerArticle(Article article) {
         String creerUnNouvelArticle = """
-                INSERT INTO Article (id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie)
-                VALUES (:id, :nom, :description, :dateDebutEnchere, :dateFinEnchere, :miseAPrix, :prixVente, :etatVente, :idUtilisateur, :idCategorie)
+                INSERT INTO Article (id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img)
+                VALUES (:id, :nom, :description, :dateDebutEnchere, :dateFinEnchere, :miseAPrix, :prixVente, :etatVente, :idUtilisateur, :idCategorie, :cheminImg)
                 """;
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -44,6 +44,7 @@ public class ArticleDAOImpl implements ArticleDAO {
         parameterSource.addValue("etatVente", article.getEtatVente());
         parameterSource.addValue("idUtilisateur", article.getUtilisateur().getId());
         parameterSource.addValue("idCategorie",article.getCategorie().getId());
+        parameterSource.addValue("cheminImg", article.getCheminImg());
 
         namedParameterJdbcTemplate.update(creerUnNouvelArticle, parameterSource, keyHolder);
 
@@ -90,7 +91,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public Article consulterParId(long idArticle) {
         String trouverParId = """
-                SELECT article.id, article.nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, pseudo, rue, code_postal, ville
+                SELECT article.id, article.nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img, pseudo, rue, code_postal, ville
                 FROM Article
                 INNER JOIN Utilisateur ON (Article.id_vendeur = utilisateur.id)
                 WHERE article.id = :idArticle
@@ -103,7 +104,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public List<Article> consulterTout() {
         String trouverTousLesArticles = """
-                SELECT article.id, article.nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, pseudo, rue, code_postal, ville
+                SELECT article.id, article.nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img, pseudo, rue, code_postal, ville
                 FROM Article
                 INNER JOIN Utilisateur ON (Article.id_vendeur = utilisateur.id)
                 """;
@@ -113,7 +114,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public List<Article> consulterParRecherche(String motRecherche) {
         String trouverParRecherche = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
+                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img
                 FROM article
                 WHERE nom LIKE '%"+ motRecherche + "%' 
                 """;
@@ -126,7 +127,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     public List<Article> consulterParCategorie(long idCategorie) {
 
         String trouverParCategorie = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
+                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img
                 FROM Article
                 WHERE id_categorie = :idCategorie
                 """;
@@ -138,7 +139,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public List<Article> consulterParEtat(String etatVente) {
         String trierParEtat = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
+                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img
                 FROM Article
                 WHERE etat_vente = :etatVente
                 """;
@@ -171,6 +172,7 @@ public class ArticleDAOImpl implements ArticleDAO {
             Categorie c = new Categorie();
             c.setId(rs.getLong("id_categorie"));
             a.setCategorie(c);
+            a.setCheminImg(rs.getString("chemin_img"));
 
             return a;
         }
