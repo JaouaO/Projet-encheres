@@ -2,10 +2,14 @@ package fr.eni.encheres.controller;
 import fr.eni.encheres.bo.Article;
 import java.util.ArrayList;
 import java.util.List;
+
+import fr.eni.encheres.bo.Utilisateur;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bll.UtilisateurService;
@@ -46,6 +50,40 @@ public class UtilisateurController {
 	@GetMapping("/connexion")
 	public String afficherConnexion(Model model) {
 		return "connexion";
+	}
+
+	@PostMapping("/connexion")
+	public String connecterUtilisateur(@RequestParam("pseudo") String pseudo,
+									   @RequestParam("motDePasse") String motDePasse,
+									   Model model,
+									   HttpSession session) {
+
+		Utilisateur utilisateur = utilisateurService.verifierConnexion(pseudo, motDePasse);
+
+		if (utilisateur != null) {
+			session.setAttribute("utilisateurSession", utilisateur);
+			return "redirect:/portail-encheres";
+		} else {
+			model.addAttribute("erreur", "Pseudo ou mot de passe incorrect.");
+			return "connexion";
+		}
+	}
+
+	@GetMapping("/portail-encheres")
+	public String afficherPortail(HttpSession session, Model model) {
+		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
+		if (utilisateur == null) {
+			return "redirect:/connexion";
+		}
+
+		List<Article> articles = enchereService.consulterToutArticle();
+		List<Categorie> categories = enchereService.consulterToutCategorie();
+
+		model.addAttribute("articles", articles);
+		model.addAttribute("categories", categories);
+		model.addAttribute("utilisateur", utilisateur);
+
+		return "portail-encheres";
 	}
 
 	@GetMapping("/profil")
