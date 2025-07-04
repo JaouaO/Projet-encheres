@@ -176,7 +176,7 @@ public class UtilisateurController {
 	}
 
 
-	@GetMapping({ "/portail-encheres" })
+	@GetMapping({ "/rechercher" })
 	public String afficherPortail (Model model) {
 
 		List<Article> articles = enchereService.consulterParEtat("Enchère ouverte");
@@ -224,8 +224,6 @@ public class UtilisateurController {
 
 			return "portail-encheres";
 		}
-
-
 
 
 }
