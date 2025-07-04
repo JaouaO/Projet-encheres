@@ -2,6 +2,8 @@ package fr.eni.encheres.controller;
 
 import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bo.Article;
+import fr.eni.encheres.bo.Categorie;
+import fr.eni.encheres.bo.Enchere;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,26 +28,24 @@ public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, M
     return "ventes-details";
 }
 
-//pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
-@GetMapping("/achats/details")
-public String afficherDetailsAchats( @RequestParam(name = "id") long idArticle, Model model) {
-    if (idArticle > 0) {
-        Article article = enchereService.consulterArticleParId(idArticle);
-        if (article != null) {
-            // Ajout de l'instance dans le modèle
-            model.addAttribute("article", article);
+    @GetMapping("/achats/details")
+    public String afficherDetailsAchats(@RequestParam(name = "id") long idArticle, Model model) {
+        if (idArticle > 0) {
+            Article article = enchereService.consulterArticleParId(idArticle);
+            if (article != null) {
+                model.addAttribute("article", article);
 
-            return "achats-details";
-        } else
-            System.out.println("Cet article n'existe pas");
-            return "redirect:index";
-    } else {
-        System.out.println("Cet article n'existe pas");
+                Categorie categorieArticle = enchereService.consulterCategorieParId(article.getCategorie().getId());
+                model.addAttribute("categorieArticle", categorieArticle);
+
+                Enchere derniereEnchere = enchereService.recupererDerniereEnchere(idArticle);
+                model.addAttribute("derniereEnchere", derniereEnchere);
+
+                return "achats-details";
+            }
+        }
         return "redirect:index";
     }
-
-
-}
 
 @GetMapping("/vente")
 public String afficherVente( Model model) {
