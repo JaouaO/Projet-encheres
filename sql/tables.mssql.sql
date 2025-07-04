@@ -48,6 +48,7 @@ CREATE TABLE Article (
     etat_vente VARCHAR(50) NOT NULL,
     id_vendeur BIGINT NOT NULL,
     id_categorie BIGINT NOT NULL,
+    chemin_img VARCHAR(100) NOT NULL,
     FOREIGN KEY (id_vendeur) REFERENCES Utilisateur(id),
     FOREIGN KEY (id_categorie) REFERENCES Categorie(id)
 );
@@ -73,4 +74,5 @@ CREATE TABLE Enchere (
     FOREIGN KEY (id_article) REFERENCES Article(id)
 );
 -- Contrainte sur les choix des états des vente
+
 ALTER TABLE Article ADD CONSTRAINT chekEtatVente CHECK (etat_vente IN ('en_cours', 'terminee', 'non_debutee', 'livree'));
