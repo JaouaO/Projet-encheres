@@ -12,8 +12,6 @@ public interface UtilisateurDAO {
     public void desactiverUtilisateur(long idUtilisateur);
 
     public Utilisateur consulterParId (long idUtilisateur);
-    
-    Utilisateur consulterParPseudo(String pseudo);
 
     public void ajouterCredits(int nbAjout, long idUtilisateur);
 
