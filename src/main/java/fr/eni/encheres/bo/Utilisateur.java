@@ -150,6 +150,20 @@ public class Utilisateur implements Serializable{
 	public void setEncheres(List<Enchere> encheres) {
 		this.encheres = encheres;
 	}
+	
+	public Retrait getRetrait() {
+		return new Retrait(rue, codePostal, ville, null);
+	}
+	public String afficherRetrait() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(rue);
+		builder.append("\n");
+		builder.append(codePostal);
+		builder.append(" ");
+		builder.append(ville);
+		return builder.toString();
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -178,9 +192,12 @@ public class Utilisateur implements Serializable{
 		builder.append(", admin=");
 		builder.append(admin);
 		builder.append(", articles=");
-		builder.append(articles);
-		builder.append(", encheres=");
-		builder.append(encheres);
+		for (Article article : articles) {
+			builder.append(article.getNom());
+			builder.append(", ");
+		}
+		//builder.append(", encheres=");
+		//builder.append(encheres);
 		builder.append("]");
 		return builder.toString();
 	}

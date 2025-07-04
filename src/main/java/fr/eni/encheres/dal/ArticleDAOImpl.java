@@ -28,22 +28,22 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public void creerArticle(Article article) {
         String creerUnNouvelArticle = """
-                INSERT INTO Article (id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie)
-                VALUES (:id, :nom, :description, :dateDebutEnchere, :dateFinEnchere, :miseAPrix, :prixVente, :etatVente, :idUtilisateur, :idCategorie)
+                INSERT INTO Article (id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img)
+                VALUES (:id, :nom, :description, :dateDebutEnchere, :dateFinEnchere, :miseAPrix, :prixVente, :etatVente, :idUtilisateur, :idCategorie, :cheminImg)
                 """;
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", article.getId());
-        parameterSource.addValue("nom", article.getNom());
+        parameterSource.addValue("nom",article.getNom());
         parameterSource.addValue("description", article.getDescription());
-        parameterSource.addValue("date_debut", article.getDateDebutEnchere());
-        parameterSource.addValue("date_fin", article.getDateFinEnchere());
-        parameterSource.addValue("mise_a_Prix", article.getMiseAPrix());
-        parameterSource.addValue("prix_vente", article.getPrixVente());
-        parameterSource.addValue("etat_vente", article.getEtatVente());
-        parameterSource.addValue("id_utilisateur", article.getUtilisateur().getId());
-        parameterSource.addValue("id_categorie",article.getCategorie().getId());
+        parameterSource.addValue("dateDebutEnchere", article.getDateDebutEnchere());
+        parameterSource.addValue("dateFinEnchere", article.getDateFinEnchere());
+        parameterSource.addValue("miseAPrix", article.getMiseAPrix());
+        parameterSource.addValue("prixVente", article.getPrixVente());
+        parameterSource.addValue("etatVente", article.getEtatVente());
+        parameterSource.addValue("idUtilisateur", article.getUtilisateur().getId());
+        parameterSource.addValue("idCategorie",article.getCategorie().getId());
+        parameterSource.addValue("cheminImg", article.getCheminImg());
 
         namedParameterJdbcTemplate.update(creerUnNouvelArticle, parameterSource, keyHolder);
 
@@ -59,7 +59,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE id = :idArticle
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idArticle);
+        parameterSource.addValue("idArticle", idArticle);
         namedParameterJdbcTemplate.update(mettreEtatEnVente, parameterSource);
     }
 
@@ -71,7 +71,7 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE id = :idArticle
                 """;
             MapSqlParameterSource ParameterSource = new MapSqlParameterSource();
-            ParameterSource.addValue("id", idArticle);
+            ParameterSource.addValue("idArticle", idArticle);
             namedParameterJdbcTemplate.update(supprArticle, ParameterSource);
         }
     }
@@ -83,16 +83,17 @@ public class ArticleDAOImpl implements ArticleDAO {
                 WHERE id = :idArticle
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idArticle);
+        parameterSource.addValue("idArticle", idArticle);
         namedParameterJdbcTemplate.update(mettreEtatVendu, parameterSource);
     }
 
     @Override
     public Article consulterParId(long idArticle) {
         String trouverParId = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
+                SELECT article.id, article.nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img, pseudo, rue, code_postal, ville
                 FROM Article
-                WHERE id = :idArticle
+                INNER JOIN Utilisateur ON (Article.id_vendeur = utilisateur.id)
+                WHERE article.id = :idArticle
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("idArticle", idArticle);
@@ -102,8 +103,9 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public List<Article> consulterTout() {
         String trouverTousLesArticles = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
-                FROM article
+                SELECT article.id, article.nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img, pseudo, rue, code_postal, ville
+                FROM Article
+                INNER JOIN Utilisateur ON (Article.id_vendeur = utilisateur.id)
                 """;
         return namedParameterJdbcTemplate.query(trouverTousLesArticles, new ArticleRowMapper());
     }
@@ -111,15 +113,12 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public List<Article> consulterParRecherche(String motRecherche) {
         String trouverParRecherche = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, libelle
-                FROM article AS a
-                INNER JOIN categorie AS c ON (a.id_categorie=c.id)
+                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img
+                FROM article
                 WHERE nom LIKE '%"+ motRecherche + "%' 
-                   OR libelle LIKE '%" + motRecherche + "%'
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("nom", motRecherche);
-        parameterSource.addValue("libelle", motRecherche);
+        parameterSource.addValue("motRecherche", motRecherche);
         return namedParameterJdbcTemplate.query(trouverParRecherche, parameterSource, new ArticleRowMapper());
     }
 
@@ -127,7 +126,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     public List<Article> consulterParCategorie(long idCategorie) {
 
         String trouverParCategorie = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
+                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img
                 FROM Article
                 WHERE id_categorie = :idCategorie
                 """;
@@ -139,12 +138,12 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public List<Article> consulterParEtat(String etatVente) {
         String trierParEtat = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie
+                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img
                 FROM Article
                 WHERE etat_vente = :etatVente
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("etat_vente", etatVente);
+        parameterSource.addValue("etatVente", etatVente);
         return namedParameterJdbcTemplate.query(trierParEtat, parameterSource, new ArticleRowMapper());
     }
 
@@ -162,12 +161,17 @@ public class ArticleDAOImpl implements ArticleDAO {
             a.setMiseAPrix(rs.getInt("mise_a_prix"));
             a.setPrixVente(rs.getInt("prix_vente"));
             a.setEtatVente(rs.getString("etat_vente"));
-            Utilisateur utilisateur = new Utilisateur();
-            utilisateur.setId(rs.getLong("id_vendeur"));
-            a.setUtilisateur(utilisateur);
-            Categorie categorie = new Categorie();
-            categorie.setId(rs.getLong("id_categorie"));
-            a.setCategorie(categorie);
+            Utilisateur u = new Utilisateur();
+            u.setId(rs.getLong("id_vendeur"));
+            a.setUtilisateur(u);
+            u.setPseudo(rs.getString("pseudo"));
+            u.setRue(rs.getString("rue"));
+            u.setVille(rs.getString("ville"));
+            u.setCodePostal(rs.getString("code_postal"));
+            Categorie c = new Categorie();
+            c.setId(rs.getLong("id_categorie"));
+            a.setCategorie(c);
+            a.setCheminImg(rs.getString("chemin_img"));
 
             return a;
         }

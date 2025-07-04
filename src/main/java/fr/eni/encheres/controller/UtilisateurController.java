@@ -3,18 +3,33 @@ package fr.eni.encheres.controller;
 import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bo.Article;
+
 import fr.eni.encheres.bo.Categorie;
+
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.support.SessionStatus;
-
 import java.util.ArrayList;
-import java.util.List;
+
+import org.springframework.web.bind.annotation.RequestParam;
+
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+import org.springframework.web.bind.support.SessionStatus;
+import fr.eni.encheres.bll.EnchereService;
+import fr.eni.encheres.bll.UtilisateurService;
+import fr.eni.encheres.bo.Categorie;
+import fr.eni.encheres.bo.Utilisateur;
 
 
+import jakarta.servlet.http.HttpSession;
+
+
+@SessionAttributes("utilisateurEnSession")
 @Controller
 public class UtilisateurController {
 
@@ -45,6 +60,26 @@ public class UtilisateurController {
 		// return "portail-encheres";
 		// }
 	}
+	
+	@PostMapping("/connexion")
+	public String connecterUtilisateur(@RequestParam("pseudo") String pseudo,
+            @RequestParam("motDePasse") String motDePasse,
+            Model model,
+            HttpSession session) {
+ 
+	    Utilisateur utilisateur = utilisateurService.verifierConnexion(pseudo, motDePasse);
+ 
+	    if (utilisateur != null) {
+	        session.setAttribute("utilisateurSession", utilisateur);
+	        System.out.println("Test");
+	        return "redirect:/accueil";
+	    } else {
+	        model.addAttribute("erreur", "Pseudo ou mot de passe incorrect.");
+	        System.out.println("test2");
+	        return "connexion";
+	    }
+	}
+	
 
 	@GetMapping("/connexion")
 	public String afficherConnexion(Model model) {
@@ -93,6 +128,12 @@ public class UtilisateurController {
 		sessionStatus.setComplete();
 
 		return "redirect:/accueil";
+	}
+	
+	@ModelAttribute("membreEnSession")
+	public Utilisateur addUtilisateurEnSession() {
+		System.out.println("Add membre en session");
+		return new Utilisateur();
 	}
 
 

@@ -1,33 +1,37 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org">>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détail PC Gamer</title>
+    <title>Détail Achat</title>
 </head>
-<body>
+<body th:object="${article}">
        	<header th:replace="~{fragments/fragment-entete :: entete}">
 	</header>
-	
 
             <h2>Détail Vente</h2>
-    <h3>PC Gamer pour travailler</h3>
+    <h3 th:text="*{nom}"></h3>
 
 
-    <p>Description :</p>
-
-    <p>Catégorie : Informatique</p>
-    <p>Meilleure offre : </p>
-    <p>Mise à prix :</p>
-    <p>Fin de l'enchère : 09/10/2018</p>
-    <p>Retrait : 10 Allée des Alouettes 44800 Saint-Herblain</p>
-
-   <!-- il faut envoyer la recherche de  profil avec un get, et gérer ça soit dans la même méthode du controller soit dans une autre -->
-        <p>Vendeur : <a th:href="@{/profil}">jojo44</a></p>
-        
-        <!-- <form action="/encherir" method="post"> -->
+        <div>
+            <img th:src="@{'/images/' + *{cheminImg} + '.jpg'}" alt="Photo de l\'article">
+            <p th:text="'Description : ' + *{description}"></p>
+            <p th:text="'Catégorie : ' + ${categorieArticle.libelle}"></p>
+            <p th:if="${derniereEnchere != null}"
+               th:text="'Meilleure offre : ' + ${derniereEnchere.montant} + ' pts par ' + ${derniereEnchere.utilisateur.pseudo}">
+            </p>
+            <p th:if="${derniereEnchere == null}">Aucune enchère pour le moment.</p>
+            <p th:text="'Mise à prix : ' + *{miseAPrix} + ' points'"></p>
+            <p th:text="'Fin de l\'enchère : ' + *{#temporals.format(dateFinEnchere,'dd/MM/yyyy')}"></p>
+            <p th:text="'Retrait : ' + *{utilisateur.afficherRetrait()}"></p>
+        </div>
+        <!-- <form action="/encherir" method="post">
+        il faut que l'enchère soit >0 et > dernière enchère (que l'on peut récupérer avec la nouvelle methode dans le service -->
     <form action="">
-    	<p>Ma proposition : <select type="number"></select> <button type="submit">Enchérir</button>
+        <p th:text="'Ma proposition : '"></p>
+        <input type="number">
+        <button type="submit">Enchérir</button>
 	</form>
 	
 

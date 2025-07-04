@@ -24,18 +24,19 @@ public class Article implements Serializable{
 	private Utilisateur utilisateur;
 	private Categorie categorie;
 	private List<Enchere> encheres;
-	
-	
-	
-	
+	private String cheminImg;
+
 
 	public Article() {
 		this.encheres = new ArrayList<Enchere>();
+		this.etatVente = "nonDebutee";
 	}
 
+
+
 	public Article(long id, String nom, String description, LocalDateTime dateDebutEnchere,
-			LocalDateTime dateFinEnchere, int miseAPrix, int prixVente, String etatVente, Retrait lieuRetrait,
-			Utilisateur utilisateur, Categorie categorie) {
+				   LocalDateTime dateFinEnchere, int miseAPrix, int prixVente, String etatVente, Retrait lieuRetrait,
+				   Utilisateur utilisateur, Categorie categorie, String cheminImg) {
 		this.id = id;
 		this.nom = nom;
 		this.description = description;
@@ -47,6 +48,7 @@ public class Article implements Serializable{
 		this.lieuRetrait = lieuRetrait;
 		this.utilisateur = utilisateur;
 		this.categorie = categorie;
+		this.cheminImg = cheminImg;
 	}
 
 	public long getId() {
@@ -137,12 +139,20 @@ public class Article implements Serializable{
 		this.categorie = categorie;
 	}
 
-	public Iterable<Enchere> getEncheres() {
+	public List<Enchere> getEncheres() {
 		return encheres;
 	}
 
 	public void setEncheres(List<Enchere> encheres) {
 		this.encheres = encheres;
+	}
+
+	public String getCheminImg() {
+		return cheminImg;
+	}
+
+	public void setCheminImg(String cheminImg) {
+		this.cheminImg = cheminImg;
 	}
 
 	@Override
@@ -173,6 +183,8 @@ public class Article implements Serializable{
 		builder.append(", encheres=");
 		builder.append(encheres);
 		builder.append("]");
+		builder.append(", cheminImg=");
+		builder.append(cheminImg);
 		return builder.toString();
 	}
 
