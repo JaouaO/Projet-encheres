@@ -42,11 +42,13 @@ public EnchereController(EnchereService enchereService, UtilisateurService utili
             Article article = enchereService.consulterArticleParId(idArticle);
             if (article != null) {
                 model.addAttribute("article", article);
+                
 
                 Categorie categorieArticle = enchereService.consulterCategorieParId(article.getCategorie().getId());
                 model.addAttribute("categorieArticle", categorieArticle);
 
                 Enchere derniereEnchere = enchereService.recupererDerniereEnchere(idArticle);
+
                 model.addAttribute("derniereEnchere", derniereEnchere);
 
                 return "achats-details";
@@ -114,5 +116,5 @@ public String retire(Model model) {
     return "redirect:/achats/details";// + idArticle;
 }
 
-
+//
 }

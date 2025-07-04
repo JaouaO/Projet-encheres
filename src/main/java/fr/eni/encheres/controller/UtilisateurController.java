@@ -133,7 +133,21 @@ public class UtilisateurController {
 		return new Utilisateur();
 	}
 
-	
+
+	@GetMapping({ "/rechercher" })
+	public String afficherPortail (Model model) {
+
+		List<Article> articles = enchereService.consulterParEtat("Enchère ouverte");
+
+		model.addAttribute("articles", articles);
+
+		List<Categorie> categories = this.enchereService.consulterToutCategorie();
+
+		model.addAttribute("categories", categories);
+
+			return "portail-encheres";
+		}
+
 
 
 }
