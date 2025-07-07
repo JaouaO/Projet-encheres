@@ -7,6 +7,9 @@ import fr.eni.encheres.bo.Article;
 
 import fr.eni.encheres.bo.Categorie;
 
+
+import java.time.Clock;
+
 import java.util.List;
 
 
@@ -83,6 +86,7 @@ public class UtilisateurController {
 		return "connexion";
 	}
 
+
 	@PostMapping("/connexion")
 	public String connecterUtilisateur(@RequestParam("pseudo") String pseudo,
 
@@ -122,6 +126,7 @@ public class UtilisateurController {
 		return "profil";
 	}
 
+
 	@GetMapping("/inscription")
 	public String afficherCreerCompte(Model model) {
 		Utilisateur utilisateur = new Utilisateur();
@@ -131,10 +136,14 @@ public class UtilisateurController {
 	}
 
 	@PostMapping("/inscription")
-	public String creerCompte(Model model) {
-		// TODO: process PUT request
-
-		return "index";
+	public String creerCompte(@ModelAttribute("utilisateur") Utilisateur utilisateur, Model model) {
+		try {
+			utilisateurService.creerUtilisateur(utilisateur);
+			return "redirect:/portail-encheres";
+		} catch (IllegalArgumentException e) {
+			model.addAttribute("erreur", e.getMessage());
+			return "creer-compte";
+		}
 	}
 
 	
@@ -208,6 +217,7 @@ public class UtilisateurController {
 
 			return "portail-encheres";
 		}
+
 
 
 

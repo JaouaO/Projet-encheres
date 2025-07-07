@@ -22,7 +22,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
             throw new IllegalArgumentException("Utilisateur ne peut pas être null");
         }
 		// Vérification pseudo alphanumérique
-		if (!utilisateur.getPseudo().matches("^[a-zA-Z0-9]+$")) {
+		if (!utilisateur.getPseudo().matches("^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z0-9]+$")) {
 			throw new IllegalArgumentException("Le pseudo doit être alphanumérique.");
 		}
 
