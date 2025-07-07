@@ -194,8 +194,6 @@ public class UtilisateurController {
 	}
 
 
-
-
     @PostMapping("/portail-encheres")
     public String filtrerArticles(
             @RequestParam("type") String type,
