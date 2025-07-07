@@ -1,7 +1,6 @@
 package fr.eni.encheres.controller;
 
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bo.Article;
