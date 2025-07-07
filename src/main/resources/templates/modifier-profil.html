@@ -11,7 +11,7 @@
 	<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
 	<h2>Mon profil</h2>
 
-<form th:object="${utilisateur}" action="@{/profil/modifier}" method="post">
+<form th:object="${utilisateur}" th:action="@{/profil/modifier}" method="post">
 		
 		<label for="">Pseudo :</label>
         <input type="text" th:field="*{pseudo}" pattern="[a-zA-Z0-9]+" required  placeholder th:value="*{pseudo}"><br>

@@ -5,7 +5,7 @@ public interface UtilisateurDAO {
 
     public void creerUtilisateur(Utilisateur utilisateur);
 
-    public void modifierUtilisateur(long idUtilisateur);
+    public void modifierUtilisateur(long idUtilisateur, Utilisateur utilisateur);
 
     public void supprimerUtilisateur(long idUtilisateur);
 
