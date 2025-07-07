@@ -26,13 +26,18 @@
             <p th:text="'Fin de l\'enchère : ' + *{#temporals.format(dateFinEnchere,'dd/MM/yyyy')}"></p>
             <p th:text="'Retrait : ' + *{utilisateur.afficherRetrait()}"></p>
         </div>
-        <!-- <form action="/encherir" method="post">
-        il faut que l'enchère soit >0 et > dernière enchère (que l'on peut récupérer avec la nouvelle methode dans le service -->
-    <form action="">
-        <p th:text="'Ma proposition : '"></p>
-        <input type="number">
-        <button type="submit">Enchérir</button>
-	</form>
+
+        <form action="#" th:action="@{/encherir}" method="post" th:object="${enchereForm}">
+            <input type="hidden" th:name="articleId" th:value="${articleId}" />
+
+            <label for="montantEnchere">Ma proposition :</label>
+            <input type="number" id="montantEnchere" name="montantEnchere"
+                   min="1"
+                   th:attr="min=${derniereEnchere != null} ? ${derniereEnchere.montantEnchere + 1} : 1"
+                   required />
+
+            <button type="submit">Enchérir</button>
+        </form>
 	
 
     <a  th:href="@{/accueil}"><button>Retour</button></a>

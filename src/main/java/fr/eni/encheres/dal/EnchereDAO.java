@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface EnchereDAO {
 
-    List<Enchere> ajouterEnchere(Enchere enchere);
+    void ajouterEnchere(Enchere enchere);
 
     List<Enchere> consulterParUtilisateur(long idUtilisateur);
 

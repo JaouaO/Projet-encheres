@@ -113,12 +113,16 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public List<Article> consulterParRecherche(String motRecherche) {
         String trouverParRecherche = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img
-                FROM article
-                WHERE nom LIKE '%"+ motRecherche + "%' 
+                SELECT a.id, a.nom, a.description, a.date_debut, a.date_fin,
+               a.mise_a_prix, a.prix_vente, a.etat_vente, a.id_vendeur,
+               a.id_categorie, a.chemin_img,
+               u.pseudo, u.rue, u.code_postal, u.ville
+        FROM article a
+        INNER JOIN utilisateur u ON a.id_vendeur = u.id
+                WHERE LOWER(a.nom) LIKE LOWER(:motRecherche) 
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("motRecherche", motRecherche);
+        parameterSource.addValue("motRecherche", "%" + motRecherche + "%");
         return namedParameterJdbcTemplate.query(trouverParRecherche, parameterSource, new ArticleRowMapper());
     }
 
@@ -126,12 +130,17 @@ public class ArticleDAOImpl implements ArticleDAO {
     public List<Article> consulterParCategorie(long idCategorie) {
 
         String trouverParCategorie = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img
-                FROM Article
+                SELECT a.id, a.nom, a.description, a.date_debut, a.date_fin,
+               a.mise_a_prix, a.prix_vente, a.etat_vente, a.id_vendeur,
+               a.id_categorie, a.chemin_img,
+               u.pseudo, u.rue, u.code_postal, u.ville
+        FROM article a
+        INNER JOIN utilisateur u ON a.id_vendeur = u.id
                 WHERE id_categorie = :idCategorie
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id_categorie", idCategorie);
+        parameterSource.addValue("idCategorie", idCategorie);
+
         return namedParameterJdbcTemplate.query(trouverParCategorie, parameterSource, new ArticleRowMapper());
     }
 
@@ -145,6 +154,26 @@ public class ArticleDAOImpl implements ArticleDAO {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("etatVente", etatVente);
         return namedParameterJdbcTemplate.query(trierParEtat, parameterSource, new ArticleRowMapper());
+    }
+
+    @Override
+    public List<Article> consulterParCategorieEtNom(Long idCategorie, String motRecherche) {
+        String sql = """
+        SELECT a.id, a.nom, a.description, a.date_debut, a.date_fin,
+               a.mise_a_prix, a.prix_vente, a.etat_vente, a.id_vendeur,
+               a.id_categorie, a.chemin_img,
+               u.pseudo, u.rue, u.code_postal, u.ville
+        FROM article a
+        INNER JOIN utilisateur u ON a.id_vendeur = u.id
+        WHERE a.id_categorie = :idCategorie
+        AND LOWER(a.nom) LIKE LOWER(:motRecherche)
+    """;
+
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("idCategorie", idCategorie);
+        parameterSource.addValue("motRecherche", "%" + motRecherche + "%");
+
+        return namedParameterJdbcTemplate.query(sql, parameterSource, new ArticleRowMapper());
     }
 
     class ArticleRowMapper implements RowMapper<Article> {

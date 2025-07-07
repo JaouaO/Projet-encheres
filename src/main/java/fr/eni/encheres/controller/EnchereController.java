@@ -3,6 +3,7 @@ import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,6 @@ import java.util.List;
 
 @Controller
 public class EnchereController {
-
 
     private EnchereService enchereService;
     private UtilisateurService utilisateurService;
@@ -101,20 +101,80 @@ public String afficherVente( Model model) {
 		return "redirect:/accueil";
 	}
 
-//doit request aussi l'ID de l'article
+// pour récupérer l'enchère avec les attributs du formulaire
+	public static class EnchereFormulaire {
+		private Long articleId;
+		private int montantEnchere;
+
+
+		public Long getArticleId() { return articleId; }
+		public void setArticleId(Long articleId) { this.articleId = articleId; }
+
+		public int getMontantEnchere() { return montantEnchere; }
+		public void setMontantEnchere(int montantEnchere) { this.montantEnchere = montantEnchere; }
+	}
+
 	@PostMapping("/encherir")
-//@RequestParam(name=nbPoints)
-	public String encherir(int nbPoints, Model model) {
-		// TODO
-		return "achats-details";// + idArticle;
+	public String encherir(@ModelAttribute EnchereFormulaire enchereForm, Model model, HttpSession session) {
+		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
+		Long articleId = enchereForm.getArticleId();
+		int montant = enchereForm.getMontantEnchere();
+
+		Article article = enchereService.consulterArticleParId(articleId);
+		if (article == null) {
+			model.addAttribute("error", "Article non trouvé");
+			return "achats-details"; // nom de ta vue
+		}
+
+		//Récupérer dernière enchère
+		Enchere derniereEnchere = enchereService.recupererDerniereEnchere(articleId);
+
+		if (montant <= 0) {
+			model.addAttribute("error", "Le montant doit être supérieur à zéro.");
+			return "achats-details";
+		}
+
+		if (montant <= article.getMiseAPrix()) {
+			model.addAttribute("error", "Votre enchère doit être supérieure à la mise à prix.");
+			return "achats-details";
+		}
+
+		if (derniereEnchere != null && montant <= derniereEnchere.getMontantEnchere()) {
+			model.addAttribute("error", "Votre enchère doit être supérieure à la meilleure offre actuelle.");
+			return "achats-details";
+		}
+
+		if (montant < utilisateur.getCredit()) {
+			model.addAttribute("error", "Vous n'avez pas assez de crédits pour effectuer cette enchère.");
+			return "achats-details";
+		}
+
+		Enchere nouvelleEnchere = new Enchere();
+		nouvelleEnchere.setArticle(article);
+		nouvelleEnchere.setMontantEnchere(montant);
+		nouvelleEnchere.setUtilisateur(utilisateur);
+		nouvelleEnchere.setDateEnchere(java.time.LocalDateTime.now());
+
+		enchereService.ajouterEnchere(nouvelleEnchere);
+
+		return "redirect:/achats-details/" + articleId;
 	}
 
 //doit request aussi l'ID de l'article
-@PostMapping("/retire")
-public String retire(Model model) {
+//@PostMapping("/retire")
+//public String retire(Model model) {
     // TODO checker que le vendeur ET l'acheteur l'ont marqué comme retiré
-    return "redirect:/achats/details";// + idArticle;
-}
+ //   return "redirect:/achats/details";// + idArticle;
+//}
 
 //
+
 }
+//doit request aussi l'ID de l'article
+//	@PostMapping("/retire")
+//	public String retire(Model model) {
+//		// TODO checker que le vendeur ET l'acheteur l'ont marqué comme retiré
+//		return "redirect:/achats/details";// + idArticle;
+//	}
+
+

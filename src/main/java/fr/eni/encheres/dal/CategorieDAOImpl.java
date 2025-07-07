@@ -35,19 +35,6 @@ public class CategorieDAOImpl implements CategorieDAO {
     }
 
     @Override
-    // suppression d'une catégorie
-    public void supprimerCategorie(long idCategorie) {
-
-        String supprCategorie = "UPDATE Categorie SET libelle = :libelle WHERE id = :id";
-
-        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-        parameterSource.addValue("id", idCategorie);
-
-        this.namedParameterJdbcTemplate.update(supprCategorie, parameterSource);
-
-    }
-
-    @Override
     // modification d'une catégorie
     public void modifierCategorie(long idCategorie) {
 
@@ -92,4 +79,18 @@ public class CategorieDAOImpl implements CategorieDAO {
                 """;
 		return namedParameterJdbcTemplate.query(trouverToutesLesCategories,new BeanPropertyRowMapper<>(Categorie.class));
 	}
+
+    @Override
+    // suppression d'une catégorie
+    public void supprimerCategorie(long idCategorie) {
+
+        String supprCategorie = "DELETE Categorie  WHERE id = :id";
+
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("id", idCategorie);
+
+        this.namedParameterJdbcTemplate.update(supprCategorie, parameterSource);
+
+    }
+
 }

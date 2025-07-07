@@ -30,10 +30,14 @@ public interface EnchereService {
 
 	List<Article> consulterParEtat(String etat);
 
-	
+
 	void ajouterEnchere(Enchere enchere);
 
     Enchere recupererDerniereEnchere(long idArticle);
 
+
+	List<Article> consulterParCategorieEtRecherche(Long idCategorie, String text);
+
 	Categorie consulterCategorieParId(long idCategorie);
+
 }
