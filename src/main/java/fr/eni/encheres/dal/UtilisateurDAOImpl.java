@@ -119,15 +119,20 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
     @Override
     public void ajouterCredits(int nbAjout, long idUtilisateur) {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setId(idUtilisateur);
+
+        int nouveauSolde = utilisateur.getCredit() + nbAjout;
 
         String creditPlus = """
                 UPDATE Utilisateur 
-                SET credit = credit+nbAjout
+                SET credit = :nouveauSolde
                 WHERE id = :idUtilisateur
         """;
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("idUtilisateur", idUtilisateur);
+        parameterSource.addValue("nouveauSolde", nouveauSolde);
 
         namedParameterJdbcTemplate.update(creditPlus, parameterSource);
 
@@ -135,15 +140,20 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
     @Override
     public void retirerCredits(int nbRetire, long idUtilisateur) {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setId(idUtilisateur);
+
+        int nouveauSolde = utilisateur.getCredit() - nbRetire;
 
         String CreditsMoins = """
                 UPDATE Utilisateur 
-                SET credit = credit-nbRetire
+                SET credit = :nouveauSolde 
                 WHERE id = :idUtilisateur
         """;
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("idUtilisateur", idUtilisateur);
+        parameterSource.addValue("nouveauSolde", nouveauSolde);
 
         namedParameterJdbcTemplate.update(CreditsMoins, parameterSource);
     }

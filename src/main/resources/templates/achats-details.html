@@ -27,9 +27,10 @@
             <p th:text="'Retrait : ' + *{utilisateur.afficherRetrait()}"></p>
         </div>
 
-        <form action="#" th:action="@{/encherir}" method="post" th:object="${enchereForm}">
-            <input type="hidden" th:name="articleId" th:value="${articleId}" />
 
+        <form action="#" th:action="@{/encherir}" method="post" th:object="${enchereForm}">
+            <input type="hidden" th:name="articleId" th:value="${article.id}" />
+<!--            <p th:if="${erreur}" th:text="${erreur}"></p>-->
             <label for="montantEnchere">Ma proposition :</label>
             <input type="number" id="montantEnchere" name="montantEnchere"
                    min="1"
