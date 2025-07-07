@@ -84,7 +84,6 @@ public class EnchereServiceImpl implements EnchereService {
 
 	@Override
 	public Enchere recupererDerniereEnchere(long idArticle) {
-		Article article = articleDAO.consulterParId(idArticle);
 
 		List<Enchere> encheres = this.enchereDAO.consulterParArticle(idArticle);
 

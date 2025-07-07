@@ -19,9 +19,6 @@ public interface EnchereService {
 	void vendreArticle(long idArticle);
 
 	Article consulterArticleParId(long idArticle);
-	
-	Categorie consulterCategorieParId(long idCategorie);
-
 
 	List<Article> consulterToutArticle();
 	
@@ -38,5 +35,9 @@ public interface EnchereService {
 
     Enchere recupererDerniereEnchere(long idArticle);
 
+
 	List<Article> consulterParCategorieEtRecherche(Long idCategorie, String text);
+
+	Categorie consulterCategorieParId(long idCategorie);
+
 }

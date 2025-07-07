@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr"
-      xmlns:th="http://www.thymeleaf.org">>
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +19,7 @@
             <p th:text="'Description : ' + *{description}"></p>
             <p th:text="'Catégorie : ' + ${categorieArticle.libelle}"></p>
             <p th:if="${derniereEnchere != null}"
-               th:text="'Meilleure offre : ' + ${derniereEnchere.montant} + ' pts par ' + ${derniereEnchere.utilisateur.pseudo}">
+               th:text="'Meilleure offre : ' + ${derniereEnchere.montantEnchere} + ' pts par ' + ${derniereEnchere.utilisateur.pseudo}">
             </p>
             <p th:if="${derniereEnchere == null}">Aucune enchère pour le moment.</p>
             <p th:text="'Mise à prix : ' + *{miseAPrix} + ' points'"></p>
