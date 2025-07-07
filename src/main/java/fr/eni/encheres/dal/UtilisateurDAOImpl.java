@@ -86,6 +86,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			namedParameterJdbcTemplate.update(modifUtilisateur, parameterSource);
 		}
 //ajouter message d'erreur en cas de Id non trouvé
+
 	}
 
 	@Override
@@ -122,36 +123,46 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 				new BeanPropertyRowMapper<>(Utilisateur.class));
 	}
 
-	@Override
-	public void ajouterCredits(int nbAjout, long idUtilisateur) {
+ @Override
+    public void ajouterCredits(int nbAjout, long idUtilisateur) {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setId(idUtilisateur);
 
-		String creditPlus = """
-				        UPDATE Utilisateur
-				        SET credit = credit+nbAjout
-				        WHERE id = :idUtilisateur
-				""";
+        int nouveauSolde = utilisateur.getCredit() + nbAjout;
 
-		MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-		parameterSource.addValue("idUtilisateur", idUtilisateur);
+        String creditPlus = """
+                UPDATE Utilisateur 
+                SET credit = :nouveauSolde
+                WHERE id = :idUtilisateur
+        """;
 
-		namedParameterJdbcTemplate.update(creditPlus, parameterSource);
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("idUtilisateur", idUtilisateur);
+        parameterSource.addValue("nouveauSolde", nouveauSolde);
 
-	}
+        namedParameterJdbcTemplate.update(creditPlus, parameterSource);
 
-	@Override
-	public void retirerCredits(int nbRetire, long idUtilisateur) {
+    }
 
-		String CreditsMoins = """
-				        UPDATE Utilisateur
-				        SET credit = credit-nbRetire
-				        WHERE id = :idUtilisateur
-				""";
+    @Override
+    public void retirerCredits(int nbRetire, long idUtilisateur) {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setId(idUtilisateur);
 
-		MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-		parameterSource.addValue("idUtilisateur", idUtilisateur);
+        int nouveauSolde = utilisateur.getCredit() - nbRetire;
 
-		namedParameterJdbcTemplate.update(CreditsMoins, parameterSource);
-	}
+        String CreditsMoins = """
+                UPDATE Utilisateur 
+                SET credit = :nouveauSolde 
+                WHERE id = :idUtilisateur
+        """;
+
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("idUtilisateur", idUtilisateur);
+        parameterSource.addValue("nouveauSolde", nouveauSolde);
+
+        namedParameterJdbcTemplate.update(CreditsMoins, parameterSource);
+    }
 
 	@Override
 	public Utilisateur consulterParPseudo(String pseudo) {
