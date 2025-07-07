@@ -5,7 +5,7 @@ import fr.eni.encheres.bo.Utilisateur;
 public interface UtilisateurService {
 
 	    void creerUtilisateur(Utilisateur utilisateur);
-	    void modifierUtilisateur(long idUtilisateur);
+	    void modifierUtilisateur(long idUtilisateur, Utilisateur utilisateur);
 	    void supprimerUtilisateur(long idUtilisateur);
 	    void desactiverUtilisateur(long idUtilisateur);
 	    Utilisateur consulterParId(long idUtilisateur);

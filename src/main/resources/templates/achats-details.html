@@ -25,6 +25,8 @@
             <p th:text="'Mise à prix : ' + *{miseAPrix} + ' points'"></p>
             <p th:text="'Fin de l\'enchère : ' + *{#temporals.format(dateFinEnchere,'dd/MM/yyyy')}"></p>
             <p th:text="'Retrait : ' + *{utilisateur.afficherRetrait()}"></p>
+            
+                    <a th:href="@{/profil(id=${article.getUtilisateur().getId()})}"><p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}" ></p></a>
         </div>
 
 
