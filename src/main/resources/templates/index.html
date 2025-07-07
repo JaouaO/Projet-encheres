@@ -15,18 +15,28 @@
 	<a th:href="@{/inscription}">S'inscrire</a>
 	<a th:href="@{/connexion}">Se connecter</a>
 	<a th:href="@{/vente}">Vendre</a>
-	
+
+    <input  type="text" id="prenom" name="prenom" required>
 	
     <h3>Liste des enchères</h3>
 
-<!-- <form action="/accueil" method="post"> -->
-    <form action="">
-    <p>Filtres : </p>
-    <li><label>Catégorie : </label> <select name="idCategorie" id="idCategorie">
-						<option th:each="c : ${categories}" th:value="${c.id}" th:text="${c.libelle}"></option>
-				</select></li>
-
-        <input type="text" name="text" class="search" placeholder="Le nom de l'article contient">
+    <!-- <form action="/accueil" method="post"> -->
+    <form action="/" method="get">
+        <p>Filtres : </p>
+        <li>
+            <label>Catégorie : </label>
+            <select name="idCategorie" id="idCategorie">
+                <option th:value="0"
+                        th:selected="${idCategorie == 0}">Toutes</option>
+                <option th:each="c : ${categories}"
+                        th:value="${c.id}"
+                        th:text="${c.libelle}"
+                        th:selected="${c.id == idCategorie}">
+                </option>
+            </select>
+        </li>
+        <input type="text" name="text" class="search"
+               th:value="${text}" placeholder="Le nom de l'article contient">
         <button>Rechercher</button>
     </form>
 
