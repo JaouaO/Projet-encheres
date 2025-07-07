@@ -22,7 +22,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
             throw new IllegalArgumentException("Utilisateur ne peut pas être null");
         }
 		// Vérification pseudo alphanumérique
-		if (!utilisateur.getPseudo().matches("^[a-zA-Z0-9]+$")) {
+		if (!utilisateur.getPseudo().matches("^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z0-9]+$")) {
 			throw new IllegalArgumentException("Le pseudo doit être alphanumérique.");
 		}
 
@@ -38,16 +38,17 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 
 		utilisateurDAO.creerUtilisateur(utilisateur);
 	}
+	@Override
+	public void modifierUtilisateur(long idUtilisateur, Utilisateur utilisateur) {
+//		if (idUtilisateur <= 0) {
+//            throw new IllegalArgumentException("ID utilisateur invalide");
+//        }else if(idUtilisateur != utilisateur.getId()) {
+//        	throw new IllegalArgumentException("ID utilisateur différent de celui de l'utilisateur modifié");
+//        }
+         utilisateurDAO.modifierUtilisateur(idUtilisateur, utilisateur);
+		
+	}
 
-
-	 @Override
-	    public void modifierUtilisateur(long idUtilisateur) {
-	        if (idUtilisateur <= 0) {
-	            throw new IllegalArgumentException("ID utilisateur invalide");
-	        }
-	         utilisateurDAO.modifierUtilisateur(idUtilisateur);
-	        
-	    }
 
 	    
 	    @Override
@@ -120,4 +121,5 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	    	return null;
 
 	}
+
 	}

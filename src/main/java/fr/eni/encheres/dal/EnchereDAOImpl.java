@@ -88,7 +88,7 @@ public class EnchereDAOImpl implements EnchereDAO {
         public Enchere mapRow(ResultSet rs, int rowNum) throws SQLException {
             Enchere e = new Enchere();
             e.setMontantEnchere(rs.getInt("montant_enchere"));
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
             LocalDateTime dt = LocalDateTime.parse(rs.getString("date_enchere"),formatter);
             e.setDateEnchere(dt);
             Article a = new Article();
