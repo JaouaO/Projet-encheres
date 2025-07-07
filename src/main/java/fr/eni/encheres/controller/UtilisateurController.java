@@ -118,7 +118,19 @@ public class UtilisateurController {
 	}
 
 	@GetMapping("/profil")
-	public String afficherProfil(Model model) {
+	public String afficherProfil(@RequestParam(name = "idCategorie", required = false, defaultValue = "-1") Long IdUtilisateur, HttpSession session, Model model) {
+		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
+
+		if(IdUtilisateur ==-1 || IdUtilisateur == utilisateurSession.getId() ) {
+			Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
+			model.addAttribute("utilisateur", utilisateur);
+			model.addAttribute("afficherModifier", true);
+		}else {
+			Utilisateur utilisateur = utilisateurService.consulterParId(IdUtilisateur);
+			model.addAttribute("utilisateur", utilisateur);
+			model.addAttribute("afficherModifier", false);
+		}
+		
 		return "profil";
 	}
 
