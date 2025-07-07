@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
     <title>Index</title>
 </head>
 
@@ -15,15 +16,11 @@
 	<a th:href="@{/inscription}">S'inscrire</a>
 	<a th:href="@{/connexion}">Se connecter</a>
 
-    <input  type="text" id="prenom" name="prenom" required>
-	
-    <h3>Liste des enchères</h3>
-
     <!-- <form action="/accueil" method="post"> -->
     <form action="/" method="get">
-        <p>Filtres : </p>
-        <li>
-            <label>Catégorie : </label>
+        <p th:class="filtres">Filtres : </p>
+        <div th:class="categories">
+            <label>Catégorie</label>
             <select name="idCategorie" id="idCategorie">
                 <option th:value="0"
                         th:selected="${idCategorie == 0}">Toutes</option>
@@ -33,19 +30,25 @@
                         th:selected="${c.id == idCategorie}">
                 </option>
             </select>
-        </li>
+        </div>
+        <div th:class="recherche">
         <input type="text" name="text" class="search"
                th:value="${text}" placeholder="Le nom de l'article contient">
-        <button>Rechercher</button>
+        <button th:class="rechercher-btn">Rechercher</button>
+        </div>
     </form>
 
-    <div th:each="article : ${articles}">
-       <a th:href="@{/achats/details(id=${article.id})}"> <p th:text="${article.nom}"></p></a>
-        <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
-        <p th:text="'Fin de l enchère : ' + ${article.dateFinEnchere}" ></p>
-        <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}" ></p>
-        <p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}" ></p>
-
+    <div class="articles" th:class="articles" th:each="article : ${articles}">
+        <div class="article">
+            <img th:src="@{'/images/' + *{article.cheminImg} + '.jpg'}" alt="Photo de l\'article">
+            <div class="article-details">
+                <a th:href="@{/achats/details(id=${article.id})}"> <h2 th:text="${article.nom}"></h2></a>
+                <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
+                <p th:text="'Fin de l enchère : ' + ${#temporals.format(article.dateFinEnchere,'dd/MM/yyyy')}" ></p>
+                <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}" ></p>
+                <p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}" ></p>
+            </div>
+        </div>
     </div>
 </body>
 
