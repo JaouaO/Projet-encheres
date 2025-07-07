@@ -1,5 +1,6 @@
 package fr.eni.encheres.controller;
 
+
 import ch.qos.logback.core.net.SyslogOutputStream;
 import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bll.UtilisateurService;
@@ -10,6 +11,7 @@ import fr.eni.encheres.bo.Categorie;
 import java.util.List;
 
 
+
 import fr.eni.encheres.bo.Utilisateur;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -17,15 +19,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import java.util.ArrayList;
 
 
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 
 import org.springframework.web.bind.support.SessionStatus;
+
 
 import jakarta.servlet.http.HttpSession;
 
@@ -65,9 +70,11 @@ public class UtilisateurController {
 		}
 
 		model.addAttribute("articles", articles);
+
 		model.addAttribute("categories", enchereService.consulterToutCategorie());
 		model.addAttribute("idCategorie", idCategorie);
 		model.addAttribute("text", text);
+
 
 		return "index";
 	}
@@ -79,9 +86,9 @@ public class UtilisateurController {
 
 	@PostMapping("/connexion")
 	public String connecterUtilisateur(@RequestParam("pseudo") String pseudo,
-									   @RequestParam("motDePasse") String motDePasse,
-									   Model model,
-									   HttpSession session) {
+
+			@RequestParam("motDePasse") String motDePasse, Model model, HttpSession session) {
+
 
 		Utilisateur utilisateur = utilisateurService.verifierConnexion(pseudo, motDePasse);
 
@@ -118,7 +125,8 @@ public class UtilisateurController {
 
 	@GetMapping("/inscription")
 	public String afficherCreerCompte(Model model) {
-		// TODO: process PUT request
+		Utilisateur utilisateur = new Utilisateur();
+		model.addAttribute("utilisateur", utilisateur);
 
 		return "creer-compte";
 	}
@@ -130,8 +138,7 @@ public class UtilisateurController {
 		return "index";
 	}
 
-	// pas sur, peut-être qu'il faut que ce soir /connexion/modifier pour
-	// correspondre aux routes ?
+	
 	@GetMapping("/profil/modifier")
 	public String afficherModifierProfil(Model model) {
 		// TODO: process POST request
@@ -139,7 +146,7 @@ public class UtilisateurController {
 		return "modifier-profil";
 	}
 
-	// pas sur si il faut remttre post /connexion comme c'est la même page ou pas
+
 	@PostMapping("/profil/modifier")
 	public String modifierProfil(Model model) {
 		// TODO: process POST request
@@ -154,7 +161,7 @@ public class UtilisateurController {
 
 		return "redirect:/accueil";
 	}
-	
+
 	@ModelAttribute("membreEnSession")
 	public Utilisateur addUtilisateurEnSession() {
 		System.out.println("Add membre en session");
@@ -175,6 +182,7 @@ public class UtilisateurController {
 
 			return "portail-encheres";
 		}
+
 
     @PostMapping("/portail-encheres")
     public String filtrerArticles(
@@ -210,6 +218,7 @@ public class UtilisateurController {
 
 			return "portail-encheres";
 		}
+
 
 
 }

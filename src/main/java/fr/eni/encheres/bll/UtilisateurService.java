@@ -12,5 +12,6 @@ public interface UtilisateurService {
 	    void ajouterCredits(int nbAjout, long idUtilisateur);
 	    void retirerCredits(int nbRetire, long idUtilisateur);
 		void annulerVenteParUtilisateur(long idArticle, long idUtilisateur);
+		Utilisateur verifierConnexion(String pseudo, String motDePasse);
 	
 }

@@ -1,18 +1,32 @@
 package fr.eni.encheres.dal;
 
+import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Enchere;
+import fr.eni.encheres.bo.Utilisateur;
+
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Repository
 public class EnchereDAOImpl implements EnchereDAO {
 
-	private JdbcTemplate namedParameterJdbcTemplate;
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	
+	
+	
+
+	public EnchereDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+	}
 
 	@Override
 
@@ -29,9 +43,9 @@ public class EnchereDAOImpl implements EnchereDAO {
 	// consultation de l'utilisateur par son id
 	public List<Enchere> consulterParUtilisateur(long idUtilisateur) {
 
-		String trouverUtilisateur = "SELECT id_utilisateur FROM Enchere WHERE id_utilisateur = :idUtilisateur";
+		String trouverParUtilisateur = "SELECT id_utilisateur FROM Enchere WHERE id_utilisateur = :idUtilisateur";
 
-		return this.namedParameterJdbcTemplate.query(trouverUtilisateur, new BeanPropertyRowMapper<>(Enchere.class));
+		return this.namedParameterJdbcTemplate.query(trouverParUtilisateur, new BeanPropertyRowMapper<>(Enchere.class));
 
 	}
 
@@ -39,9 +53,11 @@ public class EnchereDAOImpl implements EnchereDAO {
 	// consultation par article
 	public List<Enchere> consulterParArticle(long idArticle) {
 
-		String trouverParArticle = "SELECT id_article FROM Enchere WHERE id_article = :idArticle";
+		String trouverParArticle = "SELECT date_enchere, montant_enchere, id_utilisateur, id_article FROM Enchere WHERE id_article = :idArticle";
 
-		return this.namedParameterJdbcTemplate.query(trouverParArticle, new BeanPropertyRowMapper<>(Enchere.class));
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("idArticle", idArticle);
+        return namedParameterJdbcTemplate.query(trouverParArticle, parameterSource, new EnchereRowMapper());
 
 	}
 
@@ -68,5 +84,25 @@ public class EnchereDAOImpl implements EnchereDAO {
 
 		namedParameterJdbcTemplate.update(supprEnchere, paramSource);
 	}
+	
+	
+	class EnchereRowMapper implements RowMapper<Enchere> {
+        @Override
+        public Enchere mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Enchere e = new Enchere();
+            e.setMontantEnchere(rs.getInt("montant_enchere"));
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+            LocalDateTime dt = LocalDateTime.parse(rs.getString("date_enchere"),formatter);
+            e.setDateEnchere(dt);
+            Article a = new Article();
+            a.setId(rs.getLong("id_article"));
+            e.setArticle(null);
+            Utilisateur u = new Utilisateur();
+            u.setId(rs.getLong("id_utilisateur"));
+            e.setUtilisateur(u);
+          
+            return e;
+        }
+    }
 
 }
