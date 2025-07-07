@@ -124,4 +124,9 @@ public class EnchereServiceImpl implements EnchereService {
 
 	}
 
+	@Override
+	public List<Article> consulterParCategorieEtRecherche(Long idCategorie, String recherche) {
+		return articleDAO.consulterParCategorieEtNom(idCategorie, recherche);
+	}
+
 }
