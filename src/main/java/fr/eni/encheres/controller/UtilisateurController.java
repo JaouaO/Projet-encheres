@@ -118,7 +118,7 @@ public class UtilisateurController {
 	}
 
 	@GetMapping("/profil")
-	public String afficherProfil(@RequestParam(name = "idCategorie", required = false, defaultValue = "-1") Long IdUtilisateur, HttpSession session, Model model) {
+	public String afficherProfil(@RequestParam(name = "id", required = false, defaultValue = "-1") Long IdUtilisateur, HttpSession session, Model model) {
 		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
 
 		if(IdUtilisateur ==-1 || IdUtilisateur == utilisateurSession.getId() ) {
@@ -151,16 +151,16 @@ public class UtilisateurController {
 
 	
 	@GetMapping("/profil/modifier")
-	public String afficherModifierProfil(Model model) {
-		// TODO: process POST request
+	public String afficherModifierProfil(HttpSession session, Model model) {
+		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
+		model.addAttribute("utilisateur", utilisateur);
 
 		return "modifier-profil";
 	}
 
 
 	@PostMapping("/profil/modifier")
-	public String modifierProfil(Model model) {
-		// TODO: process POST request
+	public String modifierProfil( HttpSession session, Model model) {
 
 		return "profil";
 	}

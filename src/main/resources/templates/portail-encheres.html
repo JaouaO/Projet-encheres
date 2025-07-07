@@ -43,7 +43,7 @@
         <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
         <p th:text="'Fin de l enchère : ' + ${article.dateFinEnchere}" ></p>
         <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}" ></p>
-        <p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}" ></p>
+        <a th:href="@{/profil(id=${article.getUtilisateur().getId()})}"><p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}" ></p></a>
 
     </div>
 

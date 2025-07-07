@@ -11,7 +11,7 @@
   	<header th:replace="~{fragments/fragment-entete :: entete}">
 	</header>
 	<!-- <span data-th-text="'[' + ${utilisateurEnSession.prenom} + ']'"></span></h2> -->
-    <h2>(Nom du profil)</h2>
+    <h2 th:text="*{utilisateur.pseudo}">(Nom du profil)</h2>
     
 <div th:object="${utilisateur}" class="formulaire">
     <label for="">Pseudo :</label> <input disabled th:value="*{pseudo}">

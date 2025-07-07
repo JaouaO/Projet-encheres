@@ -4,29 +4,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Créer Profil</title>
+<title>Modifier Profil</title>
 </head>
 
 <body>
 	<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
 	<h2>Mon profil</h2>
 
-	<!-- <form th:object="${Utilisateur} action="/inscription" method="post"> -->
-	<form action="">
-		<label for="">Pseudo :</label> <input type="text"><br> <label
-			for="">Nom :</label> <input type="text"><br> <label
-			for="">Prénom :</label> <input type="text"><br> <label
-			for="">Email :</label> <input type="email"><br> <label
-			for="">Téléphone :</label> <input type="number"><br> <label
-			for="">Rue :</label> <input type="text"><br> <label
-			for="">Code Postal :</label> <input type="number"><br> <label
-			for="">Ville :</label> <input type="text"><br> <label
-			for="">Mot de passe :</label> <input type="password"><br>
-		<label for="">Confirmation :</label> <input type="password">
+<form th:object="${utilisateur}" action="@{/profil/modifier}" method="post">
+		
+		<label for="">Pseudo :</label>
+        <input type="text" th:field="*{pseudo}" pattern="[a-zA-Z0-9]+" required  placeholder th:value="*{pseudo}"><br>
+
+        <label for="">Nom :</label>
+        <input type="text" th:field="*{nom}" required  placeholder th:value="*{nom}"><br>
+
+        <label for="">Prénom :</label>
+        <input type="text" th:field="*{prenom}" required  placeholder th:value="*{prenom}"><br>
+
+        <label for="">Email :</label>
+        <input  type="email" th:field="*{email}" required  placeholder th:value="*{email}"><br>
+
+        <label for="">Téléphone :</label>
+        <input type="text"  pattern="[0-9]+" th:field="*{telephone}" required  placeholder th:value="*{telephone}"><br>
+
+        <label for="">Rue :</label>
+        <input type="text"th:field="*{rue}" required  placeholder th:value="*{rue}"><br>
+
+        <label for="">Code Postal :</label>
+        <input type="text"  pattern="[0-9]+" th:field="*{codePostal}" required  placeholder th:value="*{codePostal}"><br>
+
+        <label for="">Ville :</label>
+        <input type="text" th:field="*{ville}" required  placeholder th:value="*{ville}"><br>
+
+        <label for="">Mot de passe :</label>
+        <input type="password" th:field="*{motDePasse}" required  placeholder th:value="*{motDePasse}"><br>
+
+        <label for="">Confirmation :</label>
+        <input type="password" >
 		<li>
 			<button type="submit">Appliquer les modifications</button>
 		</li>
 	</form>
+	
 	<!--ajouter une pop up pour verifier la suppression du compte-->
 	<a th:href="@{/accueil}">Supprimer mon
 		compte</a>
