@@ -4,6 +4,8 @@ import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
+
+import java.time.Clock;
 import java.util.List;
 import fr.eni.encheres.bo.Utilisateur;
 import jakarta.servlet.http.HttpSession;
@@ -51,6 +53,7 @@ public class UtilisateurController {
 		return "connexion";
 	}
 
+
 	@PostMapping("/connexion")
 	public String connecterUtilisateur(@RequestParam("pseudo") String pseudo,
 			@RequestParam("motDePasse") String motDePasse, Model model, HttpSession session) {
@@ -88,6 +91,7 @@ public class UtilisateurController {
 		return "profil";
 	}
 
+
 	@GetMapping("/inscription")
 	public String afficherCreerCompte(Model model) {
 		Utilisateur utilisateur = new Utilisateur();
@@ -97,10 +101,14 @@ public class UtilisateurController {
 	}
 
 	@PostMapping("/inscription")
-	public String creerCompte(Model model) {
-		// TODO: process PUT request
-
-		return "index";
+	public String creerCompte(@ModelAttribute("utilisateur") Utilisateur utilisateur, Model model) {
+		try {
+			utilisateurService.creerUtilisateur(utilisateur);
+			return "redirect:/portail-encheres";
+		} catch (IllegalArgumentException e) {
+			model.addAttribute("erreur", e.getMessage());
+			return "creer-compte";
+		}
 	}
 
 	
@@ -134,19 +142,7 @@ public class UtilisateurController {
 	}
 
 
-	@GetMapping({ "/rechercher" })
-	public String afficherPortail (Model model) {
 
-		List<Article> articles = enchereService.consulterParEtat("Enchère ouverte");
-
-		model.addAttribute("articles", articles);
-
-		List<Categorie> categories = this.enchereService.consulterToutCategorie();
-
-		model.addAttribute("categories", categories);
-
-			return "portail-encheres";
-		}
 
 
 
