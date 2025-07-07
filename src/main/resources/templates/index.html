@@ -46,7 +46,7 @@
                 <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
                 <p th:text="'Fin de l enchère : ' + ${#temporals.format(article.dateFinEnchere,'dd/MM/yyyy')}" ></p>
                 <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}" ></p>
-                <p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}" ></p>
+                <a th:href="@{/profil(id=${article.utilisateur.id})}"><p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}" ></p></a>
             </div>
         </div>
     </div>

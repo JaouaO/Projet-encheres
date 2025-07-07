@@ -10,6 +10,7 @@ a {
     color: #1a73e8;
     text-decoration: none;
     font-size: smaller;
+
 }
 a:hover {
     text-decoration: none;
@@ -99,7 +100,9 @@ header {
     justify-content: space-between;
 
 }
-
+.article a {
+    color:black
+}
 .article img {
     width:40%;
     height: 110px;
