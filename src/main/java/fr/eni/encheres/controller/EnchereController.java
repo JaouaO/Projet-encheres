@@ -3,6 +3,7 @@ import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
+import fr.eni.encheres.exceptions.BusinessException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bo.Utilisateur;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -112,6 +114,7 @@ public String afficherVente( Model model) {
 		public Long getArticleId() { return articleId; }
 		public void setArticleId(Long articleId) { this.articleId = articleId; }
 
+
 		public int getMontantEnchere() { return montantEnchere; }
 		public void setMontantEnchere(int montantEnchere) { this.montantEnchere = montantEnchere; }
 	}
@@ -119,47 +122,58 @@ public String afficherVente( Model model) {
 	@PostMapping("/encherir")
 	public String encherir(@ModelAttribute EnchereFormulaire enchereForm, Model model, HttpSession session) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
-		Long articleId = enchereForm.getArticleId();
+		int CreditUserEnSession = utilisateur.getCredit();
+		Long ArticleId = enchereForm.getArticleId();
 		int montant = enchereForm.getMontantEnchere();
+		Article article = enchereService.consulterArticleParId(ArticleId);
+		Enchere enchereFormEnchere = new Enchere();
+		enchereFormEnchere.setArticle(article);
+		enchereFormEnchere.setMontantEnchere(montant);
 
-		Article article = enchereService.consulterArticleParId(articleId);
 		if (article == null) {
-			model.addAttribute("error", "Article non trouvé");
-			return "achats-details"; // nom de ta vue
+			model.addAttribute("erreur", "Article non trouvé");
+			System.out.println("Article non trouvé");
 		}
 
 		//Récupérer dernière enchère
-		Enchere derniereEnchere = enchereService.recupererDerniereEnchere(articleId);
+		Enchere derniereEnchere = enchereService.recupererDerniereEnchere(ArticleId);
 
 		if (montant <= 0) {
-			model.addAttribute("error", "Le montant doit être supérieur à zéro.");
-			return "achats-details";
+			model.addAttribute("erreur", "Le montant doit être supérieur à zéro.");
+			System.out.println("montant doit être supérieur à zéro");
+
 		}
 
 		if (montant <= article.getMiseAPrix()) {
-			model.addAttribute("error", "Votre enchère doit être supérieure à la mise à prix.");
-			return "achats-details";
+			model.addAttribute("erreur", "Votre enchère doit être supérieure à la mise à prix.");
+			System.out.println("Votre enchère doit être supérieure à la mise à prix.");
 		}
 
 		if (derniereEnchere != null && montant <= derniereEnchere.getMontantEnchere()) {
-			model.addAttribute("error", "Votre enchère doit être supérieure à la meilleure offre actuelle.");
-			return "achats-details";
+			model.addAttribute("erreur", "Votre enchère doit être supérieure à la meilleure offre actuelle.");
+			System.out.println("Votre enchère doit être supérieure à la meilleure offre actuelle.");
+
 		}
 
-		if (montant < utilisateur.getCredit()) {
-			model.addAttribute("error", "Vous n'avez pas assez de crédits pour effectuer cette enchère.");
-			return "achats-details";
+		if (montant > CreditUserEnSession) {
+			model.addAttribute("erreur", "Vous n'avez pas assez de crédits pour effectuer cette enchère.");
+			System.out.println("Vous n'avez pas assez de crédits pour effectuer cette enchère.");
+
 		}
 
 		Enchere nouvelleEnchere = new Enchere();
 		nouvelleEnchere.setArticle(article);
 		nouvelleEnchere.setMontantEnchere(montant);
 		nouvelleEnchere.setUtilisateur(utilisateur);
-		nouvelleEnchere.setDateEnchere(java.time.LocalDateTime.now());
+		nouvelleEnchere.setDateEnchere(LocalDateTime.now());
 
 		enchereService.ajouterEnchere(nouvelleEnchere);
 
-		return "redirect:/achats-details/" + articleId;
+		int nbRetire = nouvelleEnchere.getMontantEnchere();
+		long idUtilisateur = utilisateur.getId();
+		utilisateurService.retirerCredits(nbRetire, idUtilisateur);
+
+		return "redirect:/achats/details?id=" + article.getId();
 	}
 
 //doit request aussi l'ID de l'article
