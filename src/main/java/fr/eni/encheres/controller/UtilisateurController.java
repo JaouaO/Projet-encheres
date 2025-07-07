@@ -155,8 +155,12 @@ public class UtilisateurController {
 	}
 
 	@GetMapping("/session-cloture")
-	public String finSession(SessionStatus sessionStatus) {
+	public String finSession(SessionStatus sessionStatus, HttpSession session) {
+		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
 
+		if(utilisateur != null) {
+			session.setAttribute("utilisateurSession", null);
+		}
 		sessionStatus.setComplete();
 
 		return "redirect:/accueil";
@@ -169,19 +173,6 @@ public class UtilisateurController {
 	}
 
 
-	@GetMapping({ "/rechercher" })
-	public String afficherPortail (Model model) {
-
-		List<Article> articles = enchereService.consulterParEtat("Enchère ouverte");
-
-		model.addAttribute("articles", articles);
-
-		List<Categorie> categories = this.enchereService.consulterToutCategorie();
-
-		model.addAttribute("categories", categories);
-
-			return "portail-encheres";
-		}
 
 
     @PostMapping("/portail-encheres")
