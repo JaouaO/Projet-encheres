@@ -159,7 +159,7 @@ public String afficherVente( Model model) {
 
 		enchereService.ajouterEnchere(nouvelleEnchere);
 
-		return "redirect:/achats-details/" + articleId;
+		return "redirect:/achats-details" + articleId;
 	}
 
 //doit request aussi l'ID de l'article

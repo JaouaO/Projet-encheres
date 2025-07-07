@@ -28,7 +28,16 @@
         <input type="checkbox" name="" id="">ventes non débutées
         <input type="checkbox" name="" id="">ventes terminées
 
-    Catégories : <select name="" id=""></select>
+        <label>Catégorie : </label>
+        <select name="idCategorie" id="idCategorie">
+            <option th:value="0"
+                    th:selected="${idCategorie == 0}">Toutes</option>
+            <option th:each="c : ${categories}"
+                    th:value="${c.id}"
+                    th:text="${c.libelle}"
+                    th:selected="${c.id == idCategorie}">
+            </option>
+        </select>
 
     <input type="text" name="text" class="search" placeholder="Le nom de l'article contient">
 

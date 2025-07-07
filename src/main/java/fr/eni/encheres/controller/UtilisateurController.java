@@ -102,21 +102,42 @@ public class UtilisateurController {
 	}
 
 	@GetMapping("/portail-encheres")
-	public String afficherPortail(HttpSession session, Model model) {
+	public String afficherPortail(HttpSession session,
+		  @RequestParam(name = "idCategorie", required = false, defaultValue = "0") Long idCategorie,
+		  @RequestParam(name = "text", required = false, defaultValue = "") String text,
+		  Model model) {
+
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
 		if (utilisateur == null) {
 			return "redirect:/connexion";
 		}
 
-		List<Article> articles = enchereService.consulterToutArticle();
+		List<Article> articles;
+
+		if (idCategorie != 0 && !text.isBlank()) {
+			articles = enchereService.consulterParCategorieEtRecherche(idCategorie, text);
+		} else if (!text.isBlank()) {
+			articles = enchereService.consulterParRecherche(text);
+			System.out.println("je consulte uniquement par recherche");
+		} else if (idCategorie != 0) {
+			articles = enchereService.consulterParCategorie(idCategorie);
+		} else {
+			articles = enchereService.consulterToutArticle();
+			System.out.println("je consulte tout");
+		}
+
 		List<Categorie> categories = enchereService.consulterToutCategorie();
 
 		model.addAttribute("articles", articles);
 		model.addAttribute("categories", categories);
 		model.addAttribute("utilisateur", utilisateur);
+		model.addAttribute("idCategorie", idCategorie);
+		model.addAttribute("text", text);
 
 		return "portail-encheres";
 	}
+
+
 
 	@GetMapping("/profil")
 	public String afficherProfil(Model model) {
