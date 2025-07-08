@@ -5,8 +5,12 @@ import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.exceptions.BusinessException;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -118,8 +122,9 @@ public String afficherVente( Model model) {
 	}
 
 	@PostMapping("/encherir")
-	public String encherir(@ModelAttribute EnchereFormulaire enchereForm, Model model, HttpSession session) {
+	public String encherir(@ModelAttribute String message, @ModelAttribute EnchereFormulaire enchereForm, Model model, HttpSession session) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
+		System.out.println(utilisateur);
 		int montant = enchereForm.getMontantEnchere();
 		Article article = enchereService.consulterArticleParId(enchereForm.getArticleId());
 
@@ -131,12 +136,16 @@ public String afficherVente( Model model) {
 
 		try {
 			enchereService.ajouterEnchere(nouvelleEnchere);
+			return "redirect:/achats/details?id=" + article.getId();
 		} catch (BusinessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String message2 = "";
+			for (String m : e.getMessages()) {
+				message += m;
+			}
+			model.addAttribute("message", message2);
+			return "redirect:/achats/details?id=" + article.getId();
 		}
 
-		return "redirect:/achats/details?id=" + article.getId();
 	}
 
 //doit request aussi l'ID de l'article

@@ -5,7 +5,6 @@ import java.util.List;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
-import fr.eni.encheres.bo.Utilisateur;
 import fr.eni.encheres.exceptions.BusinessException;
 
 public interface EnchereService {
@@ -41,17 +40,24 @@ public interface EnchereService {
 	List<Article> consulterParCategorieEtRecherche(Long idCategorie, String text);
 
 	Categorie consulterCategorieParId(long idCategorie);
+
+	void ajouterCredits(int nbAjout, long idUtilisateur, BusinessException be);
 	
-	void retirerCredits(int nbRetire, long idUtilisateur);
+	void retirerCredits(int nbRetire, long idUtilisateur, BusinessException be);
 	
     boolean hasArticle(long idArticle, BusinessException be);
     
     boolean hasUtilisateur(long idUtilisateur, BusinessException be);
     
-    boolean isCreditSuffisant(int montant, Utilisateur utilisateur, BusinessException be);
+    boolean isCreditSuffisant(int montant, long idUtilisateur, BusinessException be);
     
-    boolean isOffreSupérieure(int montant, long idArticle, BusinessException be);
+    boolean isOffreSupérieureDerniereEnchere(int montant, long idArticle, BusinessException be);
+    
+    boolean isOffreSupérieureMAP(int montant, long idArticle, BusinessException be);
     
     boolean isEnchereOuverte(long idArticle, BusinessException be);
+    
+    boolean hasAutreEnchere(long idArticle);
+
 
 }

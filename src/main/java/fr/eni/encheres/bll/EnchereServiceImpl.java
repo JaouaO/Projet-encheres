@@ -133,14 +133,20 @@ public class EnchereServiceImpl implements EnchereService {
 
 		boolean isValid = hasUtilisateur(enchere.getUtilisateur().getId(), be);
 		isValid &= hasArticle(enchere.getArticle().getId(), be);
-		isValid &= isCreditSuffisant(enchere.getMontantEnchere(), enchere.getUtilisateur(), be);
+		isValid &= isCreditSuffisant(enchere.getMontantEnchere(), enchere.getUtilisateur().getId(), be);
 		isValid &= isEnchereOuverte(enchere.getArticle().getId(), be);
-		isValid &= isOffreSupérieure(enchere.getMontantEnchere(), enchere.getArticle().getId(), be);
+		isValid &= isOffreSupérieureMAP(enchere.getMontantEnchere(), enchere.getArticle().getId(), be);
+		isValid &= isOffreSupérieureDerniereEnchere(enchere.getMontantEnchere(), enchere.getArticle().getId(), be);
+		
 
 		if(isValid) {
 			try {
-				this.retirerCredits(enchere.getMontantEnchere(), enchere.getUtilisateur().getId());
+				if(hasAutreEnchere(enchere.getArticle().getId())) {
+					this.ajouterCredits(this.recupererDerniereEnchere(enchere.getArticle().getId()).getMontantEnchere(),this.recupererDerniereEnchere(enchere.getArticle().getId()).getUtilisateur().getId(), be);
+				}
+				this.retirerCredits(enchere.getMontantEnchere(), enchere.getUtilisateur().getId(), be);
 				this.enchereDAO.ajouterEnchere(enchere);
+				
 			} catch (Exception e) {
 				be.add("Erreur d'accès à la base de données");
 				logger.error(e);
@@ -149,23 +155,18 @@ public class EnchereServiceImpl implements EnchereService {
 		}else {
 			throw be;
 		}
-		
-		
-		
-
-		
-
-	
-
-	
-
-
-
 	}
 
-
+    @Override
+    public void ajouterCredits(int nbAjout, long idUtilisateur,  BusinessException be) {
+        if (nbAjout <= 0) {
+            throw new IllegalArgumentException ("Nombre de crédits à ajouter doit être positif");
+        }
+        utilisateurDAO.ajouterCredits(nbAjout, idUtilisateur);
+    }
+    
 	@Override
-	public void retirerCredits(int nbRetire, long idUtilisateur) {
+	public void retirerCredits(int nbRetire, long idUtilisateur,  BusinessException be) {
 		if (nbRetire <= 0) {
 			throw new IllegalArgumentException("Nombre de crédits à retirer doit être positif");
 		}
@@ -180,9 +181,11 @@ public class EnchereServiceImpl implements EnchereService {
 	
 	@Override
 	public boolean hasArticle(long idArticle, BusinessException be) {
-		if (article == null) {
-			model.addAttribute("erreur", "Article non trouvé");
-			System.out.println("Article non trouvé");
+		if(this.articleDAO.hasArticle(idArticle)) {
+			return true;
+		}else {
+			be.add("L'article est introuvable");
+			return false;
 		}
 	}
 
@@ -197,36 +200,59 @@ public class EnchereServiceImpl implements EnchereService {
 	}
 
 	@Override
-	public boolean isCreditSuffisant(int montant, Utilisateur utilisateur, BusinessException be) {
+	public boolean isCreditSuffisant(int montant, long idUtilisateur, BusinessException be) {
 		if (montant <= 0) {
-			model.addAttribute("erreur", "Le montant doit être supérieur à zéro.");
-			System.out.println("montant doit être supérieur à zéro");
-
+			be.add("Le montant doit être supérieur à 0");
+			return false;
 		}
-		if (montant > CreditUserEnSession) {
-			model.addAttribute("erreur", "Vous n'avez pas assez de crédits pour effectuer cette enchère.");
-			System.out.println("Vous n'avez pas assez de crédits pour effectuer cette enchère.");
-
+		if (montant > this.utilisateurDAO.consulterCredit(idUtilisateur)) {
+			be.add("le montant "+ montant+ " est supérieur à la solde du compte ("+this.utilisateurDAO.consulterCredit(idUtilisateur)+")");
+			return false;
+		}else {
+			return true;
 		}
 	}
 
 	@Override
-	public boolean isOffreSupérieure(int montant, long idArticle, BusinessException be) {
-		if (montant <= article.getMiseAPrix()) {
-			model.addAttribute("erreur", "Votre enchère doit être supérieure à la mise à prix.");
-			System.out.println("Votre enchère doit être supérieure à la mise à prix.");
-		}
-		if (derniereEnchere != null && montant <= derniereEnchere.getMontantEnchere()) {
-			model.addAttribute("erreur", "Votre enchère doit être supérieure à la meilleure offre actuelle.");
-			System.out.println("Votre enchère doit être supérieure à la meilleure offre actuelle.");
+	public boolean isOffreSupérieureDerniereEnchere(int montant, long idArticle, BusinessException be) {
 
+		if (hasAutreEnchere(idArticle)){
+			if(montant <= this.recupererDerniereEnchere(idArticle).getMontantEnchere()) {
+				be.add("le montant foit être supérieur ou égal à la dernière enchère ("+this.recupererDerniereEnchere(idArticle).getMontantEnchere()+")");
+				return false;
+			}else {
+				return true;
+			}
+		}else {
+			return true;
 		}
 	}
-
+	
+	@Override
+	public boolean isOffreSupérieureMAP(int montant, long idArticle, BusinessException be) {
+		if (montant < this.articleDAO.consulterParId(idArticle).getMiseAPrix()) {
+			be.add("le montant foit être supérieur ou égal à la mise à prix ("+this.articleDAO.consulterParId(idArticle).getMiseAPrix()+")");
+			return false;
+		}else {
+			return true;
+		}
+		
+	}
+	
+	
 	@Override
 	public boolean isEnchereOuverte(long idArticle, BusinessException be) {
-		// TODO Auto-generated method stub
-		return false;
+		if(articleDAO.isArticleEtatOuvert(idArticle)) {
+			return true;
+		}else {
+			be.add("L'article n'est plus en vente");
+			return false;
+		}
+	}
+
+	@Override
+	public boolean hasAutreEnchere(long idArticle) {
+		return this.recupererDerniereEnchere(idArticle)!=null;
 	}
 
 }

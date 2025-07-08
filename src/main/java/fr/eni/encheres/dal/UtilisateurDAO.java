@@ -16,12 +16,15 @@ public interface UtilisateurDAO {
     public void ajouterCredits(int nbAjout, long idUtilisateur);
 
     public void retirerCredits(int nbRetire, long idUtilisateur);
+    
+    int consulterCredit(long idUtilisateur);
 
     Utilisateur consulterParEmail(String email);
 
     Utilisateur consulterParPseudo(String pseudo);
     
     boolean hasUtilisateur(long idUtilisateur);
+    
 
 
  }

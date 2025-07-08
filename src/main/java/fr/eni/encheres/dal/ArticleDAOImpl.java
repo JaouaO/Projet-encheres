@@ -176,6 +176,30 @@ public class ArticleDAOImpl implements ArticleDAO {
         return namedParameterJdbcTemplate.query(sql, parameterSource, new ArticleRowMapper());
     }
 
+	@Override
+	public boolean hasArticle(long idArticle) {
+
+			String compterArticle = "  SELECT COUNT(*) FROM Article WHERE id=:idArticle";
+			MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+			parameterSource.addValue("idArticle", idArticle);
+			
+			Integer nbUtilisateur = namedParameterJdbcTemplate.queryForObject(compterArticle, parameterSource, Integer.class);
+			return nbUtilisateur !=0;
+	}
+
+	@Override
+	public boolean isArticleEtatOuvert(long idArticle) {
+		
+			String compterArticlesOuverts = "  SELECT COUNT(*) FROM Article WHERE  id=:idArticle AND etat_vente = 'en_cours' ";
+			MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+			parameterSource.addValue("idArticle", idArticle);
+			
+			Integer nbArticlesOuverts = namedParameterJdbcTemplate.queryForObject(compterArticlesOuverts, parameterSource, Integer.class);
+			return nbArticlesOuverts !=0;
+	}
+    
+    
+    
     class ArticleRowMapper implements RowMapper<Article> {
         @Override
         public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -205,4 +229,6 @@ public class ArticleDAOImpl implements ArticleDAO {
             return a;
         }
     }
+
+
 }

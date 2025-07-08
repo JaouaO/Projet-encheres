@@ -189,6 +189,17 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 		Integer nbUtilisateur = namedParameterJdbcTemplate.queryForObject(compterUtilisateur, parameterSource, Integer.class);
 		return nbUtilisateur !=0;
 	}
+	
+	@Override
+	public int consulterCredit(long idUtilisateur) {
+		String compterUtilisateur = "  SELECT credit FROM Utilisateur WHERE id=:idUtilisateur";
+		MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+		parameterSource.addValue("idUtilisateur", idUtilisateur);
+		
+		return  namedParameterJdbcTemplate.queryForObject(compterUtilisateur, parameterSource, Integer.class);
+	}
+
+
 
 	class UtilisateurRowMapper implements RowMapper<Utilisateur> {
 		@Override
