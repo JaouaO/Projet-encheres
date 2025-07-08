@@ -120,44 +120,8 @@ public String afficherVente( Model model) {
 	@PostMapping("/encherir")
 	public String encherir(@ModelAttribute EnchereFormulaire enchereForm, Model model, HttpSession session) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
-		int CreditUserEnSession = utilisateur.getCredit();
-		Long ArticleId = enchereForm.getArticleId();
 		int montant = enchereForm.getMontantEnchere();
-		Article article = enchereService.consulterArticleParId(ArticleId);
-		Enchere enchereFormEnchere = new Enchere();
-		enchereFormEnchere.setArticle(article);
-		enchereFormEnchere.setMontantEnchere(montant);
-
-		if (article == null) {
-			model.addAttribute("erreur", "Article non trouvé");
-			System.out.println("Article non trouvé");
-		}
-
-		//Récupérer dernière enchère
-		Enchere derniereEnchere = enchereService.recupererDerniereEnchere(ArticleId);
-
-		if (montant <= 0) {
-			model.addAttribute("erreur", "Le montant doit être supérieur à zéro.");
-			System.out.println("montant doit être supérieur à zéro");
-
-		}
-
-		if (montant <= article.getMiseAPrix()) {
-			model.addAttribute("erreur", "Votre enchère doit être supérieure à la mise à prix.");
-			System.out.println("Votre enchère doit être supérieure à la mise à prix.");
-		}
-
-		if (derniereEnchere != null && montant <= derniereEnchere.getMontantEnchere()) {
-			model.addAttribute("erreur", "Votre enchère doit être supérieure à la meilleure offre actuelle.");
-			System.out.println("Votre enchère doit être supérieure à la meilleure offre actuelle.");
-
-		}
-
-		if (montant > CreditUserEnSession) {
-			model.addAttribute("erreur", "Vous n'avez pas assez de crédits pour effectuer cette enchère.");
-			System.out.println("Vous n'avez pas assez de crédits pour effectuer cette enchère.");
-
-		}
+		Article article = enchereService.consulterArticleParId(enchereForm.getArticleId());
 
 		Enchere nouvelleEnchere = new Enchere();
 		nouvelleEnchere.setArticle(article);
@@ -165,11 +129,12 @@ public String afficherVente( Model model) {
 		nouvelleEnchere.setUtilisateur(utilisateur);
 		nouvelleEnchere.setDateEnchere(LocalDateTime.now());
 
-		enchereService.ajouterEnchere(nouvelleEnchere);
-
-		int nbRetire = nouvelleEnchere.getMontantEnchere();
-		long idUtilisateur = utilisateur.getId();
-		utilisateurService.retirerCredits(nbRetire, idUtilisateur);
+		try {
+			enchereService.ajouterEnchere(nouvelleEnchere);
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return "redirect:/achats/details?id=" + article.getId();
 	}

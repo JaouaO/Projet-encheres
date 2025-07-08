@@ -20,6 +20,8 @@ public interface UtilisateurDAO {
     Utilisateur consulterParEmail(String email);
 
     Utilisateur consulterParPseudo(String pseudo);
+    
+    boolean hasUtilisateur(long idUtilisateur);
 
 
  }

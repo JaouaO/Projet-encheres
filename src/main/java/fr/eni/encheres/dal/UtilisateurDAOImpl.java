@@ -179,6 +179,16 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 				.query(SQL, new MapSqlParameterSource("email", email), new UtilisateurRowMapper()).stream().findFirst()
 				.orElse(null);
 	}
+	
+	@Override
+	public boolean hasUtilisateur(long idUtilisateur) {
+		String compterUtilisateur = "  SELECT COUNT(*) FROM Utilisateur WHERE id=:idUtilisateur";
+		MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+		parameterSource.addValue("idUtilisateur", idUtilisateur);
+		
+		Integer nbUtilisateur = namedParameterJdbcTemplate.queryForObject(compterUtilisateur, parameterSource, Integer.class);
+		return nbUtilisateur !=0;
+	}
 
 	class UtilisateurRowMapper implements RowMapper<Utilisateur> {
 		@Override
@@ -199,5 +209,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			return u;
 		}
 	}
+
+
 
 }
