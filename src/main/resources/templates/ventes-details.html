@@ -3,34 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détail PC Gamer</title>
+    <title>Détail Vente</title>
 </head>
 <body>
        	<header th:replace="~{fragments/fragment-entete :: entete}">
 	</header>
-	       <!-- Afficherle bon titre en fonction des cas -->
-            <h2>Jojo a remporté l'enchère !</h2>
-            <h2>Détail Vente</h2>
-    <h3>PC Gamer pour travailler</h3>
+	         <h2>Détail Vente</h2>
+    <h3 th:text="*{nom}"></h3>
 
 
-    <p>Description :</p>
-
-    <p>Catégorie : Informatique</p>
-    <p>Meilleure offre : </p>
-    <p>Mise à prix :</p>
-    <p>Fin de l'enchère : 09/10/2018</p>
-    <p>Retrait : 10 Allée des Alouettes 44800 Saint-Herblain</p>
-
-    <p>Vendeur : <a h th:href="@{/profil}">jojo44</a></p>
+        <div>
+            <img th:src="@{'/images/' + *{cheminImg} + '.jpg'}" alt="Photo de l\'article">
+            <p th:text="'Description : ' + *{description}"></p>
+            <p th:text="'Catégorie : ' + ${categorieArticle.libelle}"></p>
+            <p th:if="${derniereEnchere != null}"
+               th:text="'Meilleure offre : ' + ${derniereEnchere.montantEnchere} + ' pts par ' + ${derniereEnchere.utilisateur.pseudo}">
+            </p>
+            <p th:if="${derniereEnchere == null}">Aucune enchère pour le moment.</p>
+            <p th:text="'Mise à prix : ' + *{miseAPrix} + ' points'"></p>
+            <p th:text="'Fin de l\'enchère : ' + *{#temporals.format(dateFinEnchere,'dd/MM/yyyy')}"></p>
+            <p th:text="'Retrait : ' + *{utilisateur.afficherRetrait()}"></p>
+            
+                    <a th:href="@{/profil(id=${article.getUtilisateur().getId()})}"><p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}" ></p></a>
+        </div>
     
     
-    	       <!-- Afficherle les boutons en fonction des cas -->
+    <div  th:if="${nonDebutee}">
     <a  th:href="@{/accueil}"><button>Annuler la vente</button></a>
-
-   <a  th:href="@{/accueil}"><button>Retour</button></a>
+	</div>
+	
+	<div  th:if="${vendu}">
     <a  th:href="@{/retire}"><button>Retrait effectué</button></a>
-    	       <!-- mettre Profil.prenom en thymeleaf-->
-       <a  th:href="@{/profil}"><button>Contacter "Profil.prenom"</button></a>
+       <a th:href="@{/profil}"><button>Contacter "Profil.prenom"</button></a>
+       </div>
+   <a  th:href="@{/accueil}"><button>Retour</button></a>
 </body>
 </html>
