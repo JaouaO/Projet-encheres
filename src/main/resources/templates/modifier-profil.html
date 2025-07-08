@@ -45,11 +45,15 @@
 		<li>
 			<button type="submit">Appliquer les modifications</button>
 		</li>
-	</form>
+        <label for="">Crédit :</label>
+        <input type="text" th:field="*{credit}" readonly><br>
+
+</form>
 	
 	<!--ajouter une pop up pour verifier la suppression du compte-->
-	<a th:href="@{/accueil}">Supprimer mon
-		compte</a>
+    <form action="/profil/supprimer" method="post" onsubmit="return confirm('Es-tu sûr de vouloir supprimer ton compte ? Cette action est irréversible.')">
+        <button type="submit">Supprimer mon compte</button>
+    </form>
 	<a th:href="@{/profil}">Retour</a>
 
 

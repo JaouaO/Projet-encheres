@@ -129,4 +129,6 @@ public class EnchereServiceImpl implements EnchereService {
 		return articleDAO.consulterParCategorieEtNom(idCategorie, recherche);
 	}
 
+
+
 }
