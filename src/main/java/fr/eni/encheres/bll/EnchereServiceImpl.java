@@ -83,6 +83,27 @@ public class EnchereServiceImpl implements EnchereService {
 	}
 
 	@Override
+	public List<Enchere> consulterToutesEncheres() {
+		return enchereDAO.consulterTout();
+	}
+
+	@Override
+	public List<Enchere> consulterParIdArticle(long idArticle) {
+		return enchereDAO.consulterParArticle(idArticle);
+	}
+
+	@Override
+	public List<Article> consulterParIdUtilisateurEtEnchereOuverte(long idUtilisateur) {
+		return articleDAO.consulterParUtiisateurEtEnchereOuverte(idUtilisateur);
+	}
+
+	@Override
+	public List<Article> consulterParIdUtilisateurEtEtatVente(long idUtilisateur, String etatVente) {
+
+		return articleDAO.consulterParIdUtilisateurEtEtatVente(idUtilisateur, etatVente);
+	}
+
+	@Override
 	public Enchere recupererDerniereEnchere(long idArticle) {
 
 		List<Enchere> encheres = this.enchereDAO.consulterParArticle(idArticle);
@@ -128,5 +149,6 @@ public class EnchereServiceImpl implements EnchereService {
 	public List<Article> consulterParCategorieEtRecherche(Long idCategorie, String recherche) {
 		return articleDAO.consulterParCategorieEtNom(idCategorie, recherche);
 	}
+
 
 }

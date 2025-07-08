@@ -1,54 +1,102 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
     <title>Portail enchères</title>
 </head>
 <body>
     	<header th:replace="~{fragments/fragment-entete :: entete}">
 	</header>
 
-    <a th:href="@{/vente}">Vendre un article</a>
-    <a th:href="@{/profil}">Mon profil</a>
-    <!-- gérer la déco -->
-    <a th:href="@{/session-cloture}">Déconnexion</a>
+    <a th:href="@{/vente}" th:text="'Vendre un article'"></a>
+    <a th:href="@{/profil}" th:text="'Mon profil'"></a>
+    <a th:href="@{/session-cloture}" th:text="'Déconnexion'"></a>
     
     
-    <form action="">
+    <form action="/portail-encheres" method="get">
 
-    Filtres :
-    <input type="radio" name ="radio">Achats 
-        <input type="checkbox" name="" id="">enchères ouvertes
-        <input type="checkbox" name="" id="">mes enchères en cours
-        <input type="checkbox" name="" id="">mes enchères remportées
-    
-    <input type="radio" name ="radio" id="">Mes ventes      
-        <input type="checkbox" name="" id="">mes ventes en cours
-        <input type="checkbox" name="" id="">ventes non débutées
-        <input type="checkbox" name="" id="">ventes terminées
+        <p th:class="filtres" th:text="'Filtres : '" ></p>
 
-    Catégories : <select name="" id=""></select>
+<!--        <input type="radio" name ="radio" id="radioAchats">-->
+<!--        <label for="radioAchats" th:text="'Achats'"></label>-->
 
-    <input type="text" name="text" class="search" placeholder="Le nom de l'article contient">
+        <input type="checkbox"
+               th:name="'checkbox'"
+               id="encheresOuvertes"
+               th:value="'encheresOuvertes'">
+          <label for="encheresOuvertes" th:text="'enchères ouvertes'"></label>
 
-    <li>
-        <a th:href="@{/rechercher}"><button type="submit">Rechercher</button></a>
-	</li>
-    
-        </form>
+        <input type="checkbox"
+               th:name="'checkbox'"
+               id="encheresEnCours"
+               th:value="'encheresEnCours'">
+        <label for="encheresEnCours" th:text="'mes enchères en cours'"></label>
 
-        <div th:each="article : ${articles}">
-       <a th:href="@{/achats/details(id=${article.id})}"> <p th:text="${article.nom}"></p></a>
-        <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
-        <p th:text="'Fin de l enchère : ' + ${article.dateFinEnchere}" ></p>
-        <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}" ></p>
-        <a th:href="@{/profil(id=${article.getUtilisateur().getId()})}"><p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}" ></p></a>
+        <input type="checkbox"
+               th:name="'checkbox'"
+               id="encheresRemportées"
+               th:value="'encheresRemportées'">
+        <label for="encheresRemportées" th:text="'mes enchères remportées'"></label>
 
-    </div>
+<!--        <input type="radio"-->
+<!--               name ="radio"-->
+<!--               id="radioVentes">-->
+<!--        -->
+<!--        <label for="radioVentes" th:text="'Mes ventes'"></label>-->
 
-    
+        <input type="checkbox"
+               th:name="'checkbox'"
+               id="ventesEnCours"
+               th:value="'ventesEnCours'">
+        <label for="ventesEnCours" th:text="'mes ventes en cours'"></label>
+
+        <input type="checkbox"
+               th:name="'checkbox'"
+               id="ventesNonDebutees"
+               th:value="'ventesNonDebutees'">
+        <label for="ventesNonDebutees" th:text="'ventes non débutées'"></label>
+
+        <input type="checkbox"
+               th:name="'checkbox'"
+               id="ventesTerminees"
+               th:value="'ventesTerminees'">
+        <label for="ventesTerminees" th:text="'ventes terminées'"></label>
+
+        <div th:class="categories">
+            <label>Catégorie</label>
+            <select name="idCategorie" id="idCategorie">
+                <option th:value="0"
+                        th:selected="${idCategorie == 0}"
+                        th:text="'Toutes'">
+                </option>
+                <option th:each="c : ${categories}"
+                        th:value="${c.id}"
+                        th:text="${c.libelle}"
+                        th:selected="${c.id == idCategorie}">
+                </option>
+            </select>
+        </div>
+        <div th:class="recherche">
+            <input type="text" name="text" class="search"
+                   th:value="${text}" th:placeholder="'Le nom de l\'article contient'">
+            <button th:class="rechercher-btn" th:text="'Rechercher'"></button>
+        </div>
+    </form>
+
+        <div class="articles" th:class="articles" th:each="article : ${articlesAAfficher}">
+            <div class="article">
+                <img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}" th:alt="'Photo de l\'article'">
+                <div class="article-details">
+                    <a th:href="@{/achats/details(id=${article.id})}"> <h2 th:text="${article.nom}"></h2></a>
+                    <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
+                    <p th:text="'Fin de l enchère : ' + ${#temporals.format(article.dateFinEnchere,'dd/MM/yyyy')}" ></p>
+                    <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}" ></p>
+                    <a th:href="@{/profil(id=${article.utilisateur.id})}"><p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}" ></p></a>
+                </div>
+            </div>
+        </div>
 </body>
 </html>
-
-//

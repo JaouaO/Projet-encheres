@@ -176,6 +176,43 @@ public class ArticleDAOImpl implements ArticleDAO {
         return namedParameterJdbcTemplate.query(sql, parameterSource, new ArticleRowMapper());
     }
 
+    @Override
+    public List<Article> consulterParUtiisateurEtEnchereOuverte(long idUtilisateur) {
+         String sql = """
+                SELECT a.id, a.nom, a.description, a.date_debut, a.date_fin, a.mise_a_prix, a.prix_vente, a.etat_vente, a.id_vendeur, a.id_categorie, a.chemin_img, u.id, u.pseudo, u.rue, u.code_postal, u.ville, u.nom, u.prenom, u.mot_de_passe, u.telephone, u.email, u.administrateur, u.credit
+                                 FROM utilisateur u
+                                INNER JOIN article a ON (a.id_vendeur != u.id)
+                                WHERE a.etat_vente = 'EN_COURS'
+                AND u.id=:idUtilisateur""";
+         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+         parameterSource.addValue("idUtilisateur", idUtilisateur);
+
+        return namedParameterJdbcTemplate.query(sql, parameterSource, new ArticleRowMapper());
+    }
+
+    @Override
+    public List<Article> consulterParIdUtilisateurEtEtatVente(long idUtilisateur, String etatVente) {
+        String sql = """
+                SELECT a.id, a.nom, a.description, a.date_debut, a.date_fin, a.mise_a_prix, a.prix_vente, a.etat_vente, a.id_vendeur, a.id_categorie, a.chemin_img, u.id, u.pseudo, u.rue, u.code_postal, u.ville, u.nom, u.prenom, u.mot_de_passe, u.telephone, u.email, u.administrateur, u.credit
+                                FROM utilisateur u
+                                INNER JOIN article a ON a.id_vendeur != u.id
+                                INNER JOIN enchere e ON a.id = e.id_article
+                                AND u.id = e.id_utilisateur
+                                WHERE a.etat_vente = 'en_cours'
+                                AND e.id_utilisateur=u.id
+                  AND u.id=:idUtilisateur
+                AND """;
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("idUtilisateur", idUtilisateur);
+        parameterSource.addValue("etatVente", etatVente);
+
+        return namedParameterJdbcTemplate.query(sql, parameterSource, new ArticleRowMapper());
+    }
+
+//    public List<Article> consulterParUtilisateurEtEncheresPerso(long idUtilisateur, ) {
+//
+//    }
+
     class ArticleRowMapper implements RowMapper<Article> {
         @Override
         public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
