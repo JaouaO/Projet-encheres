@@ -255,4 +255,6 @@ public class EnchereServiceImpl implements EnchereService {
 		return this.recupererDerniereEnchere(idArticle)!=null;
 	}
 
+
+
 }

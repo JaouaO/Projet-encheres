@@ -159,24 +159,46 @@ public class UtilisateurController {
 	@PostMapping("/profil/modifier")
 	public String modifierProfil(@ModelAttribute("utilisateur") Utilisateur utilisateurModifie, HttpSession session,
 			Model model) {
-		
-		System.out.println(utilisateurModifie);
-		
+
 		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
+
+		// Mise à jour des champs sur l'objet existant
+		utilisateurSession.setPseudo(utilisateurModifie.getPseudo());
+		utilisateurSession.setNom(utilisateurModifie.getNom());
+		utilisateurSession.setPrenom(utilisateurModifie.getPrenom());
+		utilisateurSession.setEmail(utilisateurModifie.getEmail());
+		utilisateurSession.setTelephone(utilisateurModifie.getTelephone());
+		utilisateurSession.setRue(utilisateurModifie.getRue());
+		utilisateurSession.setCodePostal(utilisateurModifie.getCodePostal());
+		utilisateurSession.setVille(utilisateurModifie.getVille());
+		utilisateurSession.setMotDePasse(utilisateurModifie.getMotDePasse()); // mot de passe mis à jour
+
 		try {
-			
-			System.out.println(utilisateurSession);
-			utilisateurService.modifierUtilisateur(utilisateurSession.getId(), utilisateurModifie);
-			session.setAttribute("utilisateurSession", utilisateurModifie);
-			
+			utilisateurService.modifierUtilisateur(utilisateurSession.getId(), utilisateurSession);
+			session.setAttribute("utilisateurSession", utilisateurSession);
+			model.addAttribute("message", "Profil mis à jour avec succès !");
 		} catch (IllegalArgumentException e) {
 			model.addAttribute("erreur", e.getMessage());
 		}
+
+		model.addAttribute("utilisateur", utilisateurSession);
 		model.addAttribute("afficherModifier", true);
-		Utilisateur utilisateur= (Utilisateur) session.getAttribute("utilisateurSession");
-		model.addAttribute("utilisateur", utilisateur);
-		model.addAttribute("message", "Profil mis à jour !!!!!!");
 		return "profil";
+	}
+
+
+	@PostMapping("/profil/supprimer")
+	public String supprimerCompte(HttpSession session, SessionStatus sessionStatus) {
+		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
+
+		if (utilisateur != null) {
+			utilisateurService.supprimerUtilisateur(utilisateur.getId());
+			session.invalidate(); // Supprime la session
+			sessionStatus.setComplete();//et la tous les attributs de session
+			System.out.println("utilisateur supprimé");
+		}
+
+		return "redirect:/accueil";
 	}
 
 
