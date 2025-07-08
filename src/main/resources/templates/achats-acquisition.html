@@ -10,26 +10,40 @@
 	</header>
 	
             <h2>Vous avez remporté l'enchère</h2>
-    <h3>PC Gamer pour travailler</h3>
+        <h3 th:text="${article.nom}">Nom de l'article</h3>
 
 
-    <p>Description :</p>
+        <p>Description : <span th:text="${article.description}">Description</span></p>
+        <p>Catégorie :<span th:text="${article.categorie.libelle}">Catégorie</span></p>
 
-    <p>Catégorie : Informatique</p>
-    <p>Meilleure offre : </p>
-    <p>Mise à prix :</p>
+        <div>
+            <img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}"
+                 alt="Image de l'article" />
+        </div>
 
-	<block class="cadre">
-	<p>Retrait : 10 Allée des Alouettes 44800 Saint-Herblain</p>
-	   <!-- il faut envoyer la recherche de  profil avec un get, et gérer ça soit dans la même méthode du controller soit dans une autre -->
-        <p>Vendeur : <a th:href="@{/profil}">jojo44</a></p>
-        <p>tel :  0606060606</p>
-	</block>
-    
-    <a  th:href="@{/retire}"><button>Retrait effectué</button></a>
 
-        
-	
+        <p>Meilleure offre :
+            <span th:text="${article.prixVente}">0</span> crédits
+            <span th:if="${derniereEnchere == null}">Aucune enchère</span>
+        </p>
+        <p>Mise à prix :<span th:text="${article.miseAPrix}">0</span> crédits</p>
+        <p th:if="${article != null}">
+            Fin de l'enchère :
+            <span th:text="${article.dateFinEnchere}">date</span>
+
+
+        <p>Retrait : <span th:if="${article.lieuRetrait == null}"
+                           th:text="${article.utilisateur.rue + ' '
+                           + article.utilisateur.codePostal + ' '
+                           + article.utilisateur.ville}">Retrait : </span></p>
+
+
+
+
+
+        <a  th:href="@{/portail-encheres}"><button>Retrait effectué</button></a>
+        <a><button>Contacter</button></a>
+        <a th:href="@{/portail-encheres}"><button>BACK</button></a>
 
 </body>
 </html>
