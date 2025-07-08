@@ -46,8 +46,15 @@ public class UtilisateurController {
 	@GetMapping({ "/", "/accueil" })
 	public String afficherAccueil(
 			@RequestParam(name = "idCategorie", required = false, defaultValue = "0") Long idCategorie,
-			@RequestParam(name = "text", required = false, defaultValue = "") String text, Model model) {
+			@RequestParam(name = "text", required = false, defaultValue = "") String text, HttpSession session, Model model) {
 
+		
+		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
+
+		if(utilisateurSession!=null) {
+			return  "redirect:/portail-encheres";
+		}
+		
 		List<Article> articles;
 
 		if (idCategorie != 0 && !text.isBlank()) {
