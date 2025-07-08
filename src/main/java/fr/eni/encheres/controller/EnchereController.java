@@ -10,7 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
+//import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +21,6 @@ import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bo.Utilisateur;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -127,11 +126,9 @@ public String afficherVente( Model model) {
 	@PostMapping("/encherir")
 	public String encherir(@Valid @ModelAttribute Enchere nouvelleEnchere, BindingResult bindingResult, Model model, HttpSession session) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
-		System.out.println(utilisateur);
 		nouvelleEnchere.setUtilisateur(utilisateur);
 		nouvelleEnchere.setDateEnchere(LocalDateTime.now());
 		nouvelleEnchere.setArticle(enchereService.consulterArticleParId(nouvelleEnchere.getArticle().getId()));
-		System.out.println(nouvelleEnchere);
 		try {
 			enchereService.ajouterEnchere(nouvelleEnchere);
 			return "redirect:/achats/details?id=" + nouvelleEnchere.getArticle().getId();
