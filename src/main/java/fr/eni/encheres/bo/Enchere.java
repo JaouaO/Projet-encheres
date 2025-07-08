@@ -2,9 +2,14 @@ package fr.eni.encheres.bo;
 
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.Min;
+
+
 public class Enchere {
 
 	private LocalDateTime dateEnchere;
+	
+	@Min(value = 1)
 	private int montantEnchere;
 	
 	Utilisateur utilisateur;
@@ -63,9 +68,9 @@ public class Enchere {
 		builder.append(", montantEnchere=");
 		builder.append(montantEnchere);
 		builder.append(", utilisateur=");
-		builder.append(utilisateur);
+		builder.append(utilisateur.getPseudo());
 		builder.append(", article=");
-		builder.append(article);
+		builder.append(article.getNom());
 		builder.append("]");
 		return builder.toString();
 	}

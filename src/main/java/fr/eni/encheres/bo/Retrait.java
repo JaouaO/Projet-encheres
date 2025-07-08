@@ -63,7 +63,7 @@ public class Retrait {
 		builder.append(", ville=");
 		builder.append(ville);
 		builder.append(", article=");
-		builder.append(article);
+		builder.append(article.getNom());
 		builder.append("]");
 		return builder.toString();
 	}

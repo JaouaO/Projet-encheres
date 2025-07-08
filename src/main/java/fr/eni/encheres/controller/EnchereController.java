@@ -21,6 +21,7 @@ import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bo.Utilisateur;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -49,14 +50,16 @@ public EnchereController(EnchereService enchereService, UtilisateurService utili
             if (article != null) {
                 model.addAttribute("article", article);
                 
-
                 Categorie categorieArticle = enchereService.consulterCategorieParId(article.getCategorie().getId());
                 model.addAttribute("categorieArticle", categorieArticle);
 
                 Enchere derniereEnchere = enchereService.recupererDerniereEnchere(idArticle);
 
                 model.addAttribute("derniereEnchere", derniereEnchere);
-
+                Enchere enchere = new Enchere();
+                enchere.setArticle(article);
+                
+                model.addAttribute("enchere",enchere);
                 return "achats-details";
             }
         }
@@ -108,42 +111,50 @@ public String afficherVente( Model model) {
 	}
 
 // pour récupérer l'enchère avec les attributs du formulaire
-	public static class EnchereFormulaire {
-		private Long articleId;
-		private int montantEnchere;
-
-
-		public Long getArticleId() { return articleId; }
-		public void setArticleId(Long articleId) { this.articleId = articleId; }
-
-
-		public int getMontantEnchere() { return montantEnchere; }
-		public void setMontantEnchere(int montantEnchere) { this.montantEnchere = montantEnchere; }
-	}
+//	public static class EnchereFormulaire {
+//		private Long articleId;
+//		private int montantEnchere;
+//
+//
+//		public Long getArticleId() { return articleId; }
+//		public void setArticleId(Long articleId) { this.articleId = articleId; }
+//
+//
+//		public int getMontantEnchere() { return montantEnchere; }
+//		public void setMontantEnchere(int montantEnchere) { this.montantEnchere = montantEnchere; }
+//	}
 
 	@PostMapping("/encherir")
-	public String encherir(@ModelAttribute String message, @ModelAttribute EnchereFormulaire enchereForm, Model model, HttpSession session) {
+	public String encherir(@Valid @ModelAttribute Enchere nouvelleEnchere, BindingResult bindingResult, Model model, HttpSession session) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
 		System.out.println(utilisateur);
-		int montant = enchereForm.getMontantEnchere();
-		Article article = enchereService.consulterArticleParId(enchereForm.getArticleId());
-
-		Enchere nouvelleEnchere = new Enchere();
-		nouvelleEnchere.setArticle(article);
-		nouvelleEnchere.setMontantEnchere(montant);
 		nouvelleEnchere.setUtilisateur(utilisateur);
 		nouvelleEnchere.setDateEnchere(LocalDateTime.now());
-
+		nouvelleEnchere.setArticle(enchereService.consulterArticleParId(nouvelleEnchere.getArticle().getId()));
+		System.out.println(nouvelleEnchere);
 		try {
 			enchereService.ajouterEnchere(nouvelleEnchere);
-			return "redirect:/achats/details?id=" + article.getId();
+			return "redirect:/achats/details?id=" + nouvelleEnchere.getArticle().getId();
 		} catch (BusinessException e) {
-			String message2 = "";
-			for (String m : e.getMessages()) {
-				message += m;
-			}
-			model.addAttribute("message", message2);
-			return "redirect:/achats/details?id=" + article.getId();
+			model.addAttribute("errorMessages", e.getMessages());
+//			e.getMessages().forEach(m->{
+//				ObjectError error = new ObjectError("", m);
+//			bindingResult.addError(error);
+//	});
+	
+			model.addAttribute("article", nouvelleEnchere.getArticle());
+            
+            Categorie categorieArticle = enchereService.consulterCategorieParId(nouvelleEnchere.getArticle().getCategorie().getId());
+            model.addAttribute("categorieArticle", categorieArticle);
+
+            Enchere derniereEnchere = enchereService.recupererDerniereEnchere(nouvelleEnchere.getArticle().getId());
+
+            model.addAttribute("derniereEnchere", derniereEnchere);
+            Enchere enchere = new Enchere();
+            enchere.setArticle(nouvelleEnchere.getArticle());
+            
+            model.addAttribute("enchere",enchere);
+            return "achats-details";
 		}
 
 	}
