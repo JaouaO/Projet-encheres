@@ -147,8 +147,12 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public List<Article> consulterParEtat(String etatVente) {
         String trierParEtat = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img
-                FROM Article
+                SELECT a.id, a.nom, a.description, a.date_debut, a.date_fin,
+               a.mise_a_prix, a.prix_vente, a.etat_vente, a.id_vendeur,
+               a.id_categorie, a.chemin_img,
+               u.pseudo, u.rue, u.code_postal, u.ville
+                FROM Article a
+                INNER JOIN utilisateur u ON a.id_vendeur = u.id
                 WHERE etat_vente = :etatVente
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
@@ -204,12 +208,8 @@ public class ArticleDAOImpl implements ArticleDAO {
             namedParameterJdbcTemplate.update(sql, params);
         }
 
-    }
-
-
-
-	@Override
-	public boolean hasArticle(long idArticle) {
+    @Override
+    public boolean hasArticle(long idArticle) {
 
 			String compterArticle = "  SELECT COUNT(*) FROM Article WHERE id=:idArticle";
 			MapSqlParameterSource parameterSource = new MapSqlParameterSource();
@@ -230,8 +230,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 			return nbArticlesOuverts !=0;
 	}
     
-    
-    
+
 
     class ArticleRowMapper implements RowMapper<Article> {
         @Override
@@ -262,8 +261,6 @@ public class ArticleDAOImpl implements ArticleDAO {
             return a;
         }
     }
-
-
 
 
 }

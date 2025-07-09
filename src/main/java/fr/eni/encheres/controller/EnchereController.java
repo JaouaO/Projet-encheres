@@ -72,7 +72,7 @@ public EnchereController(EnchereService enchereService, UtilisateurService utili
                 return "achats-details";
             }
         }
-        return "redirect:index";
+        return "redirect:/portail-encheres";
     }
 
     //pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
@@ -115,15 +115,17 @@ public String afficherVente( Model model) {
 
 	@PostMapping("/creer-nouvelle-vente")
 	public String getMethodName(@ModelAttribute Article article, Model model) {
+	//modifier pour prendre l'user en session
 		Utilisateur utilisateur = utilisateurService.consulterParId(1);
 		article.setUtilisateur(utilisateur);
+
 		article.setEtatVente("NON_DEBUTEE");
+
 		article.setLieuRetrait(utilisateur.getRetrait());
-		System.out.println(article);
 
-		enchereService.creerArticle(article);
+		enchereService.creerArticle(article); // voir pour le chemin de l'image...
 
-		return "redirect:/accueil";
+		return "redirect:/portail-encheres";
 	}
 
 // pour récupérer l'enchère avec les attributs du formulaire
@@ -185,8 +187,6 @@ public String afficherVente( Model model) {
 
 		return "redirect:/ventes/details?id=" + article.getId();
 	}
-
-
 
 	@PostMapping("/encherir")
 	public String encherir(@Valid @ModelAttribute Enchere nouvelleEnchere, BindingResult bindingResult, Model model, HttpSession session) {
