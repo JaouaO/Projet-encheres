@@ -40,4 +40,7 @@ public interface EnchereService {
 
 	Categorie consulterCategorieParId(long idCategorie);
 
+	void mettreAJourArticle(Article article);
+
+
 }

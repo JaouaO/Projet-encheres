@@ -26,4 +26,7 @@ public interface ArticleDAO {
     public List<Article> consulterParEtat(String etatVente) ;
 
     List<Article> consulterParCategorieEtNom(Long idCategorie, String recherche);
+
+    void mettreAJourArticle(Article article);
+
 }

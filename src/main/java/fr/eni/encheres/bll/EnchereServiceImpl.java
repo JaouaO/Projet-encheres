@@ -129,6 +129,11 @@ public class EnchereServiceImpl implements EnchereService {
 		return articleDAO.consulterParCategorieEtNom(idCategorie, recherche);
 	}
 
+	@Override
+	public void mettreAJourArticle(Article article) {
+		articleDAO.mettreAJourArticle(article);
+	}
+
 
 
 }

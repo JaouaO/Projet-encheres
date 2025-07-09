@@ -176,6 +176,36 @@ public class ArticleDAOImpl implements ArticleDAO {
         return namedParameterJdbcTemplate.query(sql, parameterSource, new ArticleRowMapper());
     }
 
+    @Override
+    public void mettreAJourArticle(Article article) {
+            String sql = """
+        UPDATE Article SET
+            nom = :nom,
+            description = :description,
+            date_debut = :dateDebut,
+            date_fin = :dateFin,
+            mise_a_prix = :miseAPrix,
+            id_categorie = :idCategorie,
+            chemin_img = :cheminImg
+        WHERE id = :id
+    """;
+
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("id", article.getId());
+            params.addValue("nom", article.getNom());
+            params.addValue("description", article.getDescription());
+            params.addValue("dateDebut", article.getDateDebutEnchere());
+            params.addValue("dateFin", article.getDateFinEnchere());
+            params.addValue("miseAPrix", article.getMiseAPrix());
+            params.addValue("idCategorie", article.getCategorie().getId());
+            params.addValue("cheminImg", article.getCheminImg());
+
+            namedParameterJdbcTemplate.update(sql, params);
+        }
+
+    }
+
+
     class ArticleRowMapper implements RowMapper<Article> {
         @Override
         public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -205,4 +235,3 @@ public class ArticleDAOImpl implements ArticleDAO {
             return a;
         }
     }
-}

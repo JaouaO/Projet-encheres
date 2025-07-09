@@ -18,6 +18,7 @@ import fr.eni.encheres.bo.Utilisateur;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 
 @SessionAttributes("utilisateurEnSession")
@@ -28,6 +29,7 @@ public class EnchereController {
 
     private EnchereService enchereService;
     private UtilisateurService utilisateurService;
+
 
 
 
@@ -116,6 +118,54 @@ public String afficherVente( Model model) {
 		public int getMontantEnchere() { return montantEnchere; }
 		public void setMontantEnchere(int montantEnchere) { this.montantEnchere = montantEnchere; }
 	}
+
+
+
+	@GetMapping("/vente/modifier")
+	public String afficherFormulaireModification(@RequestParam("id") Long idArticle, HttpSession session, Model model) {
+		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
+		if (utilisateur == null) {
+			return "redirect:/connexion";
+		}
+
+		Article article = enchereService.consulterArticleParId(idArticle);
+		if (article == null || article.getUtilisateur() == null || !Objects.equals(article.getUtilisateur().getId(), utilisateur.getId())) {
+			return "redirect:/portail-encheres";
+		}
+
+		if (!"non_debutee".equalsIgnoreCase(article.getEtatVente())) {
+			model.addAttribute("erreur", "Vous ne pouvez modifier que les ventes non débutées.");
+			return "redirect:/ventes/details?id=" + idArticle;
+		}
+
+		model.addAttribute("article", article);
+		model.addAttribute("categories", enchereService.consulterToutCategorie());
+		return "modifier-vente";
+	}
+
+
+	@PostMapping("/vente/modifier")
+	public String modifierVente(@ModelAttribute Article article, HttpSession session) {
+		Utilisateur vendeur = (Utilisateur) session.getAttribute("utilisateurSession");
+		Article original = enchereService.consulterArticleParId(article.getId());
+
+		//!article existe+!articleappartient à utilisateur connecté(vendeur)
+		if (original == null || original.getUtilisateur() == null || !Objects.equals(original.getUtilisateur().getId(), vendeur.getId())) {
+			return "redirect:/portail-encheres";
+		}
+
+		if (!"NON_DEBUTEE".equalsIgnoreCase(original.getEtatVente())) {
+			return "redirect:/ventes/details?id=" + article.getId();
+		}
+
+		article.setEtatVente("NON_DEBUTEE");
+		article.setUtilisateur(vendeur);
+		enchereService.mettreAJourArticle(article);
+
+		return "redirect:/ventes/details?id=" + article.getId();
+	}
+
+
 
 	@PostMapping("/encherir")
 	public String encherir(@ModelAttribute EnchereFormulaire enchereForm, Model model, HttpSession session) {
