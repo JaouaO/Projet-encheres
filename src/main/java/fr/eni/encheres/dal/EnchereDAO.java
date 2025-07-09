@@ -13,6 +13,8 @@ public interface EnchereDAO {
     List<Enchere> consulterParArticle(long idArticle);
 
     List<Enchere> consulterTout();
+    
+    boolean hasEnchereUtilisateur(long idUtilisateur, long idArticle);
 
     void annulerEnchere(Enchere enchere);
 }

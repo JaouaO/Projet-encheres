@@ -82,6 +82,21 @@ public class EnchereDAOImpl implements EnchereDAO {
 		namedParameterJdbcTemplate.update(supprEnchere, paramSource);
 	}
 	
+	@Override
+	public boolean hasEnchereUtilisateur(long idUtilisateur, long idArticle) {
+		String compterEncheres = """
+			SELECT COUNT(*) FROM Enchere e
+					inner Join Article a ON a.id = e.id_article
+					WHERE  a.id=:idArticle AND etat_vente = 'en_cours'  AND e.id_utilisateur=:idUtilisateur
+				""";
+		MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+		parameterSource.addValue("idArticle", idArticle);
+		parameterSource.addValue("idUtilisateur", idUtilisateur);
+
+		Integer nbArticlesOuverts = namedParameterJdbcTemplate.queryForObject(compterEncheres, parameterSource, Integer.class);
+		return nbArticlesOuverts !=0;
+	}
+	
 	
 	class EnchereRowMapper implements RowMapper<Enchere> {
         @Override
@@ -102,5 +117,8 @@ public class EnchereDAOImpl implements EnchereDAO {
             return e;
         }
     }
+
+
+
 
 }

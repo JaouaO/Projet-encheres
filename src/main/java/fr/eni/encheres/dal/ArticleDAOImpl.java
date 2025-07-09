@@ -155,6 +155,19 @@ public class ArticleDAOImpl implements ArticleDAO {
         parameterSource.addValue("etatVente", etatVente);
         return namedParameterJdbcTemplate.query(trierParEtat, parameterSource, new ArticleRowMapper());
     }
+    
+    @Override
+    public List<Article> consulterParEtat(String etatVente, String etatVenteDeux) {
+        String trierParEtat = """
+                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img
+                FROM Article
+                WHERE etat_vente = :etatVente OR etat_vente = :etatVenteDeux
+                """;
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("etatVente", etatVente);
+        parameterSource.addValue("etatVente", etatVenteDeux);
+        return namedParameterJdbcTemplate.query(trierParEtat, parameterSource, new ArticleRowMapper());
+    }
 
     @Override
     public List<Article> consulterParCategorieEtNom(Long idCategorie, String motRecherche) {
@@ -201,13 +214,19 @@ public class ArticleDAOImpl implements ArticleDAO {
                                 WHERE a.etat_vente = 'en_cours'
                                 AND e.id_utilisateur=u.id
                   AND u.id=:idUtilisateur
-                AND """;
+                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("idUtilisateur", idUtilisateur);
         parameterSource.addValue("etatVente", etatVente);
 
         return namedParameterJdbcTemplate.query(sql, parameterSource, new ArticleRowMapper());
     }
+    
+	@Override
+	public List<Article> sqlQueryPersonnalisee(String sql) {
+		return namedParameterJdbcTemplate.query(sql, new ArticleRowMapper());   
+	}
+
 
 //    public List<Article> consulterParUtilisateurEtEncheresPerso(long idUtilisateur, ) {
 //
@@ -242,4 +261,6 @@ public class ArticleDAOImpl implements ArticleDAO {
             return a;
         }
     }
+
+
 }
