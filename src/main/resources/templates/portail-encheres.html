@@ -22,13 +22,14 @@
 
         <p th:class="filtres" th:text="'Filtres : '" ></p>
 		
-        <input  class="radioAchat" type="radio" name ="radio" id="radioAchats" value="achats" checked>
+        <input  class="radioAchat" type="radio" th:name ="radio" id="radioAchats" th:value="achats" checked>
        <label for="radioAchats" th:text="'Achats'"></label>
  <div class="achats">
         <input type="checkbox"
                th:name="'checkbox'"
                id="encheresOuvertes"
-               th:value="'encheresOuvertes'">
+               th:value="'encheresOuvertes'"
+               checked>
           <label for="encheresOuvertes" th:text="'enchères ouvertes'"></label>
 
         <input type="checkbox"
@@ -46,9 +47,9 @@
   
        <input  class="radioVentes"
         type="radio"
-               name ="radio"
+              th:name ="radio"
              id="radioVentes"
-             value="ventes">
+             th:value="ventes">
 
         <label for="radioVentes" th:text="'Mes ventes'"></label>
       <div class="ventes">
@@ -92,7 +93,7 @@
             <button th:class="rechercher-btn" th:text="'Rechercher'"></button>
         </div>
     </form>
-<!-- 
+
         <div class="articles" th:class="articles" th:each="article : ${articlesAAfficher}">
             <div class="article">
                 <img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}" th:alt="'Photo de l\'article'">
@@ -105,6 +106,6 @@
                 </div>
             </div>
         </div>
- -->
+
 </body>
 </html>
