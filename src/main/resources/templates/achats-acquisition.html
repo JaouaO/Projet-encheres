@@ -10,26 +10,37 @@
 	</header>
 	
             <h2>Vous avez remporté l'enchère</h2>
-    <h3>PC Gamer pour travailler</h3>
+        <h3 th:text="${article.nom}">Nom de l'article</h3>
+
+        <div id="bloc-description">
+        <p>Description : <span th:text="${article.description}">Description</span></p>
+        </div>
+
+        <div>
+            <img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}"
+                 alt="Image de l'article" />
+        </div>
 
 
-    <p>Description :</p>
+        <p>Meilleure offre :
+            <span th:text="${article.prixVente}">0</span> crédits
 
-    <p>Catégorie : Informatique</p>
-    <p>Meilleure offre : </p>
-    <p>Mise à prix :</p>
+        </p>
+        <p>Mise à prix :<span th:text="${article.miseAPrix}">0</span> crédits</p>
 
-	<block class="cadre">
-	<p>Retrait : 10 Allée des Alouettes 44800 Saint-Herblain</p>
-	   <!-- il faut envoyer la recherche de  profil avec un get, et gérer ça soit dans la même méthode du controller soit dans une autre -->
-        <p>Vendeur : <a th:href="@{/profil}">jojo44</a></p>
-        <p>tel :  0606060606</p>
-	</block>
-    
-    <a  th:href="@{/retire}"><button>Retrait effectué</button></a>
 
-        
-	
+
+        <p>Retrait : <span th:if="${article.lieuRetrait == null}"
+                           th:text="${article.utilisateur.rue + ' '
+                           + article.utilisateur.codePostal + ' '
+                           + article.utilisateur.ville}">Retrait : </span></p>
+
+        <p>Vendeur : <span th:text="${article.utilisateur.pseudo}">Nom du vendeur</span></p>
+        <p>Téléphone : <span th:text="${article.utilisateur.telephone}">Téléphone</span></p>
+
+
+
+        <a th:href="@{/portail-encheres}"><button>BACK</button></a>
 
 </body>
 </html>

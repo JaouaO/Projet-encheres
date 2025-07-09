@@ -101,13 +101,16 @@ public class EnchereDAOImpl implements EnchereDAO {
 	class EnchereRowMapper implements RowMapper<Enchere> {
         @Override
         public Enchere mapRow(ResultSet rs, int rowNum) throws SQLException {
+
             Enchere e = new Enchere();
             e.setMontantEnchere(rs.getInt("montant_enchere"));
+
 
 //            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 //            LocalDateTime dt = LocalDateTime.parse(rs.getString("date_enchere"),formatter);
 //            e.setDateEnchere(dt);
             e.setDateEnchere(rs.getTimestamp("date_enchere").toLocalDateTime());
+
             Article a = new Article();
             a.setId(rs.getLong("id_article"));
             e.setArticle(null);

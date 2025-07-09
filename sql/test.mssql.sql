@@ -33,12 +33,6 @@ INSERT INTO Article (nom, description, date_debut, date_fin, mise_a_prix, prix_v
 
 
 
--- retraits
-INSERT INTO Retrait (rue, code_postal, ville, id_article) VALUES
-                                                              ('12 rue des Ventes', '44000', 'Nantes', 1),
-                                                              ( '5 avenue Achats', '75000', 'Paris',  2),
-                                                              ('1 rue Admin', '69000', 'Lyon', 3),
-                                                              ('12 rue des Ventes', '44000', 'Nantes', 4);
 
 
 
@@ -51,3 +45,9 @@ INSERT INTO Enchere (id_utilisateur, id_article, date_enchere, montant_enchere) 
 (3, 2, '2025-06-29 12:00:00', 50);
 
 
+-- retraits
+INSERT INTO Retrait (rue, code_postal, ville, id_article) VALUES
+                                                              ('12 rue des Ventes', '44000', 'Nantes', 1),
+                                                              ( '5 avenue Achats', '75000', 'Paris',  2),
+                                                              ('1 rue Admin', '69000', 'Lyon', 3),
+                                                              ('12 rue des Ventes', '44000', 'Nantes', 4);
