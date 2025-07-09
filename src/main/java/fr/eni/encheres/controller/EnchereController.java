@@ -112,6 +112,36 @@ public String afficherVente( Model model) {
         return "portail-encheres";
     }
 
+	@GetMapping("/achats/acquisition")
+	public String afficherAcquisition(@RequestParam("id") Long idArticle, HttpSession session, Model model) {
+		Article article = enchereService.consulterArticleParId(idArticle);
+
+		if (article == null) {
+			return "redirect:/portail-encheres";
+		}
+
+		if (article.getCategorie() != null && article.getCategorie().getLibelle() == null) {
+			Categorie categorie = enchereService.consulterCategorieParId(article.getCategorie().getId());
+			article.setCategorie(categorie);
+		}
+
+		if (article.getUtilisateur() != null) {
+			Utilisateur vendeur = utilisateurService.consulterParId(article.getUtilisateur().getId());
+			article.setUtilisateur(vendeur);
+		}
+
+
+		model.addAttribute("article", article);
+		model.addAttribute("derniereEnchere", enchereService.recupererDerniereEnchere(idArticle));
+		model.addAttribute("utilisateurSession", session.getAttribute("utilisateurSession"));
+
+		return "achats-acquisition";
+	}
+
+
+
+
+
 
 	@PostMapping("/creer-nouvelle-vente")
 	public String getMethodName(@ModelAttribute Article article, Model model) {
