@@ -99,7 +99,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 					""";
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			MapSqlParameterSource parameterSource = new MapSqlParameterSource();
-			parameterSource.addValue("id", idUtilisateur);
+			parameterSource.addValue("idUtilisateur", idUtilisateur);
 			namedParameterJdbcTemplate.update(supprUtilisateur, parameterSource, keyHolder);
 		}
 
@@ -179,6 +179,27 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 				.query(SQL, new MapSqlParameterSource("email", email), new UtilisateurRowMapper()).stream().findFirst()
 				.orElse(null);
 	}
+	
+	@Override
+	public boolean hasUtilisateur(long idUtilisateur) {
+		String compterUtilisateur = "  SELECT COUNT(*) FROM Utilisateur WHERE id=:idUtilisateur";
+		MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+		parameterSource.addValue("idUtilisateur", idUtilisateur);
+		
+		Integer nbUtilisateur = namedParameterJdbcTemplate.queryForObject(compterUtilisateur, parameterSource, Integer.class);
+		return nbUtilisateur !=0;
+	}
+	
+	@Override
+	public int consulterCredit(long idUtilisateur) {
+		String compterUtilisateur = "  SELECT credit FROM Utilisateur WHERE id=:idUtilisateur";
+		MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+		parameterSource.addValue("idUtilisateur", idUtilisateur);
+		
+		return  namedParameterJdbcTemplate.queryForObject(compterUtilisateur, parameterSource, Integer.class);
+	}
+
+
 
 	class UtilisateurRowMapper implements RowMapper<Utilisateur> {
 		@Override
@@ -199,5 +220,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			return u;
 		}
 	}
+
+
 
 }
