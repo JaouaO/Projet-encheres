@@ -147,8 +147,12 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public List<Article> consulterParEtat(String etatVente) {
         String trierParEtat = """
-                SELECT id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img
-                FROM Article
+                SELECT a.id, a.nom, a.description, a.date_debut, a.date_fin,
+               a.mise_a_prix, a.prix_vente, a.etat_vente, a.id_vendeur,
+               a.id_categorie, a.chemin_img,
+               u.pseudo, u.rue, u.code_postal, u.ville
+                FROM Article a
+                INNER JOIN utilisateur u ON a.id_vendeur = u.id
                 WHERE etat_vente = :etatVente
                 """;
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
@@ -188,6 +192,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 
         return namedParameterJdbcTemplate.query(sql, parameterSource, new ArticleRowMapper());
     }
+
 
     @Override
     public List<Article> consulterParUtiisateurEtEnchereOuverte(long idUtilisateur) {
@@ -232,6 +237,59 @@ public class ArticleDAOImpl implements ArticleDAO {
 //
 //    }
 
+
+    @Override
+    public void mettreAJourArticle(Article article) {
+            String sql = """
+        UPDATE Article SET
+            nom = :nom,
+            description = :description,
+            date_debut = :dateDebut,
+            date_fin = :dateFin,
+            mise_a_prix = :miseAPrix,
+            id_categorie = :idCategorie,
+            chemin_img = :cheminImg
+        WHERE id = :id
+    """;
+
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue("id", article.getId());
+            params.addValue("nom", article.getNom());
+            params.addValue("description", article.getDescription());
+            params.addValue("dateDebut", article.getDateDebutEnchere());
+            params.addValue("dateFin", article.getDateFinEnchere());
+            params.addValue("miseAPrix", article.getMiseAPrix());
+            params.addValue("idCategorie", article.getCategorie().getId());
+            params.addValue("cheminImg", article.getCheminImg());
+
+            namedParameterJdbcTemplate.update(sql, params);
+        }
+
+    @Override
+    public boolean hasArticle(long idArticle) {
+
+			String compterArticle = "  SELECT COUNT(*) FROM Article WHERE id=:idArticle";
+			MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+			parameterSource.addValue("idArticle", idArticle);
+			
+			Integer nbUtilisateur = namedParameterJdbcTemplate.queryForObject(compterArticle, parameterSource, Integer.class);
+			return nbUtilisateur !=0;
+	}
+
+	@Override
+	public boolean isArticleEtatOuvert(long idArticle) {
+		
+			String compterArticlesOuverts = "  SELECT COUNT(*) FROM Article WHERE  id=:idArticle AND etat_vente = 'en_cours' ";
+			MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+			parameterSource.addValue("idArticle", idArticle);
+			
+			Integer nbArticlesOuverts = namedParameterJdbcTemplate.queryForObject(compterArticlesOuverts, parameterSource, Integer.class);
+			return nbArticlesOuverts !=0;
+	}
+    
+
+
+
     class ArticleRowMapper implements RowMapper<Article> {
         @Override
         public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -263,4 +321,8 @@ public class ArticleDAOImpl implements ArticleDAO {
     }
 
 
+
+
 }
+
+
