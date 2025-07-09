@@ -5,8 +5,12 @@ import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.exceptions.BusinessException;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+//import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,20 +45,30 @@ public EnchereController(EnchereService enchereService, UtilisateurService utili
 
 
     @GetMapping("/achats/details")
-    public String afficherDetailsAchats(@RequestParam(name = "id") long idArticle, Model model) {
+    public String afficherDetailsAchats(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
+    	
+    	
+    	Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
+
+    	if(utilisateurSession==null) {
+    		return  "redirect:/accueil";
+    	}
+    	
         if (idArticle > 0) {
             Article article = enchereService.consulterArticleParId(idArticle);
             if (article != null) {
                 model.addAttribute("article", article);
                 
-
                 Categorie categorieArticle = enchereService.consulterCategorieParId(article.getCategorie().getId());
                 model.addAttribute("categorieArticle", categorieArticle);
 
                 Enchere derniereEnchere = enchereService.recupererDerniereEnchere(idArticle);
 
                 model.addAttribute("derniereEnchere", derniereEnchere);
-
+                Enchere enchere = new Enchere();
+                enchere.setArticle(article);
+                
+                model.addAttribute("enchere",enchere);
                 return "achats-details";
             }
         }
@@ -63,7 +77,14 @@ public EnchereController(EnchereService enchereService, UtilisateurService utili
 
     //pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
 @GetMapping("/ventes/details")
-public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model) {
+public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
+	
+	
+	Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
+
+	if(utilisateurSession==null) {
+		return  "redirect:/accueil";
+	}
 	//check l'utilisateur pour voir si c'est achat ou vente
     return "ventes-details";
 }
@@ -106,18 +127,18 @@ public String afficherVente( Model model) {
 	}
 
 // pour récupérer l'enchère avec les attributs du formulaire
-	public static class EnchereFormulaire {
-		private Long articleId;
-		private int montantEnchere;
-
-
-		public Long getArticleId() { return articleId; }
-		public void setArticleId(Long articleId) { this.articleId = articleId; }
-
-
-		public int getMontantEnchere() { return montantEnchere; }
-		public void setMontantEnchere(int montantEnchere) { this.montantEnchere = montantEnchere; }
-	}
+//	public static class EnchereFormulaire {
+//		private Long articleId;
+//		private int montantEnchere;
+//
+//
+//		public Long getArticleId() { return articleId; }
+//		public void setArticleId(Long articleId) { this.articleId = articleId; }
+//
+//
+//		public int getMontantEnchere() { return montantEnchere; }
+//		public void setMontantEnchere(int montantEnchere) { this.montantEnchere = montantEnchere; }
+//	}
 
 
 
@@ -168,60 +189,36 @@ public String afficherVente( Model model) {
 
 
 	@PostMapping("/encherir")
-	public String encherir(@ModelAttribute EnchereFormulaire enchereForm, Model model, HttpSession session) {
+	public String encherir(@Valid @ModelAttribute Enchere nouvelleEnchere, BindingResult bindingResult, Model model, HttpSession session) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
-		int CreditUserEnSession = utilisateur.getCredit();
-		Long ArticleId = enchereForm.getArticleId();
-		int montant = enchereForm.getMontantEnchere();
-		Article article = enchereService.consulterArticleParId(ArticleId);
-		Enchere enchereFormEnchere = new Enchere();
-		enchereFormEnchere.setArticle(article);
-		enchereFormEnchere.setMontantEnchere(montant);
-
-		if (article == null) {
-			model.addAttribute("erreur", "Article non trouvé");
-			System.out.println("Article non trouvé");
-		}
-
-		//Récupérer dernière enchère
-		Enchere derniereEnchere = enchereService.recupererDerniereEnchere(ArticleId);
-
-		if (montant <= 0) {
-			model.addAttribute("erreur", "Le montant doit être supérieur à zéro.");
-			System.out.println("montant doit être supérieur à zéro");
-
-		}
-
-		if (montant <= article.getMiseAPrix()) {
-			model.addAttribute("erreur", "Votre enchère doit être supérieure à la mise à prix.");
-			System.out.println("Votre enchère doit être supérieure à la mise à prix.");
-		}
-
-		if (derniereEnchere != null && montant <= derniereEnchere.getMontantEnchere()) {
-			model.addAttribute("erreur", "Votre enchère doit être supérieure à la meilleure offre actuelle.");
-			System.out.println("Votre enchère doit être supérieure à la meilleure offre actuelle.");
-
-		}
-
-		if (montant > CreditUserEnSession) {
-			model.addAttribute("erreur", "Vous n'avez pas assez de crédits pour effectuer cette enchère.");
-			System.out.println("Vous n'avez pas assez de crédits pour effectuer cette enchère.");
-
-		}
-
-		Enchere nouvelleEnchere = new Enchere();
-		nouvelleEnchere.setArticle(article);
-		nouvelleEnchere.setMontantEnchere(montant);
 		nouvelleEnchere.setUtilisateur(utilisateur);
 		nouvelleEnchere.setDateEnchere(LocalDateTime.now());
+		nouvelleEnchere.setArticle(enchereService.consulterArticleParId(nouvelleEnchere.getArticle().getId()));
+		try {
+			enchereService.ajouterEnchere(nouvelleEnchere);
+			return "redirect:/achats/details?id=" + nouvelleEnchere.getArticle().getId();
+		} catch (BusinessException e) {
+			model.addAttribute("errorMessages", e.getMessages());
+//			e.getMessages().forEach(m->{
+//				ObjectError error = new ObjectError("", m);
+//			bindingResult.addError(error);
+//	});
+	
+			model.addAttribute("article", nouvelleEnchere.getArticle());
+            
+            Categorie categorieArticle = enchereService.consulterCategorieParId(nouvelleEnchere.getArticle().getCategorie().getId());
+            model.addAttribute("categorieArticle", categorieArticle);
 
-		enchereService.ajouterEnchere(nouvelleEnchere);
+            Enchere derniereEnchere = enchereService.recupererDerniereEnchere(nouvelleEnchere.getArticle().getId());
 
-		int nbRetire = nouvelleEnchere.getMontantEnchere();
-		long idUtilisateur = utilisateur.getId();
-		utilisateurService.retirerCredits(nbRetire, idUtilisateur);
+            model.addAttribute("derniereEnchere", derniereEnchere);
+            Enchere enchere = new Enchere();
+            enchere.setArticle(nouvelleEnchere.getArticle());
+            
+            model.addAttribute("enchere",enchere);
+            return "achats-details";
+		}
 
-		return "redirect:/achats/details?id=" + article.getId();
 	}
 
 //doit request aussi l'ID de l'article

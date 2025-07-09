@@ -64,8 +64,6 @@ public class Categorie implements Serializable{
 		builder.append(id);
 		builder.append(", libelle=");
 		builder.append(libelle);
-		builder.append(", articles=");
-		builder.append(articles);
 		builder.append("]");
 		return builder.toString();
 	}

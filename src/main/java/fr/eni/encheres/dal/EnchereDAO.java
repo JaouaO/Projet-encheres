@@ -4,6 +4,7 @@ import fr.eni.encheres.bo.Enchere;
 
 import java.util.List;
 
+
 public interface EnchereDAO {
 
     void ajouterEnchere(Enchere enchere);
@@ -15,4 +16,8 @@ public interface EnchereDAO {
     List<Enchere> consulterTout();
 
     void annulerEnchere(Enchere enchere);
+    
+
+    
+    
 }
