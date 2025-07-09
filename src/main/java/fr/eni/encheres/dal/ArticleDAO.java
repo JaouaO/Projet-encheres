@@ -27,12 +27,9 @@ public interface ArticleDAO {
 
     List<Article> consulterParCategorieEtNom(Long idCategorie, String recherche);
 
-
     void mettreAJourArticle(Article article);
 
-
-    
-    boolean hasArticle(long idArticle);
+    public boolean hasArticle(long idArticle);
     
     boolean isArticleEtatOuvert(long idArticle);
     
