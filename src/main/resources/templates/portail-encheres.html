@@ -15,14 +15,16 @@
     <a th:href="@{/profil}" th:text="'Mon profil'"></a>
     <a th:href="@{/session-cloture}" th:text="'Déconnexion'"></a>
     
+  
+    
     
     <form action="/portail-encheres" method="get">
 
         <p th:class="filtres" th:text="'Filtres : '" ></p>
-
-<!--        <input type="radio" name ="radio" id="radioAchats">-->
-<!--        <label for="radioAchats" th:text="'Achats'"></label>-->
-
+		
+        <input  class="radioAchat" type="radio" name ="radio" id="radioAchats" value="achats" checked>
+       <label for="radioAchats" th:text="'Achats'"></label>
+ <div class="achats">
         <input type="checkbox"
                th:name="'checkbox'"
                id="encheresOuvertes"
@@ -40,17 +42,21 @@
                id="encheresRemportées"
                th:value="'encheresRemportées'">
         <label for="encheresRemportées" th:text="'mes enchères remportées'"></label>
+  </div>
+  
+       <input  class="radioVentes"
+        type="radio"
+               name ="radio"
+             id="radioVentes"
+             value="ventes">
 
-<!--        <input type="radio"-->
-<!--               name ="radio"-->
-<!--               id="radioVentes">-->
-<!--        -->
-<!--        <label for="radioVentes" th:text="'Mes ventes'"></label>-->
-
+        <label for="radioVentes" th:text="'Mes ventes'"></label>
+      <div class="ventes">
         <input type="checkbox"
                th:name="'checkbox'"
                id="ventesEnCours"
                th:value="'ventesEnCours'">
+               
         <label for="ventesEnCours" th:text="'mes ventes en cours'"></label>
 
         <input type="checkbox"
@@ -62,9 +68,10 @@
         <input type="checkbox"
                th:name="'checkbox'"
                id="ventesTerminees"
-               th:value="'ventesTerminees'">
+               th:value="'ventesTerminees'"
+               th:attr="radio=achats? disabled : checked">
         <label for="ventesTerminees" th:text="'ventes terminées'"></label>
-
+        </div>
         <div th:class="categories">
             <label>Catégorie</label>
             <select name="idCategorie" id="idCategorie">
@@ -85,7 +92,7 @@
             <button th:class="rechercher-btn" th:text="'Rechercher'"></button>
         </div>
     </form>
-
+<!-- 
         <div class="articles" th:class="articles" th:each="article : ${articlesAAfficher}">
             <div class="article">
                 <img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}" th:alt="'Photo de l\'article'">
@@ -98,5 +105,6 @@
                 </div>
             </div>
         </div>
+ -->
 </body>
 </html>

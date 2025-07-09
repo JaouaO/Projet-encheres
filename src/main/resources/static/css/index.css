@@ -130,6 +130,26 @@ header {
 }
 
 
+/*
+Partie pour les boutons radio portail-enchère
+*/
+
+.achats {
+  display: none;
+}
+
+.radioAchat:checked ~ .achats {
+  display: initial;
+}  
+
+.ventes {
+  display: none;
+}
+
+.radioVentes:checked ~ .ventes {
+  display: initial;
+}  
+
 @media (min-width: 600px) {
     .filtres {
         max-width: 400px;
