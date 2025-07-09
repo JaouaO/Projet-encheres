@@ -137,6 +137,12 @@ public class EnchereServiceImpl implements EnchereService {
 	public List<Article> consulterParEtat(String etat) {
 		return this.articleDAO.consulterParEtat(etat);
 
+	}	
+	
+	@Override
+	public List<Article> consulterParEtat(String etat, String etatDeux) {
+		return this.articleDAO.consulterParEtat(etat, etatDeux);
+
 	}
 
 	@Override
@@ -149,6 +155,18 @@ public class EnchereServiceImpl implements EnchereService {
 	public List<Article> consulterParCategorieEtRecherche(Long idCategorie, String recherche) {
 		return articleDAO.consulterParCategorieEtNom(idCategorie, recherche);
 	}
+
+	@Override
+	public List<Article> consulterArticlesParQuerySQLPersonnalisee(String sql) {
+		return this.articleDAO.sqlQueryPersonnalisee(sql);
+	}
+
+	@Override
+	public boolean aEncheri(long idArticle, long idUtilisateur) {
+		return enchereDAO.hasEnchereUtilisateur(idUtilisateur, idArticle);
+	}
+	
+	
 
 
 }

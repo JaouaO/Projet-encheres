@@ -29,6 +29,8 @@ public interface EnchereService {
 	List<Article> consulterParCategorie(long idCategorie);
 
 	List<Article> consulterParEtat(String etat);
+	
+	List<Article> consulterParEtat(String etat, String etatDeux);
 
 	void ajouterEnchere(Enchere enchere);
 
@@ -45,5 +47,11 @@ public interface EnchereService {
 	List<Article> consulterParIdUtilisateurEtEnchereOuverte(long idUtilisateur);
 
 	List<Article> consulterParIdUtilisateurEtEtatVente(long idUtilisateur, String etatVente);
+	
+	List<Article> consulterArticlesParQuerySQLPersonnalisee(String sql);
+	
+	boolean aEncheri(long idArticle, long idUtilisateur);
+
+
 
 }
