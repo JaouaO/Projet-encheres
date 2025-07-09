@@ -8,7 +8,6 @@ import java.util.List;
 
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Utilisateur;
-import fr.eni.encheres.dal.EnchereDAOImpl;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -16,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+
 
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -95,9 +95,9 @@ public class UtilisateurController {
 		if (utilisateur == null) {
 			return "redirect:/connexion";
 		}
-		
+
 		long idUtilisateurSession = utilisateur.getId();
-		
+
 		System.out.println(checkbox);
 
 		String sqlQuery = """
@@ -109,24 +109,18 @@ public class UtilisateurController {
 					INNER JOIN utilisateur u ON a.id_vendeur = u.id
 					WHERE a.id_vendeur
 					""";
-		
-//		   a.nom, a.description, a.date_debut, a.date_fin,
-//         a.mise_a_prix, a.prix_vente, a.etat_vente, a.id_vendeur,
-//         a.id_categorie, a.chemin_img,
-//         u.pseudo, u.rue, u.code_postal, u.ville, e.id_article, 
-//         e.id_utilisateur, e.date_enchere, e.montant_enchere
-//		  INNER JOIN enchere e ON a.id = e.id_article
-		
+
+
 		String sqlQueryRemportees = """
-			SELECT a.id, a.nom, a.description, a.date_debut, a.date_fin,
-				             a.mise_a_prix, a.prix_vente, a.etat_vente, a.id_vendeur,
-					         a.id_categorie, a.chemin_img,
-					         u.pseudo, u.rue, u.code_postal, u.ville
-				      FROM article a
-				      INNER JOIN utilisateur u ON a.id_vendeur = u.id
-					  WHERE (a.etat_vente = 'terminee' OR a.etat_vente = 'livree')
-					  AND a.id_vendeur!=
-				""" + utilisateur.getId()+" ";
+				SELECT a.id, a.nom, a.description, a.date_debut, a.date_fin,
+					             a.mise_a_prix, a.prix_vente, a.etat_vente, a.id_vendeur,
+						         a.id_categorie, a.chemin_img,
+						         u.pseudo, u.rue, u.code_postal, u.ville
+					      FROM article a
+					      INNER JOIN utilisateur u ON a.id_vendeur = u.id
+						  WHERE (a.etat_vente = 'terminee' OR a.etat_vente = 'livree')
+						  AND a.id_vendeur!=
+					""" + utilisateur.getId() + " ";
 
 		String idVendeurString = "";
 		String etatString = "";
@@ -137,7 +131,7 @@ public class UtilisateurController {
 		boolean mainQuery = false;
 
 		if (radio.equals("achats")) {
-			idVendeurString += "!=" +  utilisateur.getId() +" ";
+			idVendeurString += "!=" + utilisateur.getId() + " ";
 			for (int i = 0; i < checkbox.length; i++) {
 
 				if (checkbox[i].equals("encheresOuvertes")) {
@@ -159,7 +153,7 @@ public class UtilisateurController {
 				etatString += ") ";
 			}
 		} else {
-			idVendeurString += "=" + utilisateur.getId() +" ";
+			idVendeurString += "=" + utilisateur.getId() + " ";
 			for (int i = 0; i < checkbox.length; i++) {
 
 				if (checkbox[i].equals("ventesEnCours")) {
@@ -195,7 +189,7 @@ public class UtilisateurController {
 			}
 
 		}
-		
+
 		if (idCategorie != 0) {
 			categorieString += "AND a.id_categorie =" + idCategorie + " ";
 		}
@@ -203,48 +197,63 @@ public class UtilisateurController {
 			rechercheString += "AND LOWER(a.nom) LIKE LOWER('%" + text + "%') ";
 		}
 
-
 		String mainSqlQuery = sqlQuery + idVendeurString + etatString + categorieString + rechercheString;
-		
+
 		List<Article> articlesAAfficher = new ArrayList<Article>();
-		
-		if(mainQuery) {
+
+		if (mainQuery) {
 			articlesAAfficher = enchereService.consulterArticlesParQuerySQLPersonnalisee(mainSqlQuery);
 
 		}
-		
-		
-		if(aEncheri) {
-			String aEncheriSqlQuery = sqlQuery + idVendeurString + "AND ( etat_vente = 'en_cours') " +  categorieString +rechercheString;
-			List<Article> articlesChercherEnchereArticles = enchereService.consulterArticlesParQuerySQLPersonnalisee(aEncheriSqlQuery);
+
+		if (aEncheri) {
+			String aEncheriSqlQuery = sqlQuery + idVendeurString + "AND ( etat_vente = 'en_cours') " + categorieString
+					+ rechercheString;
+			List<Article> articlesChercherEnchereArticles = enchereService
+					.consulterArticlesParQuerySQLPersonnalisee(aEncheriSqlQuery);
 			for (Article article : articlesChercherEnchereArticles) {
-                 long idArticle = article.getId();
-				 if(enchereService.aEncheri(idArticle, idUtilisateurSession)) {
-					 articlesAAfficher.add(article);
-				 }
+				long idArticle = article.getId();
+				if (enchereService.aEncheri(idArticle, idUtilisateurSession)) {
+					boolean addArticle = true;
+					for (Article article2 : articlesAAfficher) {
+						if (article.getId() == article2.getId()) {
+							addArticle = false;
+						}
+					}
+					if (addArticle) {
+						articlesAAfficher.add(article);
+					}
+				}
 			}
 		}
-		
-		if(remportees) {
-			sqlQueryRemportees +=  categorieString + rechercheString;
-			List<Article> articlesEtatTermine = enchereService.consulterArticlesParQuerySQLPersonnalisee(sqlQueryRemportees);
-			 for (Article article : articlesEtatTermine) {
-                 long idArticle = article.getId();
-                     Enchere derniereEnchere = enchereService.recupererDerniereEnchere(idArticle);
-                     long IdDernierEncherisseur = derniereEnchere.getUtilisateur().getId();
-                     if (IdDernierEncherisseur == idUtilisateurSession) {
-                    	 articlesAAfficher.add(article);
-                     }
 
-             }
-			
+		if (remportees) {
+			sqlQueryRemportees += categorieString + rechercheString;
+			List<Article> articlesEtatTermine = enchereService
+					.consulterArticlesParQuerySQLPersonnalisee(sqlQueryRemportees);
+			for (Article article : articlesEtatTermine) {
+
+				long idArticle = article.getId();
+				Enchere derniereEnchere = enchereService.recupererDerniereEnchere(idArticle);
+				if (derniereEnchere != null) {
+					long IdDernierEncherisseur = derniereEnchere.getUtilisateur().getId();
+					if (IdDernierEncherisseur == idUtilisateurSession) {
+						boolean addArticle = true;
+						for (Article article2 : articlesAAfficher) {
+							if (article.getId() == article2.getId()) {
+								addArticle = false;
+							}
+						}
+						if (addArticle) {
+							articlesAAfficher.add(article);
+						}
+					}
+
+				}
+
+			}
+
 		}
-
-				// pasoublié les parenthèses
-				// SQL Query magique
-				// add list articlesRemportes
-		System.out.println(mainSqlQuery);
-		System.out.println(articlesAAfficher);
 
 		model.addAttribute("articlesAAfficher", articlesAAfficher);
 		model.addAttribute("utilisateur", utilisateur);
