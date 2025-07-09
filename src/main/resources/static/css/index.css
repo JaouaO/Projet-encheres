@@ -12,6 +12,7 @@ a {
     font-size: smaller;
 
 }
+
 a:hover {
     text-decoration: none;
 }
@@ -31,8 +32,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
- }
-
+}
 
 .filtres {
     margin-bottom: 20px;
@@ -45,6 +45,7 @@ header {
     display: flex;
     justify-content: space-evenly;
 }
+
 .filtres label {
     font-weight: bold;
     display: block;
@@ -68,6 +69,7 @@ header {
     border: 2px solid black;
     font-weight: bold;
     cursor: pointer;
+    margin-bottom: 10px;
 
 }
 
@@ -80,10 +82,11 @@ header {
     flex-direction: column;
     width: 90%;
     justify-content: center;
-    margin: 20px  ;
-    gap:15px
+    margin: 20px;
+    gap: 15px
 
 }
+
 .articles {
     display: flex;
     flex-direction: column;
@@ -100,11 +103,13 @@ header {
     justify-content: space-between;
 
 }
+
 .article a {
-    color:black
+    color: black
 }
+
 .article img {
-    width:40%;
+    width: 40%;
     height: 110px;
     object-fit: cover;
     border: 1px solid #ccc;
@@ -116,7 +121,7 @@ header {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    width:60%
+    width: 60%
 }
 
 .article-details h2 {
@@ -130,12 +135,88 @@ header {
 }
 
 
-@media (min-width: 600px) {
+@media (min-width: 800px) {
+
+    body {
+        width: 85%;
+
+    }
+
+    nav {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     .filtres {
         max-width: 400px;
+    }
+
+    .search {
+        width: 99%;
+        font-size: medium;
+        height: 20px;
+    }
+
+    .categories {
+        display: flex;
+        justify-content: left;
+        font-size: larger;
+        gap: 18px;
+    }
+
+    #idCategorie {
+        margin-left: 50px;
+        width: 100%;
+        height: 30px;
+    }
+
+    .toutArticles {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        margin-top: 5em;
+        /*margin: auto;*/
     }
 
     .article {
         flex-direction: row;
     }
+
+    .recherche {
+        display: flex;
+        flex-direction: column-reverse;
+        width: 100%;
+
+    }
+
+    .rechercher-btn {
+        width: 100%;
+        justify-content: center;
+        margin-right: 15em;
+        height: 6em;
+
+    }
+
+    .filtres-conteneur {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        gap: 18em;
+    }
+
+    .filtres-titre {
+        font-size: 20px;
+        font-weight: bolder;
+    }
+
+    .titreEnchere {
+        text-align: center;
+        font-size: 25px;
+    }
+
 }
+
+
