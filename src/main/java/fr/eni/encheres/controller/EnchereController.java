@@ -43,7 +43,15 @@ public EnchereController(EnchereService enchereService, UtilisateurService utili
 
 
     @GetMapping("/achats/details")
-    public String afficherDetailsAchats(@RequestParam(name = "id") long idArticle, Model model) {
+    public String afficherDetailsAchats(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
+    	
+    	
+    	Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
+
+    	if(utilisateurSession==null) {
+    		return  "redirect:/accueil";
+    	}
+    	
         if (idArticle > 0) {
             Article article = enchereService.consulterArticleParId(idArticle);
             if (article != null) {
@@ -67,7 +75,14 @@ public EnchereController(EnchereService enchereService, UtilisateurService utili
 
     //pas sur de comment on affiche le nom de l'article avec get, ça suffit comme ça?
 @GetMapping("/ventes/details")
-public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model) {
+public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
+	
+	
+	Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
+
+	if(utilisateurSession==null) {
+		return  "redirect:/accueil";
+	}
 	//check l'utilisateur pour voir si c'est achat ou vente
     return "ventes-details";
 }
