@@ -41,6 +41,8 @@ public interface EnchereService {
 
 	Categorie consulterCategorieParId(long idCategorie);
 
+	void mettreAJourArticle(Article article);
+
 	void ajouterCredits(int nbAjout, long idUtilisateur, BusinessException be);
 	
 	void retirerCredits(int nbRetire, long idUtilisateur, BusinessException be);
@@ -58,6 +60,7 @@ public interface EnchereService {
     boolean isEnchereOuverte(long idArticle, BusinessException be);
     
     boolean hasAutreEnchere(long idArticle);
+
 
 
 }

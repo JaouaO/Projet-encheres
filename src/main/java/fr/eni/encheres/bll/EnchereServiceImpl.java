@@ -255,6 +255,11 @@ public class EnchereServiceImpl implements EnchereService {
 		return this.recupererDerniereEnchere(idArticle)!=null;
 	}
 
+	@Override
+	public void mettreAJourArticle(Article article) {
+		articleDAO.mettreAJourArticle(article);
+	}
+
 
 
 }
