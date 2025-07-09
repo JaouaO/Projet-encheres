@@ -28,8 +28,8 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public void creerArticle(Article article) {
         String creerUnNouvelArticle = """
-                INSERT INTO Article (id, nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img)
-                VALUES (:id, :nom, :description, :dateDebutEnchere, :dateFinEnchere, :miseAPrix, :prixVente, :etatVente, :idUtilisateur, :idCategorie, :cheminImg)
+                INSERT INTO Article (nom, description, date_debut, date_fin , mise_a_prix , prix_vente ,etat_vente ,id_vendeur , id_categorie, chemin_img)
+                VALUES (:nom, :description, :dateDebutEnchere, :dateFinEnchere, :miseAPrix, :prixVente, :etatVente, :idUtilisateur, :idCategorie, :cheminImg)
                 """;
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
