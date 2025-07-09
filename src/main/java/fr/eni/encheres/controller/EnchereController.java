@@ -102,7 +102,11 @@ public String afficherVente( Model model) {
 			article.setCategorie(categorie);
 		}
 
-		System.out.println("Retrait : " + article.getLieuRetrait());
+		if (article.getUtilisateur() != null) {
+			Utilisateur vendeur = utilisateurService.consulterParId(article.getUtilisateur().getId());
+			article.setUtilisateur(vendeur);
+		}
+
 
 		model.addAttribute("article", article);
 		model.addAttribute("derniereEnchere", enchereService.recupererDerniereEnchere(idArticle));
