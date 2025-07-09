@@ -134,21 +134,30 @@ header {
 Partie pour les boutons radio portail-enchère
 */
 
-.achats {
-  display: none;
+.radioAchat:checked ~ .achats-checked {
+  display: inline-block;
 }
-
-.radioAchat:checked ~ .achats {
-  display: initial;
-}  
-
-.ventes {
-  display: none;
+.radioAchat:checked ~ .ventes-checked {
+    display: none;
 }
-
-.radioVentes:checked ~ .ventes {
-  display: initial;
-}  
+.radioAchat:checked ~ .ventes-unchecked {
+    display: inline-block;
+}
+.radioAchat:checked ~ .achats-unchecked {
+    display: none;
+}
+.radioVentes:checked ~ .ventes-checked {
+  display: inline-block;
+}
+.radioVentes:checked ~ .ventes-unchecked {
+    display: none;
+}
+.radioAchat:not(:checked) ~ .achats-unchecked {
+     display: inline-block;
+}
+.radioAchat:not(:checked) ~ .achats-checked {
+    display: none;
+}
 
 @media (min-width: 600px) {
     .filtres {
