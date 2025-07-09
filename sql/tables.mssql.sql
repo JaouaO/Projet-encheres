@@ -41,14 +41,14 @@ CREATE TABLE Article (
     id BIGINT IDENTITY(1,1) PRIMARY KEY,
     nom VARCHAR(200) NOT NULL,
     description TEXT,
-    date_debut DATETIME NOT NULL, 
-    date_fin DATETIME NOT NULL,
+    date_debut DATETIME2 NOT NULL, 
+    date_fin DATETIME2 NOT NULL,
     mise_a_prix INT NOT NULL,
     prix_vente INT,
     etat_vente VARCHAR(50) NOT NULL,
     id_vendeur BIGINT NOT NULL,
     id_categorie BIGINT NOT NULL,
-    chemin_img VARCHAR(100) NOT NULL,
+    chemin_img VARCHAR(100) NULL,
     FOREIGN KEY (id_vendeur) REFERENCES Utilisateur(id),
     FOREIGN KEY (id_categorie) REFERENCES Categorie(id)
 );
