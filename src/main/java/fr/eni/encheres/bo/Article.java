@@ -177,7 +177,7 @@ public class Article implements Serializable{
 		builder.append(", lieuRetrait=");
 		builder.append(lieuRetrait);
 		builder.append(", utilisateur=");
-		builder.append(utilisateur);
+		builder.append(utilisateur.getPseudo());
 		builder.append(", categorie=");
 		builder.append(categorie);
 		builder.append(", encheres=");

@@ -13,17 +13,16 @@ public class BusinessException extends Exception {
         this.messages = new ArrayList<String>();
     }
 
-    public BusinessException(List<String> messages) {
-        this.messages = new ArrayList<String>();
-    }
+
     public Iterable<String> getMessages() {
         return this.messages;
     }
+    
     public void add(String message) {
         this.messages.add(message);
     }
-    public boolean hasError()
-    {
+    
+    public boolean hasError() {
         return !this.messages.isEmpty();
     }
 
