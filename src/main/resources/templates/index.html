@@ -5,14 +5,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/accueils.css}">
     <title>Index</title>
 </head>
 
 <body>
-<header th:replace="~{fragments/fragment-entete :: entete}">
+<header >
+    <a th:replace="~{fragments/fragment-entete :: entete}"></a>
+    <div class="navigation">
+        <a th:href="@{/inscription}">S'inscrire</a>
+        <a th:href="@{/connexion}">Se connecter</a>
+    </div>
 </header>
-
+<main>
 
 <h3 class="titreEnchere">Liste des enchères</h3>
 
@@ -27,7 +32,9 @@
             </select></div>
             <input type="text" name="text" class="search" th:value="${text}" placeholder="Le nom de l'article contient">
         </div>
+        <div th:class="bouton-conteneur">
         <button th:class="rechercher-btn">Rechercher</button>
+        </div>
     </div>
 </form>
 <div class="toutArticles">
@@ -45,6 +52,7 @@
 </div>
 
 </div>
+</main>
 </body>
 
 </html>
