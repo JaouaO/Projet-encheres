@@ -91,7 +91,6 @@ public interface ArticleDAO {
 	 */
 	List<Article> sqlQueryPersonnalisee(String sql);
 
-	public List<Article> consulterParCategorieEtNom(Long idCategorie, String motRecherche);
 
     /**Met à jour l'article en mémoire à partir de son statut dans la BDD
      * @param article
@@ -111,7 +110,6 @@ public interface ArticleDAO {
     boolean isArticleEtatOuvert(long idArticle);
 
 
-	void mettreAJourArticle(Article article);
 
 
 	/**je crois que c'est un doublon non utilisé
@@ -119,9 +117,6 @@ public interface ArticleDAO {
      * @return
      */
     boolean existeArticle(long idArticle);
-
-
-	boolean isArticleEtatOuvert(long idArticle);
 
 
 
