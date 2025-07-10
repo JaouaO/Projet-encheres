@@ -32,6 +32,7 @@ public interface ArticleDAO {
 	
 	List<Article> sqlQueryPersonnalisee(String sql);
 
+	public List<Article> consulterParCategorieEtNom(Long idCategorie, String motRecherche);
 
     void mettreAJourArticle(Article article);
 
