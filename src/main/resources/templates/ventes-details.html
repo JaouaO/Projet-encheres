@@ -1,36 +1,63 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détail PC Gamer</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Détail Vente</title>
 </head>
-<body>
-       	<header th:replace="~{fragments/fragment-entete :: entete}">
-	</header>
-	       <!-- Afficherle bon titre en fonction des cas -->
-            <h2>Jojo a remporté l'enchère !</h2>
-            <h2>Détail Vente</h2>
-    <h3>PC Gamer pour travailler</h3>
+<body th:object="${article}">
+	<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
+	<!-- Afficherle bon titre en fonction des cas -->
+	<h2 th:if="${finis}"
+		th:text="${acquereur.pseudo}+' a remporté l\'enchère !'">Pseudo
+		a remporté l'enchère !</h2>
+
+	<h3 th:text="${article.nom}">Nom de l'article</h3>
+
+	<div id="bloc-description">
+		<p>
+			Description : <span th:text="${article.description}">Description</span>
+		</p>
+	</div>
+
+	<div>
+		<img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}"
+			alt="Image de l'article" />
+	</div>
 
 
-    <p>Description :</p>
+	<p>
+		Meilleure offre : <span th:text="${article.prixVente}">0</span>
+		crédits
 
-    <p>Catégorie : Informatique</p>
-    <p>Meilleure offre : </p>
-    <p>Mise à prix :</p>
-    <p>Fin de l'enchère : 09/10/2018</p>
-    <p>Retrait : 10 Allée des Alouettes 44800 Saint-Herblain</p>
+	</p>
+	<p>
+		Mise à prix :<span th:text="${article.miseAPrix}">0</span> crédits
+	</p>
 
-    <p>Vendeur : <a h th:href="@{/profil}">jojo44</a></p>
-    
-    
-    	       <!-- Afficherle les boutons en fonction des cas -->
-    <a  th:href="@{/accueil}"><button>Annuler la vente</button></a>
+	<p
+		th:text="'Fin de l\'enchère : ' + *{#temporals.format(dateFinEnchere,'dd/MM/yyyy')}"></p>
 
-   <a  th:href="@{/accueil}"><button>Retour</button></a>
-    <a  th:href="@{/retire}"><button>Retrait effectué</button></a>
-    	       <!-- mettre Profil.prenom en thymeleaf-->
-       <a  th:href="@{/profil}"><button>Contacter "Profil.prenom"</button></a>
+	<p>
+		Retrait : <span th:if="${article.lieuRetrait == null}"
+			th:text="${article.utilisateur.rue + ' '
+                           + article.utilisateur.codePostal + ' '
+                           + article.utilisateur.ville}">Retrait
+			: </span>
+	</p>
+
+	<p>
+		Vendeur : <span th:text="${article.utilisateur.pseudo}">Nom du
+			vendeur</span>
+	</p>
+
+
+	<div th:if="${finis}">
+		<a th:href="@{/retire}"><button>Retrait effectué</button></a> <a
+			th:href="@{/profil}"><button
+				th:text="'Contacter '+ ${acquereur.pseudo}">Contacter
+				"Profil.prenom"</button></a>
+	</div>
+	<a th:href="@{/accueil}"><button>Retour</button></a>
 </body>
 </html>
