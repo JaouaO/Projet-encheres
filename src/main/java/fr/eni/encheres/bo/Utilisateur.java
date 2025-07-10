@@ -154,6 +154,9 @@ public class Utilisateur implements Serializable{
 	public Retrait getRetrait(Article article) {
 		return new Retrait(rue, codePostal, ville, article);
 	}
+	/**renvoie une String correspondant au lieu de retrait formaté de l'utilisateur
+	 * @return
+	 */
 	public String afficherRetrait() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(rue);
