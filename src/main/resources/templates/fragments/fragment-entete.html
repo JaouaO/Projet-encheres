@@ -1,8 +1,10 @@
 <!-- Navbar -->
-<header th:fragment="entete">
-	<nav>
-		<a th:href="@{/accueil}">
-			<h2>Eni-Echères</h2>
-		</a>
-	</nav>
+<header >
+    <nav>
+        <a th:fragment="entete" th:href="@{/accueil}">
+            <img class="header-icone" th:src="@{'/images/icone_enchere.png'}" alt="Photo de l\'article">
+        </a>
+
+
+    </nav>
 </header>

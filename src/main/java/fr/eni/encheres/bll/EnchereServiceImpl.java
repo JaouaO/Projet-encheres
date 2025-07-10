@@ -95,6 +95,27 @@ public class EnchereServiceImpl implements EnchereService {
 	}
 
 	@Override
+	public List<Enchere> consulterToutesEncheres() {
+		return enchereDAO.consulterTout();
+	}
+
+	@Override
+	public List<Enchere> consulterParIdArticle(long idArticle) {
+		return enchereDAO.consulterParArticle(idArticle);
+	}
+
+	@Override
+	public List<Article> consulterParIdUtilisateurEtEnchereOuverte(long idUtilisateur) {
+		return articleDAO.consulterParUtiisateurEtEnchereOuverte(idUtilisateur);
+	}
+
+	@Override
+	public List<Article> consulterParIdUtilisateurEtEtatVente(long idUtilisateur, String etatVente) {
+
+		return articleDAO.consulterParIdUtilisateurEtEtatVente(idUtilisateur, etatVente);
+	}
+
+	@Override
 	public Enchere recupererDerniereEnchere(long idArticle) {
 
 		List<Enchere> encheres = this.enchereDAO.consulterParArticle(idArticle);
@@ -127,6 +148,12 @@ public class EnchereServiceImpl implements EnchereService {
 	@Override
 	public List<Article> consulterParEtat(String etat) {
 		return this.articleDAO.consulterParEtat(etat);
+
+	}	
+	
+	@Override
+	public List<Article> consulterParEtat(String etat, String etatDeux) {
+		return this.articleDAO.consulterParEtat(etat, etatDeux);
 
 	}
 
@@ -210,6 +237,15 @@ public class EnchereServiceImpl implements EnchereService {
 	}
 
 	@Override
+	public List<Article> consulterArticlesParQuerySQLPersonnalisee(String sql) {
+		return this.articleDAO.sqlQueryPersonnalisee(sql);
+	}
+
+	@Override
+	public boolean aEncheri(long idArticle, long idUtilisateur) {
+		return enchereDAO.hasEnchereUtilisateur(idUtilisateur, idArticle);
+	}
+	
 	public boolean isCreditSuffisant(int montant, long idUtilisateur, BusinessException be) {
 		if (montant <= 0) {
 			be.add("Le montant doit être supérieur à 0");
@@ -279,6 +315,5 @@ public class EnchereServiceImpl implements EnchereService {
 	public boolean existeArticle(long idArticle) {
 		return articleDAO.existeArticle(idArticle);
 	}
-
 
 }
