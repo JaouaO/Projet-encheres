@@ -21,23 +21,22 @@ public class UtilisateurServiceImpl implements UtilisateurService{
         if (utilisateur == null) {
             throw new IllegalArgumentException("Utilisateur ne peut pas être null");
         }
-		// Vérification pseudo alphanumérique
+
 		if (!utilisateur.getPseudo().matches("^(?=.*[a-zA-Z])(?=.*\\d)[a-zA-Z0-9]+$")) {
 			throw new IllegalArgumentException("Le pseudo doit être alphanumérique.");
 		}
 
-		// pseudo unique
 		if (utilisateurDAO.consulterParPseudo(utilisateur.getPseudo()) != null) {
 			throw new IllegalArgumentException("Ce pseudo est déjà utilisé.");
 		}
 
-		// email unique
 		if (utilisateurDAO.consulterParEmail(utilisateur.getEmail()) != null) {
 			throw new IllegalArgumentException("Cet email est déjà utilisé.");
 		}
 
 		utilisateurDAO.creerUtilisateur(utilisateur);
 	}
+
 	@Override
 	public void modifierUtilisateur(long idUtilisateur, Utilisateur utilisateur) {
 //		if (idUtilisateur <= 0) {
@@ -102,8 +101,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 
 		@Override
 		public void annulerVenteParUtilisateur(long idArticle, long idUtilisateur) {
-	    		      
-	    	
+
 	    	/*List<Enchere> encheres = enchereDAO.consulterParArticle(idArticle);
 	        for (Enchere enchere : encheres) {
 	            Utilisateur encherisseur = enchere.getUtilisateur();

@@ -40,7 +40,6 @@ public class UtilisateurController {
 			@RequestParam(name = "idCategorie", required = false, defaultValue = "0") Long idCategorie,
 			@RequestParam(name = "text", required = false, defaultValue = "") String text, HttpSession session, Model model) {
 
-		
 		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
 
 		if(utilisateurSession!=null) {
@@ -53,16 +52,14 @@ public class UtilisateurController {
 			articles = enchereService.consulterParCategorieEtRecherche(idCategorie, text);
 		} else if (!text.isBlank()) {
 			articles = enchereService.consulterParRecherche(text);
-			System.out.println("je consulte uniquement par recherche");
 		} else if (idCategorie != 0) {
 			articles = enchereService.consulterParCategorie(idCategorie);
 		} else {
 			articles = enchereService.consulterToutArticle();
-			System.out.println("je consulte tout");
+
 		}
 
 		model.addAttribute("articles", articles);
-
 		model.addAttribute("categories", enchereService.consulterToutCategorie());
 		model.addAttribute("idCategorie", idCategorie);
 		model.addAttribute("text", text);
@@ -74,6 +71,7 @@ public class UtilisateurController {
 	public String afficherConnexion(Model model) {
 		return "connexion";
 	}
+
 
 	@PostMapping("/connexion")
 	public String connecterUtilisateur(@RequestParam("pseudo") String pseudo,
@@ -105,7 +103,6 @@ public class UtilisateurController {
 
 		long idUtilisateurSession = utilisateur.getId();
 
-		System.out.println(checkbox);
 
 		String sqlQuery = """
 				SELECT a.id, a.nom, a.description, a.date_debut, a.date_fin,
@@ -322,7 +319,6 @@ public class UtilisateurController {
     
 		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
 
-		// Mise à jour des champs sur l'objet existant
 		utilisateurSession.setPseudo(utilisateurModifie.getPseudo());
 		utilisateurSession.setNom(utilisateurModifie.getNom());
 		utilisateurSession.setPrenom(utilisateurModifie.getPrenom());
@@ -331,7 +327,7 @@ public class UtilisateurController {
 		utilisateurSession.setRue(utilisateurModifie.getRue());
 		utilisateurSession.setCodePostal(utilisateurModifie.getCodePostal());
 		utilisateurSession.setVille(utilisateurModifie.getVille());
-		utilisateurSession.setMotDePasse(utilisateurModifie.getMotDePasse()); // mot de passe mis à jour
+		utilisateurSession.setMotDePasse(utilisateurModifie.getMotDePasse());
 
 		try {
 
@@ -355,9 +351,9 @@ public class UtilisateurController {
 
 		if (utilisateur != null) {
 			utilisateurService.supprimerUtilisateur(utilisateur.getId());
-			session.invalidate(); // Supprime la session
-			sessionStatus.setComplete();//et la tous les attributs de session
-			System.out.println("utilisateur supprimé");
+			session.invalidate();
+			sessionStatus.setComplete();
+
 		}
 
 		return "redirect:/accueil";
@@ -379,7 +375,7 @@ public class UtilisateurController {
 
 	@ModelAttribute("membreEnSession")
 	public Utilisateur addUtilisateurEnSession() {
-		System.out.println("Add membre en session");
+
 		return new Utilisateur();
 	}
 

@@ -14,8 +14,7 @@ import org.springframework.stereotype.Repository;
 public class CategorieDAOImpl implements CategorieDAO {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    
-    
+
 
     public CategorieDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
@@ -24,7 +23,10 @@ public class CategorieDAOImpl implements CategorieDAO {
 	@Override
     public void creerCategorie(Categorie categorie) {
 
-        String creerCategorie = "INSERT INTO Categorie (id, libelle) VALUES (:id, :libelle)";
+        String creerCategorie = """
+        INSERT INTO Categorie (id, libelle)
+        VALUES (:id, :libelle)
+        """;
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("libelle", categorie.getLibelle());
@@ -35,10 +37,14 @@ public class CategorieDAOImpl implements CategorieDAO {
     }
 
     @Override
-    // modification d'une catégorie
+
     public void modifierCategorie(long idCategorie) {
 
-        String modifCategorie = "UPDATE Categorie SET libelle = :libelle WHERE id = :id";
+        String modifCategorie = """
+            UPDATE Categorie
+            SET libelle = :libelle
+            WHERE id = :id
+            """;
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("id", idCategorie);
@@ -48,10 +54,13 @@ public class CategorieDAOImpl implements CategorieDAO {
     }
 
     @Override
-    // consulter une catégorie par son id
     public Categorie consulterParId(long idCategorie) {
 
-        String trouverParId = "SELECT id, libelle FROM Categorie WHERE id = :id";
+        String trouverParId = """
+            SELECT id, libelle
+            FROM Categorie
+            WHERE id = :id
+            """;
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("id", idCategorie);
@@ -60,13 +69,15 @@ public class CategorieDAOImpl implements CategorieDAO {
     }
 
     @Override
-    // ajout d'une nouvelle catégorie
     public Categorie ajouterArticle(Article article) {
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("id", article.getId());
 
-        String integrerArticle = "INSERT INTO Categorie (id) VALUES (:id)";
+        String integrerArticle = """
+        INSERT INTO Categorie (id)
+        VALUES (:id)
+        """;
 
         return this.namedParameterJdbcTemplate.queryForObject(integrerArticle, parameterSource, new BeanPropertyRowMapper<>(Categorie.class));
     }
@@ -81,7 +92,6 @@ public class CategorieDAOImpl implements CategorieDAO {
 	}
 
     @Override
-    // suppression d'une catégorie
     public void supprimerCategorie(long idCategorie) {
 
         String supprCategorie = "DELETE Categorie  WHERE id = :id";

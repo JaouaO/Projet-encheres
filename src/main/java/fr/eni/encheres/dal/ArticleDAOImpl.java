@@ -101,7 +101,11 @@ public class ArticleDAOImpl implements ArticleDAO {
     }
 
     public boolean existeArticle(long idArticle) {
-        String sql = "SELECT COUNT(*) FROM Article WHERE id = :idArticle";
+        String sql = """
+            SELECT id
+            FROM Article
+            WHERE id = :idArticle
+            """;
         MapSqlParameterSource params = new MapSqlParameterSource("idArticle", idArticle);
         Integer count = namedParameterJdbcTemplate.queryForObject(sql, params, Integer.class);
         return count != null && count > 0;
@@ -239,12 +243,6 @@ public class ArticleDAOImpl implements ArticleDAO {
 		return namedParameterJdbcTemplate.query(sql, new ArticleRowMapper());   
 	}
 
-
-//    public List<Article> consulterParUtilisateurEtEncheresPerso(long idUtilisateur, ) {
-//
-//    }
-
-
     @Override
     public void mettreAJourArticle(Article article) {
             String sql = """
@@ -273,14 +271,14 @@ public class ArticleDAOImpl implements ArticleDAO {
         }
 
 
-
-
-
     @Override
     public boolean hasArticle(long idArticle) {
 
-
-			String compterArticle = "  SELECT COUNT(*) FROM Article WHERE id=:idArticle";
+			String compterArticle = """
+            SELECT COUNT(*)
+            FROM Article
+            WHERE id = :idArticle
+            """;
 			MapSqlParameterSource parameterSource = new MapSqlParameterSource();
 			parameterSource.addValue("idArticle", idArticle);
 			
@@ -291,7 +289,12 @@ public class ArticleDAOImpl implements ArticleDAO {
 	@Override
 	public boolean isArticleEtatOuvert(long idArticle) {
 		
-			String compterArticlesOuverts = "  SELECT COUNT(*) FROM Article WHERE  id=:idArticle AND etat_vente = 'en_cours' ";
+			String compterArticlesOuverts = """
+            SELECT COUNT(*)
+            FROM Article
+            WHERE id = :idArticle
+            AND etat_vente = 'en_cours'
+            """;
 			MapSqlParameterSource parameterSource = new MapSqlParameterSource();
 			parameterSource.addValue("idArticle", idArticle);
 			
@@ -299,8 +302,6 @@ public class ArticleDAOImpl implements ArticleDAO {
 			return nbArticlesOuverts !=0;
 	}
     
-
-
 
     class ArticleRowMapper implements RowMapper<Article> {
         @Override
@@ -331,8 +332,6 @@ public class ArticleDAOImpl implements ArticleDAO {
             return a;
         }
     }
-
-
 
 
 }

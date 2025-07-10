@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-//import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -111,6 +110,7 @@ public class EnchereController {
 		return "redirect:/portail-encheres";
 	}
 
+
 	@GetMapping("/ventes/details")
 	public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
 
@@ -161,6 +161,7 @@ public class EnchereController {
 
 		model.addAttribute("articles", articles);
 
+
 		List<Categorie> categories = this.enchereService.consulterToutCategorie();
 
 		model.addAttribute("categories", categories);
@@ -193,7 +194,9 @@ public class EnchereController {
 		return "achats-acquisition";
 	}
 
+
 	@PostMapping("/creer-nouvelle-vente")
+
 
 	public String getMethodName(@ModelAttribute Article article, Model model, HttpSession session) {
 
@@ -205,27 +208,14 @@ public class EnchereController {
 
 		article.setLieuRetrait(utilisateur.getRetrait(article));
 
-		enchereService.creerArticle(article); // voir pour le chemin de l'image...
+
+		enchereService.creerArticle(article);
 
 		model.addAttribute("article", article);
 		model.addAttribute("utilisateur", utilisateur);
 
 		return "redirect:/portail-encheres";
 	}
-
-// pour récupérer l'enchère avec les attributs du formulaire
-//	public static class EnchereFormulaire {
-//		private Long articleId;
-//		private int montantEnchere;
-//
-//
-//		public Long getArticleId() { return articleId; }
-//		public void setArticleId(Long articleId) { this.articleId = articleId; }
-//
-//
-//		public int getMontantEnchere() { return montantEnchere; }
-//		public void setMontantEnchere(int montantEnchere) { this.montantEnchere = montantEnchere; }
-//	}
 
 
 	@GetMapping("/enchere-non-commence")
@@ -258,29 +248,24 @@ public class EnchereController {
 
 		if (!enchereService.existeArticle(article.getId())) {
 			model.addAttribute("erreur", "L'article demandé n'existe pas.");
-			System.out.println("no article");
 			return "portail-encheres";
 		}
 
 		Article original = enchereService.consulterArticleParId(article.getId());
-		// vente pas encore commencée
+
 		if (!"non_debutee".equalsIgnoreCase(original.getEtatVente())) {
 			model.addAttribute("erreur", "La vente ne peut plus être modifiée.");
-			System.out.println("non modifiable");
 			return "portail-encheres";
 		}
 
-		// puis utilisateur connecté est bien le propriétaire de l'article
 		if (!enchereService.verifierProprietaireArticle(article.getId(), vendeur.getId())) {
 			model.addAttribute("erreur", "Vous n'êtes pas autorisé à modifier cette vente.");
-			System.out.println("pas proprio");
 			return "portail-encheres";
 		}
 
-		//fini par mise à jour article
 		article.setEtatVente("non_debutee");
 		article.setUtilisateur(vendeur);
-		// laisse l’image existante si aucune nouvelle n’est envoyée
+
 		if (!fichierImage.isEmpty()) {
 			article.setCheminImg(fichierImage.getOriginalFilename());
 		}
@@ -289,7 +274,6 @@ public class EnchereController {
 		model.addAttribute("article", article);
 		model.addAttribute("categories", enchereService.consulterToutCategorie());
 		model.addAttribute("message", "Vente modifiée avec succès.");
-		System.out.println("modif succes");
 		return "portail-encheres";
 	}
 
@@ -356,19 +340,10 @@ public class EnchereController {
 
 	}
 
-//doit request aussi l'ID de l'article
-//@PostMapping("/retire")
-//public String retire(Model model) {
-	// TODO checker que le vendeur ET l'acheteur l'ont marqué comme retiré
-	// return "redirect:/achats/details";// + idArticle;
-//}
 
-//
 
 }
-//doit request aussi l'ID de l'article
-//	@PostMapping("/retire")
-//	public String retire(Model model) {
-//		// TODO checker que le vendeur ET l'acheteur l'ont marqué comme retiré
-//		return "redirect:/achats/details";// + idArticle;
-//	}
+
+
+
+
