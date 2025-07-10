@@ -9,7 +9,8 @@
 
 <header th:replace="~{fragments/fragment-entete :: entete}"> </header>
 
-<form th:action="@{/enchere-non-commence/modifier}" method="post" th:object="${article}">
+<form th:action="@{/enchere-non-commence/modifier}" method="post" th:object="${article}" enctype="multipart/form-data">
+  <input type="hidden" th:field="*{id}" />
   <h2>Nouvelle Vente</h2>
 
   <ul class="flex-outer">
@@ -31,8 +32,11 @@
       <textarea id="taDescription" rows="3" th:field="*{description}"></textarea>
     </li>
 
-    <li>Photo de l'article</li>
-    <input type="file" name="" id="">
+    <li>
+      <label for="inputImage">Photo de l'article :</label>
+      <input type="file" id="inputImage" name="fichierImage" />
+      <img th:src="@{'/images/' + *{cheminImg} + '.jpg'}" alt="Photo de l'article" />
+    </li>
 
     <li>
       <label for="inputMiseAPrix">Prix initial :</label>
@@ -49,20 +53,41 @@
       <input type="datetime-local" id="inputdateFinEnchere" th:field="*{dateFinEnchere}">
     </li>
 
+    <div>
+      <h2>Adresse de retrait</h2>
+
+      <li>
+        <label for="inputRue">Rue :</label>
+        <input type="text" id="inputRue" th:field="*{lieuRetrait.rue}" />
+      </li>
+
+      <li>
+        <label for="inputCodePostal">Code postal :</label>
+        <input type="text" id="inputCodePostal" th:field="*{lieuRetrait.codePostal}" />
+      </li>
+
+      <li>
+        <label for="inputVille">Ville :</label>
+        <input type="text" id="inputVille" th:field="*{lieuRetrait.ville}" />
+      </li>
+    </div>
+
     <li>
       <button type="submit">Enregistrer</button>
     </li>
 
-      <a th:href="@{/accueil}">
-        <button type="button">Annuler</button>
-      </a>
+    <a th:href="@{/accueil}">
+      <button type="button">Annuler</button>
+    </a>
 
+    <a th:href="@{/annuler-vente(id=${article.id})}"
+       onclick="return confirm('Êtes-vous sûr de vouloir annuler cette vente ?');">
+      <button type="button">Annuler la vente</button>
+    </a>
 
-      <a th:href="@{/annuler-vente(id=${article.id})}"
-         onclick="return confirm('Êtes-vous sûr de vouloir annuler cette vente ?');">
-        <button type="button">Annuler la vente</button>
-      </a>
-
+    <div th:if="${erreur}">
+      <p th:text="${erreur}"></p>
+    </div>
 
   </ul>
 </form>

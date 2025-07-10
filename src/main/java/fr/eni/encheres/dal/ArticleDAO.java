@@ -35,7 +35,7 @@ public interface ArticleDAO {
     boolean hasArticle(long idArticle);
     
     boolean isArticleEtatOuvert(long idArticle);
-    
-    
+
+    boolean existeArticle(long idArticle);
 
 }

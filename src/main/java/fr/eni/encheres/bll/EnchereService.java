@@ -61,6 +61,10 @@ public interface EnchereService {
     
     boolean hasAutreEnchere(long idArticle);
 
+	boolean verifierProprietaireArticle(Long idArticle, Long idUtilisateur);
+
+	boolean existeArticle(long idArticle);
+
 
 
 }
