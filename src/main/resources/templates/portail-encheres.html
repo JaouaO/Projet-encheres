@@ -59,6 +59,7 @@
                     <p class="achats-unchecked"><i class="fa-regular fa-square"></i> mes enchères remportées</p>
                 </div>
 
+
                 <input class="radioVentes"
                        type="radio"
                        name="radio"
@@ -93,6 +94,7 @@
                     <p class="ventes-unchecked"><i class="fa-regular fa-square"></i> mes ventes en cours</p>
                     <p class="ventes-unchecked"><i class="fa-regular fa-square"></i> ventes non débutées</p>
                     <p class="ventes-unchecked"><i class="fa-regular fa-square"></i> ventes terminées</p>
+
                 </div>
 
                 <div th:class="recherche">
@@ -118,6 +120,7 @@
                 <button th:class="rechercher-btn" th:text="'Rechercher'"></button>
             </div>
         </div>
+
     </form>
     <div class="toutArticles">
     <div class="articles" th:class="articles" th:each="article : ${articlesAAfficher}">
@@ -134,5 +137,6 @@
         </div>
     </div>
 </main>
+
 </body>
 </html>
