@@ -6,12 +6,25 @@ body {
     color: #333;
 }
 
+
+main {
+    align-content: center;
+    width: 80%;
+}
+
+.navigation {
+    width: 200px;
+    display: flex;
+    justify-content: space-around;
+}
+
 a {
-    color: #1a73e8;
+    color: #245280;
     text-decoration: none;
-    font-size: smaller;
+    font-size: 15px;
 
 }
+
 a:hover {
     text-decoration: none;
 }
@@ -31,7 +44,14 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
- }
+
+}
+
+.header-icone {
+    width: 90px;
+    height: auto;
+    border-radius: 20px
+}
 
 
 .filtres {
@@ -45,6 +65,7 @@ header {
     display: flex;
     justify-content: space-evenly;
 }
+
 .filtres label {
     font-weight: bold;
     display: block;
@@ -69,54 +90,71 @@ header {
     font-weight: bold;
     cursor: pointer;
 
+
 }
 
 .rechercher-btn:hover {
-    background-color: white;
+
+    margin-bottom: 10px;
+    border-radius: 40px;
+ background-color: #5789BA;
+
 }
 
 .recherche {
     display: flex;
     flex-direction: column;
-    width: 90%;
+
+
     justify-content: center;
-    margin: 20px  ;
-    gap:15px
+    margin: 20px;
+    gap: 15px
 
 }
+
 .articles {
     display: flex;
     flex-direction: column;
-    margin-bottom: 20px;
+
 }
 
 
 .article {
     display: flex;
+
     border: 2px solid #000;
+
+    box-shadow: 5px 5px 7px 1px rgba(36, 82, 128, 0.78);
+
     padding: 10px;
     gap: 15px;
     align-items: flex-start;
     justify-content: space-between;
 
+    border-radius: 20px;
+
 }
+
 .article a {
-    color:black
+    color: black
 }
+
 .article img {
-    width:40%;
+    width: 40%;
     height: 110px;
     object-fit: cover;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
     align-items: center;
+    border-radius: 20px 0 0 20px;
+
 }
 
 .article-details {
     display: flex;
     flex-direction: column;
     gap: 5px;
+
     width:60%
+
 }
 
 .article-details h2 {
@@ -159,12 +197,103 @@ Partie pour les boutons radio portail-enchère
     display: none;
 }
 
-@media (min-width: 600px) {
+
+@media (min-width: 800px) {
+
+    body {
+        margin: 40px;
+
+    }
+
+    nav {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+
     .filtres {
         max-width: 400px;
+    }
+
+
+    .search {
+        width: -webkit-fill-available;
+        font-size: medium;
+        height: 20px;
+    }
+
+    .categories {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 0;
+        height: 26px;
+        align-items: center;
+        font-size: medium;
+    }
+
+    #idCategorie {
+        height: 25px;
+        font-size: medium;
+        width: -webkit-fill-available;
+        color: #333333;
+    }
+
+    .toutArticles {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+        margin-top: 15px;
+
     }
 
     .article {
         flex-direction: row;
     }
+
+    .recherche {
+        display: flex;
+        flex-direction: column-reverse;
+
+    }
+
+    .rechercher-btn {
+        width: 60%;
+        justify-content: center;
+        border: none;
+        padding: 15px;
+        font-size: large;
+        background-color: #245280;
+        /*#72A0C1*/
+        color: white;
+        margin: 0px;
+
+    }
+
+    .filtres-conteneur {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+
+    .bouton-conteneur {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+    }
+
+    .filtres-titre {
+        font-size: 20px;
+        font-weight: bolder;
+    }
+
+    .titreEnchere {
+        text-align: center;
+        font-size: 25px;
+    }
+
 }
+
