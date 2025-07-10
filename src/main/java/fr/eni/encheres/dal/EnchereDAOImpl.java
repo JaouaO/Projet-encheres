@@ -26,7 +26,10 @@ public class EnchereDAOImpl implements EnchereDAO {
 	@Override
 	public void ajouterEnchere(Enchere enchere) {
 
-		String creerEnchere = "INSERT INTO Enchere (date_enchere, montant_enchere, id_utilisateur, id_article) VALUES (:dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)";
+		String creerEnchere = """
+    		INSERT INTO Enchere (date_enchere, montant_enchere, id_utilisateur, id_article)
+    		VALUES (:dateEnchere, :montantEnchere, :idUtilisateur, :idArticle)
+    		""";
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
 
 		parameterSource.addValue("dateEnchere", enchere.getDateEnchere());
@@ -41,7 +44,11 @@ public class EnchereDAOImpl implements EnchereDAO {
 	@Override
 	public List<Enchere> consulterParUtilisateur(long idUtilisateur) {
 
-		String trouverParUtilisateur = "SELECT date_enchere, montant_enchere, id_utilisateur, id_article FROM Enchere WHERE id_utilisateur = :idUtilisateur";
+		String trouverParUtilisateur =  """
+    		SELECT date_enchere, montant_enchere, id_utilisateur, id_article
+    		FROM Enchere
+    		WHERE id_utilisateur = :idUtilisateur
+    		""";
 		
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("idUtilisateur", idUtilisateur);
@@ -52,7 +59,11 @@ public class EnchereDAOImpl implements EnchereDAO {
 	@Override
 	public List<Enchere> consulterParArticle(long idArticle) {
 
-		String trouverParArticle = "SELECT date_enchere, montant_enchere, id_utilisateur, id_article FROM Enchere WHERE id_article = :idArticle";
+		String trouverParArticle = """
+   		SELECT date_enchere, montant_enchere, id_utilisateur, id_article
+    	FROM Enchere
+    	WHERE id_article = :idArticle
+    	""";
 
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("idArticle", idArticle);
@@ -63,7 +74,10 @@ public class EnchereDAOImpl implements EnchereDAO {
 	@Override
 	public List<Enchere> consulterTout() {
 
-		String consulTout = "SELECT id, date_enchere, montant_enchere, id_utilisateur, id_article FROM Enchere";
+		String consulTout = """
+    	SELECT id, date_enchere, montant_enchere, id_utilisateur, id_article
+    	FROM Enchere
+    	""";
 
 		return this.namedParameterJdbcTemplate.query(consulTout,new EnchereRowMapper());
 	}
@@ -73,7 +87,11 @@ public class EnchereDAOImpl implements EnchereDAO {
 		LocalDateTime dateEnchere = enchere.getDateEnchere();
 		Long idUtilisateur = enchere.getUtilisateur().getId();
 
-		String supprEnchere = "DELETE FROM Enchere WHERE date_enchere = :dateEnchere AND id_utilisateur = :idUtilisateur";
+		String supprEnchere = """
+    	DELETE FROM Enchere
+    	WHERE date_enchere = :dateEnchere
+    	AND id_utilisateur = :idUtilisateur
+    	""";
 
 		MapSqlParameterSource paramSource = new MapSqlParameterSource();
 		paramSource.addValue("dateEnchere", dateEnchere);
@@ -104,8 +122,6 @@ public class EnchereDAOImpl implements EnchereDAO {
 
             Enchere e = new Enchere();
             e.setMontantEnchere(rs.getInt("montant_enchere"));
-
-
 //            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 //            LocalDateTime dt = LocalDateTime.parse(rs.getString("date_enchere"),formatter);
 //            e.setDateEnchere(dt);

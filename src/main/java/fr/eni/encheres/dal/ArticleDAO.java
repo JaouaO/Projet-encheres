@@ -34,8 +34,7 @@ public interface ArticleDAO {
 	List<Article> consulterParIdUtilisateurEtEtatVente(long idUtilisateur, String etatVente);
 	
 	List<Article> sqlQueryPersonnalisee(String sql);
-  
-    List<Article> consulterParCategorieEtNom(Long idCategorie, String recherche);
+
 
     void mettreAJourArticle(Article article);
 

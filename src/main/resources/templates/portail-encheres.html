@@ -107,7 +107,7 @@
 
         <div class="articles" th:class="articles" th:each="article : ${articlesAAfficher}">
             <div class="article">
-                <img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}" th:alt="'Photo de l'article'">
+                <img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}" th:alt="'Photo de l\'article'">
                 <div class="article-details">
                     <a th:href="@{/achats/details(id=${article.id})}"> <h2 th:text="${article.nom}"></h2></a>
                     <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>

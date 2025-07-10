@@ -85,7 +85,6 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			
 			namedParameterJdbcTemplate.update(modifUtilisateur, parameterSource);
 		}
-//ajouter message d'erreur en cas de Id non trouvé
 
 	}
 
@@ -166,7 +165,11 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
 	@Override
 	public Utilisateur consulterParPseudo(String pseudo) {
-		String SQL = "SELECT * FROM Utilisateur WHERE pseudo = :pseudo";
+		String SQL = """
+    SELECT id, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur
+    FROM Utilisateur
+    WHERE pseudo = :pseudo
+    """;
 		return namedParameterJdbcTemplate
 				.query(SQL, new MapSqlParameterSource("pseudo", pseudo), new UtilisateurRowMapper()).stream()
 				.findFirst().orElse(null);
@@ -174,7 +177,11 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
 	@Override
 	public Utilisateur consulterParEmail(String email) {
-		String SQL = "SELECT * FROM Utilisateur WHERE email = :email";
+		String SQL = """
+    	SELECT id, pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur
+    	FROM Utilisateur
+    	WHERE email = :email
+    	""";
 		return namedParameterJdbcTemplate
 				.query(SQL, new MapSqlParameterSource("email", email), new UtilisateurRowMapper()).stream().findFirst()
 				.orElse(null);
@@ -182,7 +189,11 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	
 	@Override
 	public boolean hasUtilisateur(long idUtilisateur) {
-		String compterUtilisateur = "  SELECT COUNT(*) FROM Utilisateur WHERE id=:idUtilisateur";
+		String compterUtilisateur = """
+    		SELECT COUNT(*)
+    		FROM Utilisateur
+   			WHERE id = :idUtilisateur
+    		""";
 		MapSqlParameterSource parameterSource = new MapSqlParameterSource();
 		parameterSource.addValue("idUtilisateur", idUtilisateur);
 		
@@ -192,7 +203,11 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 	
 	@Override
 	public int consulterCredit(long idUtilisateur) {
-		String compterUtilisateur = "  SELECT credit FROM Utilisateur WHERE id=:idUtilisateur";
+		String compterUtilisateur = """
+    		SELECT credit
+    		FROM Utilisateur
+    		WHERE id = :idUtilisateur
+    		""";
 		MapSqlParameterSource parameterSource = new MapSqlParameterSource();
 		parameterSource.addValue("idUtilisateur", idUtilisateur);
 		
@@ -220,7 +235,5 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 			return u;
 		}
 	}
-
-
 
 }
