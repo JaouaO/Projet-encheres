@@ -192,15 +192,23 @@ public class EnchereController {
 
 
 	@PostMapping("/creer-nouvelle-vente")
-	public String getMethodName(@ModelAttribute Article article, Model model) {
 
-		Utilisateur utilisateur = utilisateurService.consulterParId(1);
+
+	public String getMethodName(@ModelAttribute Article article, Model model, HttpSession session) {
+
+		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
+
 		article.setUtilisateur(utilisateur);
 
 		article.setEtatVente("NON_DEBUTEE");
-		article.setLieuRetrait(utilisateur.getRetrait());
+
+		article.setLieuRetrait(utilisateur.getRetrait(article));
+
 
 		enchereService.creerArticle(article);
+
+		model.addAttribute("article", article);
+		model.addAttribute("utilisateur", utilisateur);
 
 		return "redirect:/portail-encheres";
 	}

@@ -26,10 +26,7 @@ public interface ArticleDAO {
 
 	public List<Article> consulterParEtat(String etatVente, String etatVenteDeux);
 
-	List<Article> consulterParCategorieEtNom(Long idCategorie, String recherche);
-
 	List<Article> consulterParUtiisateurEtEnchereOuverte(long idUtilisateur);
-
 
 	List<Article> consulterParIdUtilisateurEtEtatVente(long idUtilisateur, String etatVente);
 	

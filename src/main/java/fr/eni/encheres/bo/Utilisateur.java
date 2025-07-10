@@ -151,8 +151,8 @@ public class Utilisateur implements Serializable{
 		this.encheres = encheres;
 	}
 	
-	public Retrait getRetrait() {
-		return new Retrait(rue, codePostal, ville, null);
+	public Retrait getRetrait(Article article) {
+		return new Retrait(rue, codePostal, ville, article);
 	}
 	public String afficherRetrait() {
 		StringBuilder builder = new StringBuilder();
