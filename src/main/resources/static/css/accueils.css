@@ -6,6 +6,7 @@ body {
     color: #333;
 }
 
+
 main {
     align-content: center;
     width: 80%;
@@ -43,6 +44,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
 }
 
 .header-icone {
@@ -50,6 +52,7 @@ header {
     height: auto;
     border-radius: 20px
 }
+
 
 .filtres {
     margin-bottom: 20px;
@@ -86,17 +89,22 @@ header {
     border: 2px solid black;
     font-weight: bold;
     cursor: pointer;
-    margin-bottom: 10px;
-    border-radius: 40px;
+
+
 }
 
 .rechercher-btn:hover {
-    background-color: #5789BA;
+
+    margin-bottom: 10px;
+    border-radius: 40px;
+ background-color: #5789BA;
+
 }
 
 .recherche {
     display: flex;
     flex-direction: column;
+
 
     justify-content: center;
     margin: 20px;
@@ -113,12 +121,16 @@ header {
 
 .article {
     display: flex;
+
+    border: 2px solid #000;
+
     box-shadow: 5px 5px 7px 1px rgba(36, 82, 128, 0.78);
-    /*box-shadow: 6px 6px 17px 2px #2B2B2B;*/
+
     padding: 10px;
     gap: 15px;
     align-items: flex-start;
     justify-content: space-between;
+
     border-radius: 20px;
 
 }
@@ -133,13 +145,16 @@ header {
     object-fit: cover;
     align-items: center;
     border-radius: 20px 0 0 20px;
+
 }
 
 .article-details {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    width: 60%
+
+    width:60%
+
 }
 
 .article-details h2 {
@@ -150,6 +165,36 @@ header {
 .article-details p {
     margin: 0;
     font-size: 12px;
+}
+
+
+/*
+Partie pour les boutons radio portail-enchère
+*/
+
+.radioAchat:checked ~ .achats-checked {
+  display: inline-block;
+}
+.radioAchat:checked ~ .ventes-checked {
+    display: none;
+}
+.radioAchat:checked ~ .ventes-unchecked {
+    display: inline-block;
+}
+.radioAchat:checked ~ .achats-unchecked {
+    display: none;
+}
+.radioVentes:checked ~ .ventes-checked {
+  display: inline-block;
+}
+.radioVentes:checked ~ .ventes-unchecked {
+    display: none;
+}
+.radioAchat:not(:checked) ~ .achats-unchecked {
+     display: inline-block;
+}
+.radioAchat:not(:checked) ~ .achats-checked {
+    display: none;
 }
 
 
@@ -167,9 +212,11 @@ header {
         align-items: center;
     }
 
+
     .filtres {
         max-width: 400px;
     }
+
 
     .search {
         width: -webkit-fill-available;
@@ -249,5 +296,4 @@ header {
     }
 
 }
-
 

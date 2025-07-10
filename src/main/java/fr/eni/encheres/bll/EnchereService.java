@@ -30,14 +30,30 @@ public interface EnchereService {
 	List<Article> consulterParCategorie(long idCategorie);
 
 	List<Article> consulterParEtat(String etat);
+  
+	List<Article> consulterParEtat(String etat, String etatDeux);
 
 	void ajouterEnchere(Enchere enchere) throws BusinessException;
 
-    Enchere recupererDerniereEnchere(long idArticle);
+
+  Enchere recupererDerniereEnchere(long idArticle);
 
 	List<Article> consulterParCategorieEtRecherche(Long idCategorie, String text);
 
 	Categorie consulterCategorieParId(long idCategorie);
+
+
+	List<Enchere> consulterToutesEncheres();
+
+	List<Enchere> consulterParIdArticle(long idArticle);
+
+	List<Article> consulterParIdUtilisateurEtEnchereOuverte(long idUtilisateur);
+
+	List<Article> consulterParIdUtilisateurEtEtatVente(long idUtilisateur, String etatVente);
+	
+	List<Article> consulterArticlesParQuerySQLPersonnalisee(String sql);
+	
+	boolean aEncheri(long idArticle, long idUtilisateur);
 
 	void mettreAJourArticle(Article article);
 
@@ -58,7 +74,5 @@ public interface EnchereService {
     boolean isEnchereOuverte(long idArticle, BusinessException be);
     
     boolean hasAutreEnchere(long idArticle);
-
-
 
 }
