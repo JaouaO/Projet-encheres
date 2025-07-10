@@ -1,57 +1,62 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Détail Achat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/pages-details.css}">
+    <title>Détail Achat</title>
 </head>
 <body th:object="${article}">
-	<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
+<header>
+    <a th:replace="~{fragments/fragment-entete :: entete}"></a>
+</header>
+<main>
+    <h2>Détail Vente</h2>
+    <h3 th:text="*{nom}"></h3>
+    <div class="main-conteneur">
+        <img th:src="@{'/images/' + *{cheminImg} + '.jpg'}"
+             alt="Photo de l\'article">
+        <div class="main-conteneur-right">
+            <div>
+                <p th:text="'Description : ' + *{description}"></p>
+                <p th:text="'Catégorie : ' + ${categorieArticle.libelle}"></p>
+                <p th:if="${derniereEnchere != null}"
+                   th:text="'Meilleure offre : ' + ${derniereEnchere.montantEnchere} + ' pts par ' + ${derniereEnchere.utilisateur.pseudo}">
+                </p>
+                <p th:if="${derniereEnchere == null}">Aucune enchère pour le
+                    moment.</p>
+                <p th:text="'Mise à prix : ' + *{miseAPrix} + ' points'"></p>
+                <p
+                        th:text="'Fin de l\'enchère : ' + *{#temporals.format(dateFinEnchere,'dd/MM/yyyy')}"></p>
+                <p th:text="'Retrait : ' + *{utilisateur.afficherRetrait()}"></p>
 
-	<h2>Détail Vente</h2>
-	<h3 th:text="*{nom}"></h3>
+                <a th:href="@{/profil(id=${article.getUtilisateur().getId()})}">
+                    <p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}"></p>
+                </a>
+            </div>
 
+            <form th:action="@{/encherir}" th:object="${enchere}" method="post">
+                <ul>
+                    <li th:each="e : ${errorMessages}" th:text="${e}"></li>
+                </ul>
+                <input type="hidden" th:name="article" th:field="*{article.id}"
 
-	<div>
-		<img th:src="@{'/images/' + *{cheminImg} + '.jpg'}"
-			alt="Photo de l\'article">
-		<p th:text="'Description : ' + *{description}"></p>
-		<p th:text="'Catégorie : ' + ${categorieArticle.libelle}"></p>
-		<p th:if="${derniereEnchere != null}"
-			th:text="'Meilleure offre : ' + ${derniereEnchere.montantEnchere} + ' pts par ' + ${derniereEnchere.utilisateur.pseudo}">
-		</p>
-		<p th:if="${derniereEnchere == null}">Aucune enchère pour le
-			moment.</p>
-		<p th:text="'Mise à prix : ' + *{miseAPrix} + ' points'"></p>
-		<p
-			th:text="'Fin de l\'enchère : ' + *{#temporals.format(dateFinEnchere,'dd/MM/yyyy')}"></p>
-		<p th:text="'Retrait : ' + *{utilisateur.afficherRetrait()}"></p>
+                       th:value="${article.id}"/>
+                <!--            <p th:if="${erreur}" th:text="${erreur}"></p>-->
+                <label for="montantEnchere">Ma proposition :</label> <input
+                    type="number" id="montantEnchere" name="montantEnchere" min="1"
+                    th:field="*{montantEnchere}"
+                    th:attr="min=${derniereEnchere != null} ? ${derniereEnchere.montantEnchere + 1} : 1"
+                    required/>
 
-		<a th:href="@{/profil(id=${article.getUtilisateur().getId()})}">
-			<p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}"></p>
-		</a>
-	</div>
+                <button type="submit">Enchérir</button>
+            </form>
 
-
-	<form th:action="@{/encherir}" th:object="${enchere}" method="post">
-			<ul>
-				<li th:each="e : ${errorMessages}" th:text="${e}"></li>
-			</ul>
-			<input type="hidden" th:name="article" th:field="*{article.id}"
-			
-			th:value="${article.id}" />
-		<!--            <p th:if="${erreur}" th:text="${erreur}"></p>-->
-		<label for="montantEnchere">Ma proposition :</label> <input
-			type="number" id="montantEnchere" name="montantEnchere" min="1"
-			th:field="*{montantEnchere}"
-			th:attr="min=${derniereEnchere != null} ? ${derniereEnchere.montantEnchere + 1} : 1"
-			required />
-
-		<button type="submit">Enchérir</button>
-	</form>
-
-
-	<a th:href="@{/accueil}"><button>Retour</button></a>
-
+            <a th:href="@{/accueil}">
+                <button>Retour</button>
+            </a>
+        </div>
+    </div>
+</main>
 </body>
 </html>

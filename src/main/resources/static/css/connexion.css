@@ -9,32 +9,10 @@ body {
 main {
     display: flex;
     flex-direction: column;
-
-    text-align: start;
-
-}
-
-form {
-    display: grid;
-    gap: 10px;
-}
-
-.cadre-photo {
-    border: 1px solid;
-    min-height: 150px;
-    min-width: 150px;
-    max-width: 225px;
-    max-height: 225px;
-    background-color: grey;
-    margin-bottom: 15px;
-}
-
-.cadre-retrait {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    border: 1px solid;
-    padding: 10px;
+    justify-content: center;
+    width:100%;
+    align-items: center;
+    gap: 15px;
 }
 
 .navigation {
@@ -78,8 +56,32 @@ header {
     height: auto;
     border-radius: 20px
 }
+form {
+    display: grid;
+    gap: 10px;
+    width: 100%;
+}
 
+.boutons-connexion {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+}
 
+.boutons-connexion button {
+    width: 100%;
+    height: 30%;
+    text-align: center;
+}
+
+.boutons-connexion-mdp {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
 @media (min-width: 800px) {
 
     body {
@@ -94,8 +96,10 @@ header {
     }
 
     main {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width:100%
     }
 
     .navigation {
@@ -112,5 +116,19 @@ header {
         align-items: center;
     }
 
+    form {
+        width: 350px;
+    }
+    p {
+        width: 100%;
+        text-align: end;
+    }
+    .boutons-connexion button {
+        width: 150px;
+    }
+
+    .boutons-connexion-mdp {
+          width: 150px;
+    }
 }
 

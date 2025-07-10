@@ -4,36 +4,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/profil.css}">
     <title>Profil</title>
 </head>
 
 <body>
-  	<header th:replace="~{fragments/fragment-entete :: entete}">
-	</header>
-	<!-- <span data-th-text="'[' + ${utilisateurEnSession.prenom} + ']'"></span></h2> -->
+<header>
+    <a th:replace="~{fragments/fragment-entete :: entete}"></a>
+</header>
+
+<main>
+
     <h2 th:text="*{utilisateur.pseudo}">(Nom du profil)</h2>
-    
-<div th:object="${utilisateur}" class="formulaire">
-    <label for="">Pseudo :</label> <input disabled th:value="*{pseudo}">
-    <label for="">Nom :</label> <input disabled th:value="*{nom}">
-    <label for="">Prénom :</label> <input disabled th:value="*{prenom}">
-    <label for="">Email :</label> <input disabled th:value="*{email}">
-    <label for="">Téléphone :</label> <input disabled th:value="*{telephone}">
-    <label for="">Rue :</label><input disabled th:value="*{rue}">
-    <label for="">Code Postal :</label> <input disabled th:value="*{codePostal}">
-    <label for="">Ville :</label> <input disabled th:value="*{ville}">
-    <label for="">Mot de passe :</label> <input disabled value="******">
-    <label for="">Crédit :</label> <input disabled th:value="*{credit}">
-</div>
 
-	<div th:if="${afficherModifier}">
-	   <a th:href="@{/profil/modifier}">Modifier</a>
-	</div>
-	<div th:if="${!afficherModifier}">
-    <a th:href="@{/accueil}">Accueil</a>	
+    <div th:object="${utilisateur}" class="formulaire">
+        <label for="">Pseudo :</label> <input disabled th:value="*{pseudo}">
+        <label for="">Nom :</label> <input disabled th:value="*{nom}">
+        <label for="">Prénom :</label> <input disabled th:value="*{prenom}">
+        <label for="">Email :</label> <input disabled th:value="*{email}">
+        <label for="">Téléphone :</label> <input disabled th:value="*{telephone}">
+        <label for="">Rue :</label><input disabled th:value="*{rue}">
+        <label for="">Code Postal :</label> <input disabled th:value="*{codePostal}">
+        <label for="">Ville :</label> <input disabled th:value="*{ville}">
+        <label for="">Mot de passe :</label> <input disabled value="******">
+        <label for="">Crédit :</label> <input disabled th:value="*{credit}">
     </div>
- 
 
+    <div th:if="${afficherModifier}">
+        <a th:href="@{/profil/modifier}">Modifier</a>
+    </div>
+    <div th:if="${!afficherModifier}">
+        <a th:href="@{/accueil}">Accueil</a>
+    </div>
+
+</main>
 
 
 </body>
