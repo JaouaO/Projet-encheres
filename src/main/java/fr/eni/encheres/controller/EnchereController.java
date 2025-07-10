@@ -1,4 +1,5 @@
 package fr.eni.encheres.controller;
+
 import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
@@ -24,90 +25,145 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.web.multipart.MultipartFile;
 
-
 @SessionAttributes("utilisateurEnSession")
-
 
 @Controller
 public class EnchereController {
 
-    private EnchereService enchereService;
-    private UtilisateurService utilisateurService;
+	private EnchereService enchereService;
+	private UtilisateurService utilisateurService;
 
-
-
-
-public EnchereController(EnchereService enchereService, UtilisateurService utilisateurService) {
+	public EnchereController(EnchereService enchereService, UtilisateurService utilisateurService) {
 		this.enchereService = enchereService;
 		this.utilisateurService = utilisateurService;
 	}
 
+	@GetMapping("/details")
+	public String AfficherDetails(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
 
+		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
+		if (utilisateurSession == null) {
+			return "redirect:/accueil";
+		}
+		if (idArticle > 0) {
 
-    @GetMapping("/achats/details")
-    public String afficherDetailsAchats(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
-    	
-    	
-    	Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
+			Article article = enchereService.consulterArticleParId(idArticle);
+			if (article != null) {
+				if (article.getUtilisateur().getId() == utilisateurSession.getId()) {
+					String etatArticleEnVente = article.getEtatVente();
+					switch (etatArticleEnVente) {
+					case "nonDebutee":
+						return "redirect:/portail-encheres";
 
-    	if(utilisateurSession==null) {
-    		return  "redirect:/accueil";
-    	}
-    	
-        if (idArticle > 0) {
-            Article article = enchereService.consulterArticleParId(idArticle);
-            if (article != null) {
-                model.addAttribute("article", article);
-                
-                Categorie categorieArticle = enchereService.consulterCategorieParId(article.getCategorie().getId());
-                model.addAttribute("categorieArticle", categorieArticle);
+					case "enCours", "terminee", "livree":
+						return "/ventes/details?id=" + idArticle;
 
-                Enchere derniereEnchere = enchereService.recupererDerniereEnchere(idArticle);
+					default:
+						return "redirect:/portail-encheres";
+					}
+				} else {
+					String etatArticleEnVente = article.getEtatVente();
+					switch (etatArticleEnVente) {
+					case "enCours":
+						return "/achats/details?id=" + idArticle;
+					case "terminee", "livree":
+						return "/achats/acquisition" + idArticle;
+					default:
+						return "redirect:/portail-encheres";
+						
+					}
+				}
+			}
 
-                model.addAttribute("derniereEnchere", derniereEnchere);
-                Enchere enchere = new Enchere();
-                enchere.setArticle(article);
-                
-                model.addAttribute("enchere",enchere);
-                return "achats-details";
-            }
-        }
-        return "redirect:/portail-encheres";
-    }
+		}
 
-
-@GetMapping("/ventes/details")
-public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
-
-	Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
-
-	if(utilisateurSession==null) {
-		return  "redirect:/accueil";
+		return "redirect:/portail-encheres";
 	}
 
-    return "ventes-details";
-}
+	@GetMapping("/achats/details")
+	public String afficherDetailsAchats(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
 
-@GetMapping("/vente")
-public String afficherVente( Model model) {
-	model.addAttribute("categories", this.enchereService.consulterToutCategorie());
-	Article article = new Article();
-	model.addAttribute("article", article);
+		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
 
-    return "creer-nouvelle-vente";
-}
+		if (utilisateurSession == null) {
+			return "redirect:/accueil";
+		}
 
-    @GetMapping({ "/rechercher" })
-    public String rechercherEtat (Model model) {
+		if (idArticle > 0) {
+			Article article = enchereService.consulterArticleParId(idArticle);
+			if (article != null) {
+				model.addAttribute("article", article);
 
-        List<Article> articles = enchereService.consulterParEtat("enchere_ouverte");
+				Categorie categorieArticle = enchereService.consulterCategorieParId(article.getCategorie().getId());
+				model.addAttribute("categorieArticle", categorieArticle);
 
-        model.addAttribute("articles", articles);
-        List<Categorie> categories = this.enchereService.consulterToutCategorie();
-        model.addAttribute("categories", categories);
+				Enchere derniereEnchere = enchereService.recupererDerniereEnchere(idArticle);
 
-        return "portail-encheres";
-    }
+				model.addAttribute("derniereEnchere", derniereEnchere);
+				Enchere enchere = new Enchere();
+				enchere.setArticle(article);
+
+				model.addAttribute("enchere", enchere);
+				return "achats-details";
+			}
+		}
+		return "redirect:/portail-encheres";
+	}
+
+
+	@GetMapping("/ventes/details")
+	public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
+
+		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
+
+		if (utilisateurSession == null) {
+			return "redirect:/accueil";
+		}
+
+		if (idArticle > 0) {
+			Article article = enchereService.consulterArticleParId(idArticle);
+			if (article != null) {
+				model.addAttribute("article", article);
+				Enchere derniereEnchere = enchereService.recupererDerniereEnchere(idArticle);
+				Categorie categorieArticle = enchereService.consulterCategorieParId(article.getCategorie().getId());
+				model.addAttribute("categorieArticle", categorieArticle);
+				model.addAttribute("derniereEnchere", derniereEnchere);
+
+				if (article.getEtatVente().equals("terminee") || article.getEtatVente().equals("livree")) {
+					Utilisateur acquereur = derniereEnchere.getUtilisateur();
+					model.addAttribute("acquereur", acquereur);
+					model.addAttribute("finis", true);
+				}
+				return "ventes-details";
+			}
+		}
+
+		return "redirect:/accueil";
+	}
+
+	@GetMapping("/vente")
+	public String afficherVente(Model model) {
+		model.addAttribute("categories", this.enchereService.consulterToutCategorie());
+		Article article = new Article();
+		model.addAttribute("article", article);
+
+		return "creer-nouvelle-vente";
+	}
+
+	@GetMapping({ "/rechercher" })
+	public String rechercherEtat(Model model) {
+
+		List<Article> articles = enchereService.consulterParEtat("enchere_ouverte");
+
+		model.addAttribute("articles", articles);
+
+
+		List<Categorie> categories = this.enchereService.consulterToutCategorie();
+
+		model.addAttribute("categories", categories);
+
+		return "portail-encheres";
+	}
 
 	@GetMapping("/achats/acquisition")
 	public String afficherAcquisition(@RequestParam("id") Long idArticle, HttpSession session, Model model) {
@@ -126,7 +182,6 @@ public String afficherVente( Model model) {
 			Utilisateur vendeur = utilisateurService.consulterParId(article.getUtilisateur().getId());
 			article.setUtilisateur(vendeur);
 		}
-
 
 		model.addAttribute("article", article);
 		model.addAttribute("derniereEnchere", enchereService.recupererDerniereEnchere(idArticle));
@@ -176,6 +231,7 @@ public String afficherVente( Model model) {
 		if (vendeur == null) {
 			model.addAttribute("erreur", "Vous devez être connecté pour modifier une vente.");
 			return "connexion";
+
 		}
 
 		if (!enchereService.existeArticle(article.getId())) {
@@ -238,7 +294,8 @@ public String afficherVente( Model model) {
 	}
 
 	@PostMapping("/encherir")
-	public String encherir(@Valid @ModelAttribute Enchere nouvelleEnchere, BindingResult bindingResult, Model model, HttpSession session) {
+	public String encherir(@Valid @ModelAttribute Enchere nouvelleEnchere, BindingResult bindingResult, Model model,
+			HttpSession session) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
 		nouvelleEnchere.setUtilisateur(utilisateur);
 		nouvelleEnchere.setDateEnchere(LocalDateTime.now());
@@ -252,25 +309,29 @@ public String afficherVente( Model model) {
 //				ObjectError error = new ObjectError("", m);
 //			bindingResult.addError(error);
 //	});
+
 			model.addAttribute("article", nouvelleEnchere.getArticle());
-            
-            Categorie categorieArticle = enchereService.consulterCategorieParId(nouvelleEnchere.getArticle().getCategorie().getId());
-            model.addAttribute("categorieArticle", categorieArticle);
 
-            Enchere derniereEnchere = enchereService.recupererDerniereEnchere(nouvelleEnchere.getArticle().getId());
+			Categorie categorieArticle = enchereService
+					.consulterCategorieParId(nouvelleEnchere.getArticle().getCategorie().getId());
+			model.addAttribute("categorieArticle", categorieArticle);
 
-            model.addAttribute("derniereEnchere", derniereEnchere);
-            Enchere enchere = new Enchere();
-            enchere.setArticle(nouvelleEnchere.getArticle());
-            
-            model.addAttribute("enchere",enchere);
-            return "achats-details";
+			Enchere derniereEnchere = enchereService.recupererDerniereEnchere(nouvelleEnchere.getArticle().getId());
+
+			model.addAttribute("derniereEnchere", derniereEnchere);
+			Enchere enchere = new Enchere();
+			enchere.setArticle(nouvelleEnchere.getArticle());
+
+			model.addAttribute("enchere", enchere);
+			return "achats-details";
 		}
 
 	}
 
 
+
 }
+
 
 
 
