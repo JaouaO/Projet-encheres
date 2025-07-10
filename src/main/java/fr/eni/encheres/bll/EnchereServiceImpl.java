@@ -3,6 +3,8 @@ package fr.eni.encheres.bll;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
@@ -304,5 +306,14 @@ public class EnchereServiceImpl implements EnchereService {
 		articleDAO.mettreAJourArticle(article);
 	}
 
+	public boolean verifierProprietaireArticle(Long idArticle, Long idUtilisateur) {
+		Article article = consulterArticleParId(idArticle);
+		return article != null && Objects.equals(article.getUtilisateur().getId(), idUtilisateur);
+	}
+
+	@Override
+	public boolean existeArticle(long idArticle) {
+		return articleDAO.existeArticle(idArticle);
+	}
 
 }

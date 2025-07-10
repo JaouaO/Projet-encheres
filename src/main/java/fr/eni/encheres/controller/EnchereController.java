@@ -23,6 +23,7 @@ import fr.eni.encheres.bo.Utilisateur;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @SessionAttributes("utilisateurEnSession")
@@ -173,49 +174,96 @@ public String afficherVente( Model model) {
 //	}
 
 
-
-	@GetMapping("/vente/modifier")
-	public String afficherFormulaireModification(@RequestParam("id") Long idArticle, HttpSession session, Model model) {
+	@GetMapping("/enchere-non-commence")
+	public String afficherVenteNonCommencee(@RequestParam("id") Long idArticle,
+											HttpSession session,
+											Model model) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
 		if (utilisateur == null) {
-			return "redirect:/connexion";
+			model.addAttribute("erreur", "Vous devez être connecté pour accéder à cette page.");
+			return "connexion";
+		}
+		Article article = enchereService.consulterArticleParId(idArticle);
+		model.addAttribute("article", article);
+		model.addAttribute("categories", enchereService.consulterToutCategorie());
+		return "enchere-non-commence";
+	}
+
+
+	@PostMapping("/enchere-non-commence/modifier")
+	public String modifierVenteNonCommencee(@ModelAttribute Article article,
+											@RequestParam("fichierImage") MultipartFile fichierImage,
+											HttpSession session,
+											Model model) {
+		Utilisateur vendeur = (Utilisateur) session.getAttribute("utilisateurSession");
+		if (vendeur == null) {
+			model.addAttribute("erreur", "Vous devez être connecté pour modifier une vente.");
+			return "connexion";
 		}
 
+		if (!enchereService.existeArticle(article.getId())) {
+			model.addAttribute("erreur", "L'article demandé n'existe pas.");
+			System.out.println("no article");
+			return "portail-encheres";
+		}
+
+		Article original = enchereService.consulterArticleParId(article.getId());
+		// vente pas encore commencée
+		if (!"non_debutee".equalsIgnoreCase(original.getEtatVente())) {
+			model.addAttribute("erreur", "La vente ne peut plus être modifiée.");
+			System.out.println("non modifiable");
+			return "portail-encheres";
+		}
+
+		// puis utilisateur connecté est bien le propriétaire de l'article
+		if (!enchereService.verifierProprietaireArticle(article.getId(), vendeur.getId())) {
+			model.addAttribute("erreur", "Vous n'êtes pas autorisé à modifier cette vente.");
+			System.out.println("pas proprio");
+			return "portail-encheres";
+		}
+
+		//fini par mise à jour article
+		article.setEtatVente("non_debutee");
+		article.setUtilisateur(vendeur);
+		// laisse l’image existante si aucune nouvelle n’est envoyée
+		if (!fichierImage.isEmpty()) {
+			article.setCheminImg(fichierImage.getOriginalFilename());
+		}
+		enchereService.mettreAJourArticle(article);
+
+		model.addAttribute("article", article);
+		model.addAttribute("categories", enchereService.consulterToutCategorie());
+		model.addAttribute("message", "Vente modifiée avec succès.");
+		System.out.println("modif succes");
+		return "portail-encheres";
+	}
+
+
+	@GetMapping("/annuler-vente")
+	public String annulerVente(@RequestParam("id") Long idArticle, HttpSession session, Model model) {
+		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
+
+		if (utilisateur == null) {
+			model.addAttribute("erreur", "Vous devez être connecté pour accéder à cette action.");
+			return "connexion";
+		}
 		Article article = enchereService.consulterArticleParId(idArticle);
-		if (article == null || article.getUtilisateur() == null || !Objects.equals(article.getUtilisateur().getId(), utilisateur.getId())) {
+
+
+		if (article == null || !Objects.equals(article.getUtilisateur().getId(), utilisateur.getId())) {
+			model.addAttribute("erreur", "Vous n'avez pas le droit d'annuler cette vente.");
 			return "redirect:/portail-encheres";
 		}
 
 		if (!"non_debutee".equalsIgnoreCase(article.getEtatVente())) {
-			model.addAttribute("erreur", "Vous ne pouvez modifier que les ventes non débutées.");
-			return "redirect:/ventes/details?id=" + idArticle;
-		}
-
-		model.addAttribute("article", article);
-		model.addAttribute("categories", enchereService.consulterToutCategorie());
-		return "modifier-vente";
-	}
-
-
-	@PostMapping("/vente/modifier")
-	public String modifierVente(@ModelAttribute Article article, HttpSession session) {
-		Utilisateur vendeur = (Utilisateur) session.getAttribute("utilisateurSession");
-		Article original = enchereService.consulterArticleParId(article.getId());
-
-		//!article existe+!articleappartient à utilisateur connecté(vendeur)
-		if (original == null || original.getUtilisateur() == null || !Objects.equals(original.getUtilisateur().getId(), vendeur.getId())) {
+			model.addAttribute("erreur", "Impossible d'annuler une vente déjà commencée.");
 			return "redirect:/portail-encheres";
 		}
 
-		if (!"NON_DEBUTEE".equalsIgnoreCase(original.getEtatVente())) {
-			return "redirect:/ventes/details?id=" + article.getId();
-		}
+		enchereService.annulerVente(article.getId());
 
-		article.setEtatVente("NON_DEBUTEE");
-		article.setUtilisateur(vendeur);
-		enchereService.mettreAJourArticle(article);
-
-		return "redirect:/ventes/details?id=" + article.getId();
+		model.addAttribute("message", "Vente annulée avec succès.");
+		return "redirect:/accueil";
 	}
 
 	@PostMapping("/encherir")

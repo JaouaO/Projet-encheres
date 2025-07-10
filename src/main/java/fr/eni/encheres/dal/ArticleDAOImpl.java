@@ -65,7 +65,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     @Override
     public void annulerVente(long idArticle) {
-        if (idArticle == 0) {
+        if (idArticle > 0) {
             String supprArticle = """
                 DELETE Article
                 WHERE id = :idArticle
@@ -98,6 +98,13 @@ public class ArticleDAOImpl implements ArticleDAO {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("idArticle", idArticle);
         return namedParameterJdbcTemplate.queryForObject(trouverParId, parameterSource, new ArticleRowMapper());
+    }
+
+    public boolean existeArticle(long idArticle) {
+        String sql = "SELECT COUNT(*) FROM Article WHERE id = :idArticle";
+        MapSqlParameterSource params = new MapSqlParameterSource("idArticle", idArticle);
+        Integer count = namedParameterJdbcTemplate.queryForObject(sql, params, Integer.class);
+        return count != null && count > 0;
     }
 
     @Override
@@ -265,8 +272,13 @@ public class ArticleDAOImpl implements ArticleDAO {
             namedParameterJdbcTemplate.update(sql, params);
         }
 
+
+
+
+
     @Override
     public boolean hasArticle(long idArticle) {
+
 
 			String compterArticle = "  SELECT COUNT(*) FROM Article WHERE id=:idArticle";
 			MapSqlParameterSource parameterSource = new MapSqlParameterSource();
