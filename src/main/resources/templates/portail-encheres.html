@@ -59,8 +59,6 @@
                     <p class="achats-unchecked"><i class="fa-regular fa-square"></i> mes enchères remportées</p>
                 </div>
 
-
-
                 <input class="radioVentes"
                        type="radio"
                        name="radio"
@@ -87,9 +85,9 @@
                            th:name="'checkbox'"
                            id="ventesTerminees"
                            th:value="'ventesTerminees'">
-                    <!--               th:attr="radio=achats? disabled : checked">-->
 
                     <label for="ventesTerminees" th:text="'ventes terminées'"></label>
+                  
                 </div>
                 <div class="ventes-unchecked">
                     <p class="ventes-unchecked"><i class="fa-regular fa-square"></i> mes ventes en cours</p>
@@ -129,7 +127,7 @@
         <div class="article">
             <img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}" th:alt="'Photo de l\'article'">
             <div class="article-details">
-                <a th:href="@{/achats/details(id=${article.id})}"><h2 th:text="${article.nom}"></h2></a>
+                <a th:href="@{/details(id=${article.id})}"><h2 th:text="${article.nom}"></h2></a>
                 <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
                 <p th:text="'Fin de l enchère : ' + ${#temporals.format(article.dateFinEnchere,'dd/MM/yyyy')}"></p>
                 <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}"></p>

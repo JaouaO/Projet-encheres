@@ -62,6 +62,7 @@ public interface ArticleDAO {
 	 */
 	public List<Article> consulterParEtat(String etatVente, String etatVenteDeux);
 
+
 	/**reetourne la liste des articles qui ont la catégorie renseignée et qui contiennent
 	 * dans leur nom le mot renseigné
 	 * @param idCategorie
@@ -110,6 +111,9 @@ public interface ArticleDAO {
     boolean isArticleEtatOuvert(long idArticle);
 
 
+	void mettreAJourArticle(Article article);
+
+
 	/**je crois que c'est un doublon non utilisé
      * @param idArticle
      * @return
@@ -117,7 +121,8 @@ public interface ArticleDAO {
     boolean existeArticle(long idArticle);
 
 
+	boolean isArticleEtatOuvert(long idArticle);
 
-    
+
 
 }

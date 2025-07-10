@@ -59,13 +59,14 @@ public class EnchereController {
 			Article article = enchereService.consulterArticleParId(idArticle);
 			if (article != null) {
 				if (article.getUtilisateur().getId() == utilisateurSession.getId()) {
-					String etatArticleEnVente = article.getEtatVente();
+					String etatArticleEnVente = article.getEtatVente().toLowerCase();
+					System.out.println(article);
 					switch (etatArticleEnVente) {
-					case "nonDebutee":
-						return "redirect:/portail-encheres";
+					case "nondebutee","non_debutee":
+						return "redirect:/enchere-non-commence?id=" + idArticle;
 
-					case "enCours", "terminee", "livree":
-						return "/ventes/details?id=" + idArticle;
+					case  "encours","en_cours", "terminee", "livree":
+						return "redirect:/ventes/details?id=" + idArticle;
 
 					default:
 						return "redirect:/portail-encheres";
@@ -73,10 +74,10 @@ public class EnchereController {
 				} else {
 					String etatArticleEnVente = article.getEtatVente();
 					switch (etatArticleEnVente) {
-					case "enCours":
-						return "/achats/details?id=" + idArticle;
+					case  "encours", "en_cours":
+						return "redirect:/achats/details?id=" + idArticle;
 					case "terminee", "livree":
-						return "/achats/acquisition" + idArticle;
+						return "redirect:/achats/acquisition?id=" + idArticle;
 					default:
 						return "redirect:/portail-encheres";
 
