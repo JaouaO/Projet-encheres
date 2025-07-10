@@ -3,44 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détail PC Gamer</title>
+    <link rel="stylesheet" th:href="@{/css/pages-details.css}">
+    <title>Détail acquisition</title>
 </head>
 <body>
-       	<header th:replace="~{fragments/fragment-entete :: entete}">
-	</header>
-	
-            <h2>Vous avez remporté l'enchère</h2>
-        <h3 th:text="${article.nom}">Nom de l'article</h3>
+<header>
+    <a th:replace="~{fragments/fragment-entete :: entete}"></a>
+</header>
+<main>
+    <h2>Vous avez remporté l'enchère</h2>
+    <h3 th:text="${article.nom}">Nom de l'article</h3>
 
-        <div id="bloc-description">
-        <p>Description : <span th:text="${article.description}">Description</span></p>
-        </div>
+    <div class="main-conteneur">
+    <img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}"
+         alt="Image de l'article"/>
+        <div class="main-conteneur-right">
+    <p>Description : <span th:text="${article.description}">Description</span></p>
 
-        <div>
-            <img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}"
-                 alt="Image de l'article" />
-        </div>
+    <p>Meilleure offre :
+        <span th:text="${article.prixVente}">0</span> crédits
 
-
-        <p>Meilleure offre :
-            <span th:text="${article.prixVente}">0</span> crédits
-
-        </p>
-        <p>Mise à prix :<span th:text="${article.miseAPrix}">0</span> crédits</p>
+    </p>
+    <p>Mise à prix :<span th:text="${article.miseAPrix}">0</span> crédits</p>
 
 
-
-        <p>Retrait : <span th:if="${article.lieuRetrait == null}"
-                           th:text="${article.utilisateur.rue + ' '
+    <p>Retrait : <span th:if="${article.lieuRetrait == null}"
+                       th:text="${article.utilisateur.rue + ' '
                            + article.utilisateur.codePostal + ' '
                            + article.utilisateur.ville}">Retrait : </span></p>
 
-        <p>Vendeur : <span th:text="${article.utilisateur.pseudo}">Nom du vendeur</span></p>
-        <p>Téléphone : <span th:text="${article.utilisateur.telephone}">Téléphone</span></p>
+    <p>Vendeur : <span th:text="${article.utilisateur.pseudo}">Nom du vendeur</span></p>
+    <p>Téléphone : <span th:text="${article.utilisateur.telephone}">Téléphone</span></p>
 
 
-
-        <a th:href="@{/portail-encheres}"><button>BACK</button></a>
-
+    <a th:href="@{/portail-encheres}">
+        <button>BACK</button>
+    </a>
+        </div>
+    </div>
 </body>
 </html>

@@ -2,42 +2,41 @@
 <html lang="fr">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Se connecter</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/connexion.css}">
+    <title>Se connecter</title>
 
 </head>
 
 <body>
-	<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
+<header>
+    <a th:replace="~{fragments/fragment-entete :: entete}"></a>
+</header>
+<main>
+    <form th:action="@{/connexion}" method="post">
+        <p>
+            Identifiant : <input type="text" name="pseudo" required>
+        </p>
+        <p>
+            Mot de passe : <input type="password" name="motDePasse" required>
+        </p>
+        <div class="boutons-connexion">
+            <button type="submit">Connexion</button>
+            <div class="boutons-connexion-mdp">
+                <input type="checkbox" th:text="'Se souvenir de moi'">
+                <a href="">Mot de passe oublié</a>
+            </div>
+        </div>
+    </form>
 
-	<!-- <form th:object="${Utilisateur} action="/connexion" method="post"> -->
-	<form th:action="@{/connexion}" method="post">
+    <div th:if="${erreur}" class="erreur">
+        <p th:text="${erreur}"></p>
+    </div>
 
 
-		<p>
-			Identifiant : <input type="text" name="pseudo" required>
-		</p>
-		<p>
-			Mot de passe : <input type="password" name="motDePasse" required>
-		</p>
-
-		<button type="submit">Connexion</button>
-		<input type="checkbox">Se souvenir de moi <a href="">Mot
-			de passe oublié</a>
-	</form>
-
-	<div th:if="${erreur}" class="erreur">
-		<p th:text="${erreur}"></p>
-	</div>
-
-
-
-
-
-	<a th:href="@{/inscription}">Créer un compte</a>
-
+    <a th:href="@{/inscription}">Créer un compte</a>
+</main>
 </body>
-
 
 </html>

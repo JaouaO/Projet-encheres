@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
-
 import org.springframework.web.bind.support.SessionStatus;
 
 import jakarta.servlet.http.HttpSession;
@@ -35,34 +34,41 @@ public class UtilisateurController {
 
 	}
 
+	/**
+	 * Affiche la page d'accueil html et tous les articles dont l'état est en_cours
+	 * 
+	 * @param idCategorie
+	 * @param text
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@GetMapping({ "/", "/accueil" })
 	public String afficherAccueil(
 			@RequestParam(name = "idCategorie", required = false, defaultValue = "0") Long idCategorie,
-			@RequestParam(name = "text", required = false, defaultValue = "") String text, HttpSession session, Model model) {
+			@RequestParam(name = "text", required = false, defaultValue = "") String text, HttpSession session,
+			Model model) {
 
-		
 		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
 
-		if(utilisateurSession!=null) {
-			return  "redirect:/portail-encheres";
+		if (utilisateurSession != null) {
+			return "redirect:/portail-encheres";
 		}
-		
+
 		List<Article> articles;
 
 		if (idCategorie != 0 && !text.isBlank()) {
 			articles = enchereService.consulterParCategorieEtRecherche(idCategorie, text);
 		} else if (!text.isBlank()) {
 			articles = enchereService.consulterParRecherche(text);
-			System.out.println("je consulte uniquement par recherche");
 		} else if (idCategorie != 0) {
 			articles = enchereService.consulterParCategorie(idCategorie);
 		} else {
 			articles = enchereService.consulterToutArticle();
-			System.out.println("je consulte tout");
+
 		}
 
 		model.addAttribute("articles", articles);
-
 		model.addAttribute("categories", enchereService.consulterToutCategorie());
 		model.addAttribute("idCategorie", idCategorie);
 		model.addAttribute("text", text);
@@ -70,11 +76,28 @@ public class UtilisateurController {
 		return "index";
 	}
 
+	/**
+	 * affiche la page de connexion
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/connexion")
 	public String afficherConnexion(Model model) {
 		return "connexion";
 	}
 
+	/**
+	 * Connecte l'utilisateur si le pseudo et le mot de passe correspondent à un
+	 * utilisateur en BDD et l'envoie à la page portail enchère, renvoie à la page
+	 * de connexion sinon.
+	 * 
+	 * @param pseudo
+	 * @param motDePasse
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@PostMapping("/connexion")
 	public String connecterUtilisateur(@RequestParam("pseudo") String pseudo,
 
@@ -91,6 +114,20 @@ public class UtilisateurController {
 		}
 	}
 
+	/**
+	 * 
+	 * à partir de la recherche renseignée et des filtres cochés par l'utilisateur,
+	 * renvoie une page avec les articles correspondants, c'est aussi la page qui
+	 * permet de faire ses recherches
+	 * 
+	 * @param session
+	 * @param radio
+	 * @param checkbox
+	 * @param idCategorie
+	 * @param text
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/portail-encheres")
 	public String afficherPortail(HttpSession session,
 			@RequestParam(name = "radio", required = false, defaultValue = "achats") String radio,
@@ -105,8 +142,6 @@ public class UtilisateurController {
 
 		long idUtilisateurSession = utilisateur.getId();
 
-		System.out.println(checkbox);
-
 		String sqlQuery = """
 				SELECT a.id, a.nom, a.description, a.date_debut, a.date_fin,
 				             a.mise_a_prix, a.prix_vente, a.etat_vente, a.id_vendeur,
@@ -116,7 +151,6 @@ public class UtilisateurController {
 					INNER JOIN utilisateur u ON a.id_vendeur = u.id
 					WHERE a.id_vendeur
 					""";
-
 
 		String sqlQueryRemportees = """
 				SELECT a.id, a.nom, a.description, a.date_debut, a.date_fin,
@@ -272,6 +306,15 @@ public class UtilisateurController {
 
 	}
 
+	/**
+	 * Affiche la page html du profil de l'utilisateur dont l'id est renseigné,
+	 * possibilité de modifier ce profil si c'est l'utilisateur en session
+	 * 
+	 * @param IdUtilisateur
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/profil")
 	public String afficherProfil(@RequestParam(name = "id", required = false, defaultValue = "-1") Long IdUtilisateur,
 			HttpSession session, Model model) {
@@ -290,6 +333,12 @@ public class UtilisateurController {
 		return "profil";
 	}
 
+	/**
+	 * affiche la page html permettant de créer un compte utilisateur en BDD
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/inscription")
 	public String afficherCreerCompte(Model model) {
 		Utilisateur utilisateur = new Utilisateur();
@@ -298,6 +347,14 @@ public class UtilisateurController {
 		return "creer-compte";
 	}
 
+	/**
+	 * crée un utilisateur en BDD et le connecte si les informations sont valides,
+	 * sinon, renvoie une erreur et reste sur la page iscription
+	 * 
+	 * @param utilisateur
+	 * @param model
+	 * @return
+	 */
 	@PostMapping("/inscription")
 	public String creerCompte(@ModelAttribute("utilisateur") Utilisateur utilisateur, Model model) {
 		try {
@@ -309,6 +366,13 @@ public class UtilisateurController {
 		}
 	}
 
+	/**
+	 * affiche une page html permettant de modifier son profil utilisateur en BDD
+	 * 
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/profil/modifier")
 	public String afficherModifierProfil(Model model, HttpSession session) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
@@ -316,13 +380,21 @@ public class UtilisateurController {
 		return "modifier-profil";
 	}
 
+	/**
+	 * met à jour l'utilisateur en BDD à partir des infos renseignées sur la page
+	 * html
+	 * 
+	 * @param utilisateurModifie
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@PostMapping("/profil/modifier")
 	public String modifierProfil(@ModelAttribute("utilisateur") Utilisateur utilisateurModifie, HttpSession session,
 			Model model) {
-    
+
 		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
 
-		// Mise à jour des champs sur l'objet existant
 		utilisateurSession.setPseudo(utilisateurModifie.getPseudo());
 		utilisateurSession.setNom(utilisateurModifie.getNom());
 		utilisateurSession.setPrenom(utilisateurModifie.getPrenom());
@@ -331,7 +403,7 @@ public class UtilisateurController {
 		utilisateurSession.setRue(utilisateurModifie.getRue());
 		utilisateurSession.setCodePostal(utilisateurModifie.getCodePostal());
 		utilisateurSession.setVille(utilisateurModifie.getVille());
-		utilisateurSession.setMotDePasse(utilisateurModifie.getMotDePasse()); // mot de passe mis à jour
+		utilisateurSession.setMotDePasse(utilisateurModifie.getMotDePasse());
 
 		try {
 
@@ -348,23 +420,34 @@ public class UtilisateurController {
 		return "profil";
 	}
 
-
+	/**
+	 * supprime le compte de l'utilisateur en session et renvoie à l'accueil
+	 * 
+	 * @param session
+	 * @param sessionStatus
+	 * @return
+	 */
 	@PostMapping("/profil/supprimer")
 	public String supprimerCompte(HttpSession session, SessionStatus sessionStatus) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
 
 		if (utilisateur != null) {
 			utilisateurService.supprimerUtilisateur(utilisateur.getId());
-			session.invalidate(); // Supprime la session
-			sessionStatus.setComplete();//et la tous les attributs de session
-			System.out.println("utilisateur supprimé");
+			session.invalidate();
+			sessionStatus.setComplete();
+
 		}
 
 		return "redirect:/accueil";
 	}
 
-
-
+	/**
+	 * déconnecte l'utilisateur en session et renvoie à l'accueil
+	 * 
+	 * @param sessionStatus
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/session-cloture")
 	public String finSession(SessionStatus sessionStatus, HttpSession session) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
@@ -377,41 +460,15 @@ public class UtilisateurController {
 		return "redirect:/accueil";
 	}
 
+	/**
+	 * renvoie un utilisateur vide
+	 * 
+	 * @return
+	 */
 	@ModelAttribute("membreEnSession")
 	public Utilisateur addUtilisateurEnSession() {
-		System.out.println("Add membre en session");
+
 		return new Utilisateur();
 	}
 
-//	@PostMapping("/portail-encheres")
-//	public String filtrerArticles(@RequestParam("type") String type,
-//			@RequestParam(value = "categorie", required = false) String categorie, Model model) {
-//
-//		List<Article> articles;
-//
-//		// Récupération des articles selon le type (achat ou vente)
-//		if ("vente".equals(type)) {
-//			articles = enchereService.consulterParEtat("Mes ventes");
-//		} else {
-//			articles = enchereService.consulterParEtat("Enchère ouverte");
-//		}
-//
-//		// Si une catégorie est sélectionnée, on filtre avec une boucle
-//		if (categorie != null && !categorie.isEmpty()) {
-//			List<Article> articlesFiltres = new ArrayList<>();
-//
-//			for (Article article : articles) {
-//				if (article.getCategorie().getLibelle().equalsIgnoreCase(categorie)) {
-//					articlesFiltres.add(article);
-//				}
-//			}
-//		}
-//		// articles = articlesFiltres; // problème à regler
-//
-//		// On prépare les données pour l'affichage dans la vue
-//		model.addAttribute("articles", articles);
-//		model.addAttribute("categories", enchereService.consulterToutCategorie());
-//		model.addAttribute("type", type);
-//
-//		return "portail-encheres";
 }

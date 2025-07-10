@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-//import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +38,15 @@ public class EnchereController {
 		this.utilisateurService = utilisateurService;
 	}
 
+	/**
+	 * envoie vers la méthode permettant d'afficher correctement l'article dont l'id
+	 * est renseigné en fonction de l'utilisateur connecté et de l'état de l'article
+	 * 
+	 * @param idArticle
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/details")
 	public String AfficherDetails(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
 
@@ -72,7 +80,7 @@ public class EnchereController {
 						return "redirect:/achats/acquisition?id=" + idArticle;
 					default:
 						return "redirect:/portail-encheres";
-						
+
 					}
 				}
 			}
@@ -82,6 +90,14 @@ public class EnchereController {
 		return "redirect:/portail-encheres";
 	}
 
+	/**
+	 * affiche la page html achats détails pour l'article dont l'id est renseigné
+	 * 
+	 * @param idArticle
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/achats/details")
 	public String afficherDetailsAchats(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
 
@@ -112,6 +128,14 @@ public class EnchereController {
 		return "redirect:/portail-encheres";
 	}
 
+	/**
+	 * affiche la page html ventes détails pour l'article dont l'id est renseigné
+	 * 
+	 * @param idArticle
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/ventes/details")
 	public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
 
@@ -142,15 +166,31 @@ public class EnchereController {
 		return "redirect:/accueil";
 	}
 
+	/**
+	 * affiche la page html creer nouvelle vente qui permet de creer de nouveaux
+	 * articles
+	 * 
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/vente")
-	public String afficherVente(Model model) {
+	public String afficherVente(Model model, HttpSession session) {
+		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
 		model.addAttribute("categories", this.enchereService.consulterToutCategorie());
 		Article article = new Article();
 		model.addAttribute("article", article);
+		model.addAttribute("utilisateur", utilisateurSession);
 
 		return "creer-nouvelle-vente";
 	}
 
+	/**
+	 * Obsolète ?
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@GetMapping({ "/rechercher" })
 	public String rechercherEtat(Model model) {
 
@@ -165,6 +205,14 @@ public class EnchereController {
 		return "portail-encheres";
 	}
 
+	/**
+	 * affiche la page html achats acquisiton pour l'article dont l'id est renseigné
+	 * 
+	 * @param idArticle
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/achats/acquisition")
 	public String afficherAcquisition(@RequestParam("id") Long idArticle, HttpSession session, Model model) {
 		Article article = enchereService.consulterArticleParId(idArticle);
@@ -190,40 +238,46 @@ public class EnchereController {
 		return "achats-acquisition";
 	}
 
+	/**
+	 * initialise l'article créé en html puis l'ajoute en BDD renvoie ensuite au
+	 * portail enchères
+	 * 
+	 * @param article
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@PostMapping("/creer-nouvelle-vente")
-	public String getMethodName(@ModelAttribute Article article, Model model) {
-		// modifier pour prendre l'user en session
-		Utilisateur utilisateur = utilisateurService.consulterParId(1);
+
+	public String creerNouvelleVente(@ModelAttribute Article article, Model model, HttpSession session) {
+
+		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
+
 		article.setUtilisateur(utilisateur);
 
 		article.setEtatVente("NON_DEBUTEE");
 
-		article.setLieuRetrait(utilisateur.getRetrait());
+		article.setLieuRetrait(utilisateur.getRetrait(article));
 
-		enchereService.creerArticle(article); // voir pour le chemin de l'image...
+		enchereService.creerArticle(article);
+
+		model.addAttribute("article", article);
+		model.addAttribute("utilisateur", utilisateur);
 
 		return "redirect:/portail-encheres";
 	}
 
-// pour récupérer l'enchère avec les attributs du formulaire
-//	public static class EnchereFormulaire {
-//		private Long articleId;
-//		private int montantEnchere;
-//
-//
-//		public Long getArticleId() { return articleId; }
-//		public void setArticleId(Long articleId) { this.articleId = articleId; }
-//
-//
-//		public int getMontantEnchere() { return montantEnchere; }
-//		public void setMontantEnchere(int montantEnchere) { this.montantEnchere = montantEnchere; }
-//	}
-
-
+	/**
+	 * affiche la page html enchere non commencee pour l'article dont l'id est
+	 * renseigné
+	 * 
+	 * @param idArticle
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/enchere-non-commence")
-	public String afficherVenteNonCommencee(@RequestParam("id") Long idArticle,
-											HttpSession session,
-											Model model) {
+	public String afficherVenteNonCommencee(@RequestParam("id") Long idArticle, HttpSession session, Model model) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
 		if (utilisateur == null) {
 			model.addAttribute("erreur", "Vous devez être connecté pour accéder à cette page.");
@@ -235,12 +289,19 @@ public class EnchereController {
 		return "enchere-non-commence";
 	}
 
-
+	/**
+	 * met à jour l'article en BDD à partir de ce qui a été renseigné dans la page
+	 * html pour l'article renseigné
+	 * 
+	 * @param article
+	 * @param fichierImage
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@PostMapping("/enchere-non-commence/modifier")
 	public String modifierVenteNonCommencee(@ModelAttribute Article article,
-											@RequestParam("fichierImage") MultipartFile fichierImage,
-											HttpSession session,
-											Model model) {
+			@RequestParam("fichierImage") MultipartFile fichierImage, HttpSession session, Model model) {
 		Utilisateur vendeur = (Utilisateur) session.getAttribute("utilisateurSession");
 		if (vendeur == null) {
 			model.addAttribute("erreur", "Vous devez être connecté pour modifier une vente.");
@@ -250,29 +311,24 @@ public class EnchereController {
 
 		if (!enchereService.existeArticle(article.getId())) {
 			model.addAttribute("erreur", "L'article demandé n'existe pas.");
-			System.out.println("no article");
 			return "portail-encheres";
 		}
 
 		Article original = enchereService.consulterArticleParId(article.getId());
-		// vente pas encore commencée
+
 		if (!"non_debutee".equalsIgnoreCase(original.getEtatVente())) {
 			model.addAttribute("erreur", "La vente ne peut plus être modifiée.");
-			System.out.println("non modifiable");
 			return "portail-encheres";
 		}
 
-		// puis utilisateur connecté est bien le propriétaire de l'article
 		if (!enchereService.verifierProprietaireArticle(article.getId(), vendeur.getId())) {
 			model.addAttribute("erreur", "Vous n'êtes pas autorisé à modifier cette vente.");
-			System.out.println("pas proprio");
 			return "portail-encheres";
 		}
 
-		//fini par mise à jour article
 		article.setEtatVente("non_debutee");
 		article.setUtilisateur(vendeur);
-		// laisse l’image existante si aucune nouvelle n’est envoyée
+
 		if (!fichierImage.isEmpty()) {
 			article.setCheminImg(fichierImage.getOriginalFilename());
 		}
@@ -281,11 +337,18 @@ public class EnchereController {
 		model.addAttribute("article", article);
 		model.addAttribute("categories", enchereService.consulterToutCategorie());
 		model.addAttribute("message", "Vente modifiée avec succès.");
-		System.out.println("modif succes");
 		return "portail-encheres";
 	}
 
-
+	/**
+	 * Supprime l'article renseigné de la BDD si c'est bien un article que
+	 * l'utilisateur connecté peut supprimer
+	 * 
+	 * @param idArticle
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/annuler-vente")
 	public String annulerVente(@RequestParam("id") Long idArticle, HttpSession session, Model model) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
@@ -295,7 +358,6 @@ public class EnchereController {
 			return "connexion";
 		}
 		Article article = enchereService.consulterArticleParId(idArticle);
-
 
 		if (article == null || !Objects.equals(article.getUtilisateur().getId(), utilisateur.getId())) {
 			model.addAttribute("erreur", "Vous n'avez pas le droit d'annuler cette vente.");
@@ -313,6 +375,16 @@ public class EnchereController {
 		return "redirect:/accueil";
 	}
 
+	/**
+	 * Initialise l'enchère à partir de ce qui a été renseigné sur la page HTML puis
+	 * l'ajoute à la BDD si tout est ok
+	 * 
+	 * @param nouvelleEnchere
+	 * @param bindingResult
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@PostMapping("/encherir")
 	public String encherir(@Valid @ModelAttribute Enchere nouvelleEnchere, BindingResult bindingResult, Model model,
 			HttpSession session) {
@@ -348,19 +420,4 @@ public class EnchereController {
 
 	}
 
-//doit request aussi l'ID de l'article
-//@PostMapping("/retire")
-//public String retire(Model model) {
-	// TODO checker que le vendeur ET l'acheteur l'ont marqué comme retiré
-	// return "redirect:/achats/details";// + idArticle;
-//}
-
-//
-
 }
-//doit request aussi l'ID de l'article
-//	@PostMapping("/retire")
-//	public String retire(Model model) {
-//		// TODO checker que le vendeur ET l'acheteur l'ont marqué comme retiré
-//		return "redirect:/achats/details";// + idArticle;
-//	}

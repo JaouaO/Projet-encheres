@@ -1,0 +1,134 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    margin: 20px;
+    padding: 0;
+    color: #333;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width:100%;
+    align-items: center;
+    gap: 15px;
+}
+
+.navigation {
+    flex-direction: column;
+    gap: 5px;
+
+    display: flex;
+
+}
+
+a {
+    color: #245280;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: black;
+}
+
+h2 {
+    color: black;
+    text-align: center;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+}
+
+.header-icone {
+    width: 90px;
+    height: auto;
+    border-radius: 20px
+}
+form {
+    display: grid;
+    gap: 10px;
+    width: 100%;
+}
+
+.boutons-connexion {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.boutons-connexion button {
+    width: 100%;
+    height: 30%;
+    text-align: center;
+}
+
+.boutons-connexion-mdp {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+@media (min-width: 800px) {
+
+    body {
+        margin: 40px;
+    }
+
+    header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width:100%
+    }
+
+    .navigation {
+        width: 400px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    nav {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    form {
+        width: 350px;
+    }
+    p {
+        width: 100%;
+        text-align: end;
+    }
+    .boutons-connexion button {
+        width: 150px;
+    }
+
+    .boutons-connexion-mdp {
+          width: 150px;
+    }
+}
+
