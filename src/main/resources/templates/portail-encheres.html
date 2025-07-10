@@ -107,14 +107,15 @@
 
         <div class="articles" th:class="articles" th:each="article : ${articlesAAfficher}">
             <div class="article">
-                <img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}" th:alt="'Photo de l'article'">
+            
+                <img  th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}" th:alt="'Photo de l'article'">
                 <div class="article-details">
-                    <a th:href="@{/achats/details(id=${article.id})}"> <h2 th:text="${article.nom}"></h2></a>
+                    <a th:href="@{/details(id=${article.id})}"> <h2 th:text="${article.nom}"></h2></a>
                     <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
                     <p th:text="'Fin de l enchère : ' + ${#temporals.format(article.dateFinEnchere,'dd/MM/yyyy')}" ></p>
                     <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}" ></p>
                     <a th:href="@{/profil(id=${article.utilisateur.id})}"><p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}" ></p></a>
-                    <a th:href="@{/enchere-non-commence(id=${article.id})}">Modifier</a>
+                    <!-- <a th:href="@{/enchere-non-commence(id=${article.id})}">Modifier</a> -->
                 </div>
             </div>
         </div>

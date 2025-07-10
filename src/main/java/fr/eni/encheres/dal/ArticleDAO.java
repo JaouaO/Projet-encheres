@@ -26,27 +26,20 @@ public interface ArticleDAO {
 
 	public List<Article> consulterParEtat(String etatVente, String etatVenteDeux);
 
-	List<Article> consulterParCategorieEtNom(Long idCategorie, String recherche);
-
 	List<Article> consulterParUtiisateurEtEnchereOuverte(long idUtilisateur);
 
-
 	List<Article> consulterParIdUtilisateurEtEtatVente(long idUtilisateur, String etatVente);
-	
+
 	List<Article> sqlQueryPersonnalisee(String sql);
-  
-    List<Article> consulterParCategorieEtNom(Long idCategorie, String recherche);
 
-    void mettreAJourArticle(Article article);
+	List<Article> consulterParCategorieEtNom(Long idCategorie, String recherche);
 
-    public boolean hasArticle(long idArticle);
-    
-    boolean isArticleEtatOuvert(long idArticle);
+	void mettreAJourArticle(Article article);
 
+	public boolean hasArticle(long idArticle);
 
-    boolean existeArticle(long idArticle);
+	boolean isArticleEtatOuvert(long idArticle);
 
-
-    
+	boolean existeArticle(long idArticle);
 
 }
