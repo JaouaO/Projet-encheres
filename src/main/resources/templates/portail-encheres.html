@@ -5,119 +5,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/accueils.css}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/regular.min.css" rel="stylesheet" type="text/css" />
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/fontawesome.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/regular.min.css" rel="stylesheet"
+          type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/accueils.css}">
     <title>Portail enchères</title>
 </head>
+
 <body>
-    	<header th:replace="~{fragments/fragment-entete :: entete}">
-	</header>
 
-<a th:href="@{/vente}" th:text="'Vendre un article'"></a>
-<a th:href="@{/profil}" th:text="'Mon profil'"></a>
-<a th:href="@{/session-cloture}" th:text="'Déconnexion'"></a>
-
-
-<form action="/portail-encheres" method="get">
-
-    <p th:class="filtres" th:text="'Filtres : '"></p>
-
-    <input class="radioAchat" type="radio" name="radio" id="radioAchats" value="achats" checked>
-    <label for="radioAchats" th:text="'Achats'"></label>
-    <div class="achats-checked">
-        <input th:class="achats-checked" type="checkbox"
-               th:name="'checkbox'"
-               id="encheresOuvertes"
-               th:value="'encheresOuvertes'">
-        <label for="encheresOuvertes" th:text="'enchères ouvertes'"></label>
-
-
-        <input type="checkbox"
-               th:name="'checkbox'"
-               id="encheresEnCours"
-               th:value="'encheresEnCours'">
-        <label for="encheresEnCours" th:text="'mes enchères en cours'"></label>
-
-        <input type="checkbox"
-               th:name="'checkbox'"
-               id="encheresRemportées"
-               th:value="'encheresRemportées'">
-        <label for="encheresRemportées" th:text="'mes enchères remportées'"></label>
+<header>
+    <a th:replace="~{fragments/fragment-entete :: entete}"></a>
+    <div class="navigation">
+        <a th:href="@{/vente}" th:text="'Vendre un article'"></a>
+        <a th:href="@{/profil}" th:text="'Mon profil'"></a>
+        <a th:href="@{/session-cloture}" th:text="'Déconnexion'"></a>
     </div>
-    <div class="achats-unchecked">
-        <p class="achats-unchecked"><i class="fa-regular fa-square-full"></i> enchères ouvertes</p>
-        <p class="achats-unchecked"><i class="fa-regular fa-square-full"></i> mes enchères en cours</p>
-        <p class="achats-unchecked"><i class="fa-regular fa-square"></i> mes enchères remportées</p>
-    </div>
-    <input class="radioVentes"
-           type="radio"
-           name="radio"
-           id="radioVentes"
-           value="ventes">
+</header>
+<main>
+    <form action="/portail-encheres" method="get">
 
-    <label for="radioVentes" th:text="'Mes ventes'"></label>
-    <div class="ventes-checked">
-        <input type="checkbox"
-               th:name="'checkbox'"
-               id="ventesEnCours"
-               th:value="'ventesEnCours'">
+        <p th:class="filtres" th:text="'Filtres : '"></p>
+        <div th:class="filtres-conteneur">
+            <div th:class="recherche-tous-boutons">
 
-        <label for="ventesEnCours" th:text="'mes ventes en cours'"></label>
+                    <input class="radioAchat" type="radio" name="radio" id="radioAchats" value="achats" checked>
+                    <label for="radioAchats" th:text="'Achats'"></label>
 
-        <input type="checkbox"
-               th:name="'checkbox'"
-               id="ventesNonDebutees"
-               th:value="'ventesNonDebutees'">
-        <label for="ventesNonDebutees" th:text="'ventes non débutées'"></label>
+                <div class="achats-checked">
+                    <input th:class="achats-checked" type="checkbox"
+                           th:name="'checkbox'"
+                           id="encheresOuvertes"
+                           th:value="'encheresOuvertes'">
+                    <label for="encheresOuvertes" th:text="'enchères ouvertes'"></label>
 
-        <input type="checkbox"
-               th:name="'checkbox'"
-               id="ventesTerminees"
-               th:value="'ventesTerminees'">
-<!--               th:attr="radio=achats? disabled : checked">-->
 
-        <label for="ventesTerminees" th:text="'ventes terminées'"></label>
-    </div>
-    <div class="ventes-unchecked">
-        <p class="ventes-unchecked"><i class="fa-regular fa-square"></i> mes ventes en cours</p>
-        <p class="ventes-unchecked"><i class="fa-regular fa-square"></i> ventes non débutées</p>
-        <p class="ventes-unchecked"><i class="fa-regular fa-square"></i> ventes terminées</p>
-    </div>
-    <div th:class="categories">
-        <label>Catégorie</label>
-        <select name="idCategorie" id="idCategorie">
-            <option th:value="0"
-                    th:selected="${idCategorie == 0}"
-                    th:text="'Toutes'">
-            </option>
-            <option th:each="c : ${categories}"
-                    th:value="${c.id}"
-                    th:text="${c.libelle}"
-                    th:selected="${c.id == idCategorie}">
-            </option>
-        </select>
-    </div>
-    <div th:class="recherche">
+                    <input type="checkbox"
+                           th:name="'checkbox'"
+                           id="encheresEnCours"
+                           th:value="'encheresEnCours'">
+                    <label for="encheresEnCours" th:text="'mes enchères en cours'"></label>
 
-        <input type="text" name="text" class="search"
-               th:value="${text}" th:placeholder="'Le nom de l\'article contient'">
-        <button th:class="rechercher-btn" th:text="'Rechercher'"></button>
-    </div>
-</form>
-<!-- 
-        <div class="articles" th:class="articles" th:each="article : ${articlesAAfficher}">
-            <div class="article">
-                <img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}" th:alt="'Photo de l\'article'">
-                <div class="article-details">
-                    <a th:href="@{/achats/details(id=${article.id})}"> <h2 th:text="${article.nom}"></h2></a>
-                    <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
-                    <p th:text="'Fin de l enchère : ' + ${#temporals.format(article.dateFinEnchere,'dd/MM/yyyy')}" ></p>
-                    <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}" ></p>
-                    <a th:href="@{/profil(id=${article.utilisateur.id})}"><p th:text="'Vendeur : ' + ${article.utilisateur.pseudo}" ></p></a>
+                    <input type="checkbox"
+                           th:name="'checkbox'"
+                           id="encheresRemportées"
+                           th:value="'encheresRemportées'">
+                    <label for="encheresRemportées" th:text="'mes enchères remportées'"></label>
+                </div>
+                <div class="achats-unchecked">
+                    <p class="achats-unchecked"><i class="fa-regular fa-square-full"></i> enchères ouvertes</p>
+                    <p class="achats-unchecked"><i class="fa-regular fa-square-full"></i> mes enchères en cours</p>
+                    <p class="achats-unchecked"><i class="fa-regular fa-square"></i> mes enchères remportées</p>
+                </div>
+
+                <input class="radioVentes"
+                       type="radio"
+                       name="radio"
+                       id="radioVentes"
+                       value="ventes">
+
+                <label for="radioVentes" th:text="'Mes ventes'"></label>
+
+                <div class="ventes-checked">
+                    <input type="checkbox"
+                           th:name="'checkbox'"
+                           id="ventesEnCours"
+                           th:value="'ventesEnCours'">
+
+                    <label for="ventesEnCours" th:text="'mes ventes en cours'"></label>
+
+                    <input type="checkbox"
+                           th:name="'checkbox'"
+                           id="ventesNonDebutees"
+                           th:value="'ventesNonDebutees'">
+                    <label for="ventesNonDebutees" th:text="'ventes non débutées'"></label>
+
+                    <input type="checkbox"
+                           th:name="'checkbox'"
+                           id="ventesTerminees"
+                           th:value="'ventesTerminees'">
+                    <!--               th:attr="radio=achats? disabled : checked">-->
+
+                    <label for="ventesTerminees" th:text="'ventes terminées'"></label>
+                </div>
+                <div class="ventes-unchecked">
+                    <p class="ventes-unchecked"><i class="fa-regular fa-square"></i> mes ventes en cours</p>
+                    <p class="ventes-unchecked"><i class="fa-regular fa-square"></i> ventes non débutées</p>
+                    <p class="ventes-unchecked"><i class="fa-regular fa-square"></i> ventes terminées</p>
+                </div>
+
+                <div th:class="recherche">
+                    <div th:class="categories">
+                        <label>Catégorie</label>
+                        <select name="idCategorie" id="idCategorie">
+                            <option th:value="0"
+                                    th:selected="${idCategorie == 0}"
+                                    th:text="'Toutes'">
+                            </option>
+                            <option th:each="c : ${categories}"
+                                    th:value="${c.id}"
+                                    th:text="${c.libelle}"
+                                    th:selected="${c.id == idCategorie}">
+                            </option>
+                        </select>
+                    </div>
+                    <input type="text" name="text" class="search"
+                           th:value="${text}" th:placeholder="'Le nom de l\'article contient'">
                 </div>
             </div>
+            <div th:class="bouton-conteneur">
+                <button th:class="rechercher-btn" th:text="'Rechercher'"></button>
+            </div>
         </div>
- -->
+    </form>
+    <div class="toutArticles">
+    <div class="articles" th:class="articles" th:each="article : ${articlesAAfficher}">
+        <div class="article">
+            <img th:src="@{'/images/' + ${article.cheminImg} + '.jpg'}" th:alt="'Photo de l\'article'">
+            <div class="article-details">
+                <a th:href="@{/achats/details(id=${article.id})}"><h2 th:text="${article.nom}"></h2></a>
+                <p th:text="'Prix : ' + ${article.miseAPrix} + ' points'"></p>
+                <p th:text="'Fin de l enchère : ' + ${#temporals.format(article.dateFinEnchere,'dd/MM/yyyy')}"></p>
+                <p th:text="'Retrait : ' + ${article.utilisateur.rue} + ' ' + ${article.utilisateur.codePostal} + ' ' + ${article.utilisateur.ville}"></p>
+                <a th:href="@{/profil(id=${article.utilisateur.id})}"><p
+                        th:text="'Vendeur : ' + ${article.utilisateur.pseudo}"></p></a>
+            </div>
+        </div>
+    </div>
+</main>
 </body>
 </html>
