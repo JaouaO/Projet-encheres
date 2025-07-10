@@ -1,5 +1,6 @@
 package fr.eni.encheres.bll;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -43,8 +44,15 @@ public class EnchereServiceImpl implements EnchereService {
 	}
 
 	@Override
-	public void mettreEnVente(long idArticle) {
-		this.articleDAO.mettreEnVente(idArticle);
+	//il s'agit ici de mettre en vente dans le sens où l'article qui a été créé et qui est en état de vente NON_DEBUTEE
+	//passe EN_COURS dès que la date de début d'enchère est arrivée
+	public void mettreEnVente() {
+		List<Article> ventesNonDebutees = articleDAO.consulterParEtat("NON_DEBUTEE");
+		for (Article article : ventesNonDebutees) {
+			if (article.getDateDebutEnchere().isBefore(LocalDateTime.now())) {
+				articleDAO.mettreEnVente(article.getId());
+			}
+		}
 	}
 
 	@Override
@@ -137,8 +145,8 @@ public class EnchereServiceImpl implements EnchereService {
 		isValid &= hasArticle(enchere.getArticle().getId(), be);
 		isValid &= isCreditSuffisant(enchere.getMontantEnchere(), enchere.getUtilisateur().getId(), be);
 		isValid &= isEnchereOuverte(enchere.getArticle().getId(), be);
-		isValid &= isOffreSupérieureMAP(enchere.getMontantEnchere(), enchere.getArticle().getId(), be);
-		isValid &= isOffreSupérieureDerniereEnchere(enchere.getMontantEnchere(), enchere.getArticle().getId(), be);
+		isValid &= isOffreSuperieureDerniereEnchere(enchere.getMontantEnchere(), enchere.getArticle().getId(), be);
+		isValid &= isOffreSuperieureDerniereEnchere(enchere.getMontantEnchere(), enchere.getArticle().getId(), be);
 		
 
 		if(isValid) {
@@ -216,7 +224,7 @@ public class EnchereServiceImpl implements EnchereService {
 	}
 
 	@Override
-	public boolean isOffreSupérieureDerniereEnchere(int montant, long idArticle, BusinessException be) {
+	public boolean isOffreSuperieureDerniereEnchere(int montant, long idArticle, BusinessException be) {
 
 		if (hasAutreEnchere(idArticle)){
 			if(montant <= this.recupererDerniereEnchere(idArticle).getMontantEnchere()) {

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouvelle vente</title>
+</head>
+<body>
+<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
+
+<form action="/creer-nouvelle-vente" method="post"
+      th:object="${article}">
+
+    <h2>Nouvelle vente</h2>
+    <ul class="flex-outer">
+        <li><label for="inputNom">Article : </label><input type="text" id="inputNom" th:field="*{nom}">
+        </li>
+        <li><label for="idCategorie">Catégorie :</label>
+            <select th:field="*{categorie}" id="idCategorie">
+                <option th:each="c : ${categories}" th:text="${c.libelle}"
+                        th:value="${c.id}"></option>
+            </select>
+        </li>
+
+        <li><label for="taDescription">Description :</label> <textarea
+                id="taDescription" rows="3" th:field="*{description}">
+						</textarea>
+        <li>Photo de l'article</li>
+        <input type="file" name="" id="" th:text="'UPLOADER'">
+
+
+        <li><label for="inputMiseAPrix">Prix initial : </label> <input
+                type="number" id="inputMiseAPrix" th:field="*{miseAPrix}" /></li>
+        <li><label for="inputdateDebutEnchere">Début de l'enchère</label>
+            <input type="datetime-local" id="inputdateDebutEnchere"  th:field="*{dateDebutEnchere}">
+        </li>
+        <li><label for="inputdateFinEnchere">Fin de l'enchère</label>
+            <input type="datetime-local" id="inputdateFinEnchere"  th:field="*{dateFinEnchere}">
+        </li>
+        <!--
+                    <li><label th:text="${utilisateur.afficherRetrait()}"></label></li>
+                    <li>
+        -->
+
+
+        <button type="submit">Créer</button>
+        </li>
+        <li><a th:href="@{/accueil}"><button>Annuler</button></a></li>
+    </ul>
+</form>
+
+</body>
+</html>

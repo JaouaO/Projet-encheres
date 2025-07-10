@@ -11,7 +11,7 @@ public interface EnchereService {
 
 	void creerArticle(Article article);
 
-	void mettreEnVente(long idArticle);
+	void mettreEnVente();
 
 	void annulerVente(long idArticle);
 
@@ -31,11 +31,9 @@ public interface EnchereService {
 
 	List<Article> consulterParEtat(String etat);
 
-
 	void ajouterEnchere(Enchere enchere) throws BusinessException;
 
     Enchere recupererDerniereEnchere(long idArticle);
-
 
 	List<Article> consulterParCategorieEtRecherche(Long idCategorie, String text);
 
@@ -53,7 +51,7 @@ public interface EnchereService {
     
     boolean isCreditSuffisant(int montant, long idUtilisateur, BusinessException be);
     
-    boolean isOffreSupérieureDerniereEnchere(int montant, long idArticle, BusinessException be);
+    boolean isOffreSuperieureDerniereEnchere(int montant, long idArticle, BusinessException be);
     
     boolean isOffreSupérieureMAP(int montant, long idArticle, BusinessException be);
     
