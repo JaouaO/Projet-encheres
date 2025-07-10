@@ -43,11 +43,11 @@
         <div class="cadre-retrait">
         <p th:text="'Retrait'"></p>
         <label for="rue" th:text="'Rue : '"></label>
-        <input id="rue" type="text" th:field="*{utilisateur.rue}">
+        		<p th:text="${utilisateur.rue}"></p>
         <label for="cp" th:text="'Code postal : '"></label>
-        <input id="cp" type="text" th:field="*{utilisateur.codePostal}">
+                <p th:text="${utilisateur.codePostal}"></p>
         <label for="ville" th:text="'Ville : '"></label>
-        <input id="ville" type="text" th:field="*{utilisateur.ville}">
+                <p th:text="${utilisateur.ville}"></p>
         </div>
 
         <button type="submit" th:text="'Enregistrer'"></button>

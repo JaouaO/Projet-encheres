@@ -142,10 +142,14 @@ public class EnchereController {
 	}
 
 	@GetMapping("/vente")
-	public String afficherVente(Model model) {
+	public String afficherVente(Model model, HttpSession session) {
+		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
 		model.addAttribute("categories", this.enchereService.consulterToutCategorie());
 		Article article = new Article();
 		model.addAttribute("article", article);
+		model.addAttribute("utilisateur", utilisateurSession);
+
+		
 
 		return "creer-nouvelle-vente";
 	}
