@@ -38,6 +38,15 @@ public class EnchereController {
 		this.utilisateurService = utilisateurService;
 	}
 
+	/**
+	 * envoie vers la méthode permettant d'afficher correctement l'article dont l'id
+	 * est renseigné en fonction de l'utilisateur connecté et de l'état de l'article
+	 * 
+	 * @param idArticle
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/details")
 	public String AfficherDetails(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
 
@@ -70,7 +79,7 @@ public class EnchereController {
 						return "/achats/acquisition" + idArticle;
 					default:
 						return "redirect:/portail-encheres";
-						
+
 					}
 				}
 			}
@@ -80,6 +89,14 @@ public class EnchereController {
 		return "redirect:/portail-encheres";
 	}
 
+	/**
+	 * affiche la page html achats détails pour l'article dont l'id est renseigné
+	 * 
+	 * @param idArticle
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/achats/details")
 	public String afficherDetailsAchats(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
 
@@ -110,7 +127,14 @@ public class EnchereController {
 		return "redirect:/portail-encheres";
 	}
 
-
+	/**
+	 * affiche la page html ventes détails pour l'article dont l'id est renseigné
+	 * 
+	 * @param idArticle
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/ventes/details")
 	public String afficherDetailsVentes(@RequestParam(name = "id") long idArticle, Model model, HttpSession session) {
 
@@ -141,6 +165,14 @@ public class EnchereController {
 		return "redirect:/accueil";
 	}
 
+	/**
+	 * affiche la page html creer nouvelle vente qui permet de creer de nouveaux
+	 * articles
+	 * 
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@GetMapping("/vente")
 	public String afficherVente(Model model, HttpSession session) {
 		Utilisateur utilisateurSession = (Utilisateur) session.getAttribute("utilisateurSession");
@@ -149,18 +181,21 @@ public class EnchereController {
 		model.addAttribute("article", article);
 		model.addAttribute("utilisateur", utilisateurSession);
 
-		
-
 		return "creer-nouvelle-vente";
 	}
 
+	/**
+	 * Obsolète ?
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@GetMapping({ "/rechercher" })
 	public String rechercherEtat(Model model) {
 
 		List<Article> articles = enchereService.consulterParEtat("enchere_ouverte");
 
 		model.addAttribute("articles", articles);
-
 
 		List<Categorie> categories = this.enchereService.consulterToutCategorie();
 
@@ -169,6 +204,14 @@ public class EnchereController {
 		return "portail-encheres";
 	}
 
+	/**
+	 * affiche la page html achats acquisiton pour l'article dont l'id est renseigné
+	 * 
+	 * @param idArticle
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/achats/acquisition")
 	public String afficherAcquisition(@RequestParam("id") Long idArticle, HttpSession session, Model model) {
 		Article article = enchereService.consulterArticleParId(idArticle);
@@ -194,11 +237,18 @@ public class EnchereController {
 		return "achats-acquisition";
 	}
 
-
+	/**
+	 * initialise l'article créé en html puis l'ajoute en BDD renvoie ensuite au
+	 * portail enchères
+	 * 
+	 * @param article
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@PostMapping("/creer-nouvelle-vente")
 
-
-	public String getMethodName(@ModelAttribute Article article, Model model, HttpSession session) {
+	public String creerNouvelleVente(@ModelAttribute Article article, Model model, HttpSession session) {
 
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
 
@@ -208,7 +258,6 @@ public class EnchereController {
 
 		article.setLieuRetrait(utilisateur.getRetrait(article));
 
-
 		enchereService.creerArticle(article);
 
 		model.addAttribute("article", article);
@@ -217,11 +266,17 @@ public class EnchereController {
 		return "redirect:/portail-encheres";
 	}
 
-
+	/**
+	 * affiche la page html enchere non commencee pour l'article dont l'id est
+	 * renseigné
+	 * 
+	 * @param idArticle
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/enchere-non-commence")
-	public String afficherVenteNonCommencee(@RequestParam("id") Long idArticle,
-											HttpSession session,
-											Model model) {
+	public String afficherVenteNonCommencee(@RequestParam("id") Long idArticle, HttpSession session, Model model) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
 		if (utilisateur == null) {
 			model.addAttribute("erreur", "Vous devez être connecté pour accéder à cette page.");
@@ -233,12 +288,19 @@ public class EnchereController {
 		return "enchere-non-commence";
 	}
 
-
+	/**
+	 * met à jour l'article en BDD à partir de ce qui a été renseigné dans la page
+	 * html pour l'article renseigné
+	 * 
+	 * @param article
+	 * @param fichierImage
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@PostMapping("/enchere-non-commence/modifier")
 	public String modifierVenteNonCommencee(@ModelAttribute Article article,
-											@RequestParam("fichierImage") MultipartFile fichierImage,
-											HttpSession session,
-											Model model) {
+			@RequestParam("fichierImage") MultipartFile fichierImage, HttpSession session, Model model) {
 		Utilisateur vendeur = (Utilisateur) session.getAttribute("utilisateurSession");
 		if (vendeur == null) {
 			model.addAttribute("erreur", "Vous devez être connecté pour modifier une vente.");
@@ -277,7 +339,15 @@ public class EnchereController {
 		return "portail-encheres";
 	}
 
-
+	/**
+	 * Supprime l'article renseigné de la BDD si c'est bien un article que
+	 * l'utilisateur connecté peut supprimer
+	 * 
+	 * @param idArticle
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/annuler-vente")
 	public String annulerVente(@RequestParam("id") Long idArticle, HttpSession session, Model model) {
 		Utilisateur utilisateur = (Utilisateur) session.getAttribute("utilisateurSession");
@@ -287,7 +357,6 @@ public class EnchereController {
 			return "connexion";
 		}
 		Article article = enchereService.consulterArticleParId(idArticle);
-
 
 		if (article == null || !Objects.equals(article.getUtilisateur().getId(), utilisateur.getId())) {
 			model.addAttribute("erreur", "Vous n'avez pas le droit d'annuler cette vente.");
@@ -305,6 +374,16 @@ public class EnchereController {
 		return "redirect:/accueil";
 	}
 
+	/**
+	 * Initialise l'enchère à partir de ce qui a été renseigné sur la page HTML puis
+	 * l'ajoute à la BDD si tout est ok
+	 * 
+	 * @param nouvelleEnchere
+	 * @param bindingResult
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@PostMapping("/encherir")
 	public String encherir(@Valid @ModelAttribute Enchere nouvelleEnchere, BindingResult bindingResult, Model model,
 			HttpSession session) {
@@ -340,10 +419,4 @@ public class EnchereController {
 
 	}
 
-
-
 }
-
-
-
-

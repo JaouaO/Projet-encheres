@@ -4,6 +4,7 @@ import fr.eni.encheres.bo.Categorie;
 
 public interface AdminService {
 
+//RIEN ICI N'EST IMPLEMENTE
     void supprimerUtilisateur(long idUtilisateur);
     void desactiverUtilisateur(long idUtilisateur);
     void creerCategorie(Categorie categorie);
