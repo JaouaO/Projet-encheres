@@ -7,8 +7,34 @@ body {
 }
 
 main {
-    align-content: center;
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    text-align: start;
+
+}
+
+form {
+    display: grid;
+    gap: 10px;
+}
+
+.cadre-photo {
+    border: 1px solid;
+    min-height: 150px;
+    min-width: 150px;
+    max-width: 225px;
+    max-height: 225px;
+    background-color: grey;
+    margin-bottom: 15px;
+}
+
+.cadre-retrait {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid;
+    padding: 10px;
 }
 
 .navigation {
@@ -37,6 +63,7 @@ h1 {
 
 h2 {
     color: black;
+    text-align: center;
 }
 
 header {
@@ -62,7 +89,7 @@ header {
     margin-bottom: 15px;
     display: flex;
     justify-content: space-evenly;
-    gap:5px;
+    gap: 5px;
 }
 
 .filtres label {
@@ -109,7 +136,7 @@ header {
 }
 
 .rechercher-btn:hover {
- background-color: #5789BA;
+    background-color: #5789BA;
 
 }
 
@@ -157,7 +184,7 @@ header {
     flex-direction: column;
     gap: 5px;
 
-    width:60%
+    width: 60%
 
 }
 
@@ -177,26 +204,33 @@ Partie pour les boutons radio portail-enchère
 */
 
 .radioAchat:checked ~ .achats-checked {
-  display: inline-block;
+    display: inline-block;
 }
+
 .radioAchat:checked ~ .ventes-checked {
     display: none;
 }
+
 .radioAchat:checked ~ .ventes-unchecked {
     display: inline-block;
 }
+
 .radioAchat:checked ~ .achats-unchecked {
     display: none;
 }
+
 .radioVentes:checked ~ .ventes-checked {
-  display: inline-block;
+    display: inline-block;
 }
+
 .radioVentes:checked ~ .ventes-unchecked {
     display: none;
 }
+
 .radioAchat:not(:checked) ~ .achats-unchecked {
-     display: inline-block;
+    display: inline-block;
 }
+
 .radioAchat:not(:checked) ~ .achats-checked {
     display: none;
 }
@@ -215,22 +249,23 @@ Partie pour les boutons radio portail-enchère
         align-items: center;
     }
 
+    main {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .navigation {
         width: 400px;
         display: flex;
         flex-direction: row;
         justify-content: space-around;
     }
+
     nav {
         display: flex;
         width: 100%;
         justify-content: space-between;
         align-items: center;
-    }
-
-    main {
-        align-content: center;
-        width: 80%;
     }
 
     .filtres {
