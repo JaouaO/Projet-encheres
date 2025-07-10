@@ -7,15 +7,14 @@
     <title>Nouvelle vente</title>
 </head>
 <body>
+<main>
 <header th:replace="~{fragments/fragment-entete :: entete}"></header>
 
     <h2>Nouvelle vente</h2>
-<main>
+
     <div class="cadre-photo"></div>
     <form action="/creer-nouvelle-vente" method="post"
           th:object="${article}">
-
-
 
         <label for="inputNom">Article : </label><input type="text" id="inputNom" th:field="*{nom}">
 

@@ -1,96 +1,75 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modifier vente</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/nouvelle-vente.css}">
+    <title>Modifier vente</title>
 </head>
 <body>
+<main>
+<header th:replace="~{fragments/fragment-entete :: entete}"></header>
+    <h2>Nouvelle Vente</h2>
 
-<header th:replace="~{fragments/fragment-entete :: entete}"> </header>
 
-<form th:action="@{/enchere-non-commence/modifier}" method="post" th:object="${article}" enctype="multipart/form-data">
-  <input type="hidden" th:field="*{id}" />
-  <h2>Nouvelle Vente</h2>
+    <form th:action="@{/enchere-non-commence/modifier}" method="post" th:object="${article}" enctype="multipart/form-data">
+        <img class="cadre-photo" th:src="@{'/images/' + *{cheminImg} + '.jpg'}" alt="Photo de l'article"/>
 
-  <ul class="flex-outer">
+        <input type="hidden" th:field="*{id}"/>
 
-    <li>
-      <label for="inputNom">Article :</label>
-      <input type="text" id="inputNom" th:field="*{nom}">
-    </li>
+    <label for="inputNom">Article :</label>
+    <input type="text" id="inputNom" th:field="*{nom}">
 
-    <li>
-      <label for="idCategorie">Catégorie :</label>
-      <select th:field="*{categorie}" id="idCategorie">
+    <label for="idCategorie">Catégorie :</label>
+    <select th:field="*{categorie}" id="idCategorie">
         <option th:each="c : ${categories}" th:text="${c.libelle}" th:value="${c.id}"></option>
-      </select>
-    </li>
+    </select>
 
-    <li>
-      <label for="taDescription">Description :</label>
-      <textarea id="taDescription" rows="3" th:field="*{description}"></textarea>
-    </li>
+    <label for="taDescription">Description :</label>
+    <textarea id="taDescription" rows="3" th:field="*{description}"></textarea>
 
-    <li>
-      <label for="inputImage">Photo de l'article :</label>
-      <input type="file" id="inputImage" name="fichierImage" />
-      <img th:src="@{'/images/' + *{cheminImg} + '.jpg'}" alt="Photo de l'article" />
-    </li>
+    <label for="inputImage">Photo de l'article :</label>
+    <input type="file" id="inputImage" name="fichierImage"/>
 
-    <li>
-      <label for="inputMiseAPrix">Prix initial :</label>
-      <input type="number" id="inputMiseAPrix" th:field="*{miseAPrix}" />
-    </li>
 
-    <li>
-      <label for="inputdateDebutEnchere">Début de l'enchère</label>
-      <input type="datetime-local" id="inputdateDebutEnchere" th:field="*{dateDebutEnchere}">
-    </li>
+    <label for="inputMiseAPrix">Prix initial :</label>
+    <input type="number" id="inputMiseAPrix" th:field="*{miseAPrix}"/>
 
-    <li>
-      <label for="inputdateFinEnchere">Fin de l'enchère</label>
-      <input type="datetime-local" id="inputdateFinEnchere" th:field="*{dateFinEnchere}">
-    </li>
+    <label for="inputdateDebutEnchere">Début de l'enchère</label>
+    <input type="datetime-local" id="inputdateDebutEnchere" th:field="*{dateDebutEnchere}">
+
+    <label for="inputdateFinEnchere">Fin de l'enchère</label>
+    <input type="datetime-local" id="inputdateFinEnchere" th:field="*{dateFinEnchere}">
 
     <div>
-      <h2>Adresse de retrait</h2>
+        <h2>Adresse de retrait</h2>
 
-      <li>
         <label for="inputRue">Rue :</label>
-        <input type="text" id="inputRue" th:field="*{lieuRetrait.rue}" />
-      </li>
+        <input type="text" id="inputRue" th:field="*{lieuRetrait.rue}"/>
 
-      <li>
         <label for="inputCodePostal">Code postal :</label>
-        <input type="text" id="inputCodePostal" th:field="*{lieuRetrait.codePostal}" />
-      </li>
+        <input type="text" id="inputCodePostal" th:field="*{lieuRetrait.codePostal}"/>
 
-      <li>
         <label for="inputVille">Ville :</label>
-        <input type="text" id="inputVille" th:field="*{lieuRetrait.ville}" />
-      </li>
+        <input type="text" id="inputVille" th:field="*{lieuRetrait.ville}"/>
     </div>
 
-    <li>
-      <button type="submit">Enregistrer</button>
-    </li>
+    <button type="submit">Enregistrer</button>
 
     <a th:href="@{/accueil}">
-      <button type="button">Annuler</button>
+        <button type="button">Annuler</button>
     </a>
 
     <a th:href="@{/annuler-vente(id=${article.id})}"
        onclick="return confirm('Êtes-vous sûr de vouloir annuler cette vente ?');">
-      <button type="button">Annuler la vente</button>
+        <button type="button">Annuler la vente</button>
     </a>
 
     <div th:if="${erreur}">
-      <p th:text="${erreur}"></p>
+        <p th:text="${erreur}"></p>
     </div>
 
-  </ul>
 </form>
-
+</main>
 </body>
 </html>
